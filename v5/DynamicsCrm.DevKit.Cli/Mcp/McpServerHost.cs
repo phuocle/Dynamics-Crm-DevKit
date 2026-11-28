@@ -38,7 +38,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
         // Maps disabled tool type name → associated resource names (Name from [McpServerResource(Name=...)])
         internal static readonly Dictionary<string, string[]> ToolResourceMap = new()
         {
-            [nameof(Tools.ExecuteSqlTool)] = new[] { "instructions_for_sql" },
+            [nameof(Tools.QueryDataTool)] = new[] { "instructions_for_sql" },
             [nameof(Tools.ManageRibbonTool)] = new[] { "instructions_for_manage_ribbon" },
             [nameof(Tools.ManageCommandTool)] = new[] { "instructions_for_manage_command" },
             [nameof(Tools.ManageReportTool)] = new[] { "instructions_for_manage_report" },
@@ -152,7 +152,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                 (g.DryRun ? " (dry-run: mutations blocked)" : ""));
             return $" | Startup connection: {connections.StartupEnvId}. Connection groups: {string.Join(", ", labels)}. " +
                 "Omit env to use the startup connection; pass an ID, alias, or default for the unnumbered group. " +
-                "Call connection_list for details. Dataverse tools accept env; read_instruction and connection_list do not.";
+                "Call get_context(action='connections') for details. Dataverse tools accept env; read_instruction and get_context(action='connections') do not.";
         }
 
         /// <summary>

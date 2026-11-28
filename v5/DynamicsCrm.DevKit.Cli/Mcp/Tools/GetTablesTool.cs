@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class GetTablesTool : McpToolBase
     {
         private readonly MetadataService _metadataService;
@@ -39,12 +38,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Clone or copy a column (detail_level='full' required — compact/standard lack clone metadata)\n" +
             "- Inspect a formula in full detail: rawFormulaDefinition is the exact Dataverse definition. formulaDefinition is the entity:attribute clone reference.\n" +
             "- Inspect 1:N and N:1 cascade behavior, hierarchy, and associated menu settings with detail_level='full'.\n" +
-            "- AI MUST use get_tables for entity/attribute metadata — do NOT use execute_webapi with EntityDefinitions\n\n" +
+            "- AI MUST use inspect_metadata(resource='tables') for entity/attribute metadata — do NOT use execute_webapi with EntityDefinitions\n\n" +
             "RELATED TOOLS:\n" +
             "- manage_column → create/update columns (pass the formulaDefinition reference as formula_definition to clone)\n" +
             "- manage_table → create/update tables\n" +
             "- manage_relationship → create/update relationships\n" +
-            "- execute_fetchxml → query data once you know attribute names")]
+            "- query_data(mode='fetchxml') → query data once you know attribute names")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Logical name → detail mode. Empty = list mode.")] string entity_name = "",
             [Description("LIST: keyword filter on entity. DETAIL: single value = prefix match on logical names; comma/pipe/semicolon-separated = word-boundary match on logical name + exact match on display name.")] string filter = "",
@@ -118,7 +117,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (resolved.Status == ResolveStatus.NotFound)
                     return Error(
                         $"'{entityName}' was not found by Display Name or Logical/Unique/Schema Name.",
-                        "Use get_tables with no entity_name to list available tables.");
+                        "Use inspect_metadata(resource='tables') with no entity_name to list available tables.");
                 if (resolved.Status == ResolveStatus.Ambiguous)
                 {
                     var message = resolved.Error.Split("\r\n")[0];

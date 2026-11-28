@@ -53,15 +53,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Metadata/system endpoints (forms, views, sitemap, schema, choice, webresource, roles, publish, env vars, deleted records, command bar) are BLOCKED/REDIRECTED at runtime to the dedicated tool named in the error\n\n" +
 
             "RELATED TOOLS:\n" +
-            "- whoami → current connection identity (GET WhoAmI is redirected here)\n" +
-            "- get_tables / manage_table / manage_column / manage_relationship → schema\n" +
+            "- get_context(action='whoami') → current connection identity (GET WhoAmI is redirected here)\n" +
+            "- inspect_metadata(resource='tables') / manage_table / manage_column / manage_relationship → schema\n" +
             "- manage_choice → option sets\n" +
             "- manage_form / manage_view / manage_app → UI; sitemap via manage_app\n" +
             "- manage_environment_variable / manage_webresource / manage_role → config\n" +
             "- manage_command → command bar\n" +
             "- manage_record_file → file/image column data\n" +
             "- manage_deleted_records → restore\n" +
-            "- execute_sql → SQL SELECT queries; the ?sql= query option is BLOCKED/REDIRECTED to execute_sql\n" +
+            "- query_data(mode='sql') → SQL SELECT queries; the ?sql= query option is BLOCKED/REDIRECTED to query_data(mode='sql')\n" +
             "- publish_customizations → publish after metadata changes")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("GET, POST, PUT, PATCH, or DELETE. Default GET.")] string method = "GET",
@@ -168,7 +168,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     if (isMetadata)
                     {
                         if (_connectionInfo.ConnectedOrgUri == null)
-                            return Error("ServiceClient is not connected to a Dataverse organization. Call whoami first to verify the connection.");
+                            return Error("ServiceClient is not connected to a Dataverse organization. Call get_context(action='whoami') first to verify the connection.");
                         if (!getHeaders.Keys.Any(k => string.Equals(k, "Accept", StringComparison.OrdinalIgnoreCase)))
                             getHeaders["Accept"] = new List<string> { "application/xml" };
                         response = GetMetadataRaw(trimmedUrl, getHeaders);
@@ -322,17 +322,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static readonly (string UrlPattern, string RedirectTool, string Message)[] RedirectedGetEndpoints =
         [
-            ("whoami", "whoami",
-                "whoami returns the current connection identity in one call: user, organization, environment URL, Dataverse version, security roles, and DevKit build info."),
+            ("whoami", "get_context(action='whoami')",
+                "get_context(action='whoami') returns the current connection identity in one call: user, organization, environment URL, Dataverse version, security roles, and DevKit build info."),
 
-            ("entitydefinitions", "get_tables",
-                "get_tables provides filtered, tiered metadata (compact/standard/full) optimized for AI consumption."),
+            ("entitydefinitions", "inspect_metadata(resource='tables')",
+                "inspect_metadata(resource='tables') provides filtered, tiered metadata (compact/standard/full) optimized for AI consumption."),
 
-            ("attributedefinitions", "get_tables",
-                "get_tables(entity_name='...') returns attributes with filtering, detail levels, and relationships."),
+            ("attributedefinitions", "inspect_metadata(resource='tables')",
+                "inspect_metadata(resource='tables', name='...') returns attributes with filtering, detail levels, and relationships."),
 
-            ("relationshipdefinitions", "get_tables or manage_relationship",
-                "get_tables(entity_name='...') includes 1:N, N:1, N:N relationships; manage_relationship creates/updates/deletes them safely."),
+            ("relationshipdefinitions", "inspect_metadata(resource='tables') or manage_relationship",
+                "inspect_metadata(resource='tables', name='...') includes 1:N, N:1, N:N relationships; manage_relationship creates/updates/deletes them safely."),
 
             ("globaloptionsetdefinitions", "manage_choice",
                 "manage_choice lists and manages global option sets; manage_column handles local picklists on an entity."),
@@ -340,14 +340,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ("optionsetdefinitions", "manage_choice",
                 "manage_choice lists and manages global option sets; manage_column handles local picklists on an entity."),
 
-            ("asyncoperations", "get_system_jobs",
-                "get_system_jobs provides status/operation_type filters, time scope, correlation_id tracing, and detail mode with message + friendlyMessage."),
+            ("asyncoperations", "inspect_diagnostics(resource='system_jobs')",
+                "inspect_diagnostics(resource='system_jobs') provides status/operation_type filters, time scope, correlation_id tracing, and detail mode with message + friendlyMessage."),
 
-            ("workflows", "get_workflows",
-                "get_workflows provides entity_name/mode/status filters, trigger_field discovery, and workflow execution metadata."),
+            ("workflows", "inspect_automation(resource='workflows')",
+                "inspect_automation(resource='workflows') provides entity_name/mode/status filters, trigger_field discovery, and workflow execution metadata."),
 
-            ("processes", "get_workflows",
-                "get_workflows covers classic workflows (background + realtime) with filters and detail mode."),
+            ("processes", "inspect_automation(resource='workflows')",
+                "inspect_automation(resource='workflows') covers classic workflows (background + realtime) with filters and detail mode."),
 
             ("deletionstatecode", "manage_deleted_records",
                 "Standard OData $filter on 'deletionstatecode' or 'statecode eq 1' is unreliable for non-activity entities " +
@@ -552,8 +552,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var urlLower = Uri.UnescapeDataString(url).ToLowerInvariant();
                 if (HasSqlQueryOption(urlLower))
                     return ("The ?sql= query option is not supported in execute_webapi.",
-                        "Use execute_sql instead — pass the SQL via its sql parameter (without URL-encoding). " +
-                        "execute_sql validates syntax, handles paging, and returns tabular results. " +
+                        "Use query_data(mode='sql') instead — pass the SQL via its query parameter (without URL-encoding). " +
+                        "query_data(mode='sql') validates syntax, handles paging, and returns tabular results. " +
                         "Read docs://instructions_for_sql for Dataverse SQL rules.");
                 foreach (var (pattern, tool, message) in RedirectedGetEndpoints)
                 {

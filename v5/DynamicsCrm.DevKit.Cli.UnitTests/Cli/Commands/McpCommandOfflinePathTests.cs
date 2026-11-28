@@ -44,7 +44,8 @@ public class McpCommandOfflinePathTests
         var (exit, output) = await RunCliAsync("mcp", "--plain", "--tools");
 
         Assert.AreEqual(0, exit);
-        StringAssert.Contains(output, "whoami");
+        StringAssert.Contains(output, "get_context");
+        StringAssert.Contains(output, "query_data");
         StringAssert.Contains(output, "manage_record");
     }
 

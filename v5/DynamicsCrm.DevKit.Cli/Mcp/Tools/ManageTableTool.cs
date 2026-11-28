@@ -52,7 +52,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Create a new custom table, or update mutable metadata of an existing one\n" +
             "\n" +
             "RELATED TOOLS:\n" +
-            "- get_tables → discover entities\n" +
+            "- inspect_metadata(resource='tables') → discover entities\n" +
             "- manage_column → add columns\n" +
             "- manage_relationship → 1:N / N:N\n" +
             "- manage_form → forms\n" +
@@ -171,7 +171,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var solResult = SolutionResolverHelper.Resolve(_orgService, solution_name, requireUnmanaged: true);
                     if (!solResult.IsSuccess)
-                        return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
+                        return Error(solResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='solution_components') to find valid solution names.");
                     resolvedPrefix = solResult.Prefix;
                     resolvedSolutionUniqueName = solResult.UniqueName;
                 }
@@ -188,7 +188,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                     else if (entityResolve.Status != ResolveStatus.NotFound)
                     {
-                        return Error(entityResolve.Error.Split("\r\n")[0], "Use get_tables to list entities.");
+                        return Error(entityResolve.Error.Split("\r\n")[0], "Use inspect_metadata(resource='tables') to list entities.");
                     }
 
                     if (existingEntity != null)
@@ -205,7 +205,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         return Error(
                             $"No existing entity found for logical_name '{logical_name}'. To CREATE a new table, also provide display_name + display_collection_name + solution_name. To UPDATE an existing table, double-check the logical name.",
-                            "Use get_tables to list entities.");
+                            "Use inspect_metadata(resource='tables') to list entities.");
                     }
                 }
                 else if (string.IsNullOrWhiteSpace(display_name))
@@ -217,7 +217,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (icon_vector_name.Length > 0)
                     return Error("icon_vector_name can only be set on an existing table.",
-                        "Use get_tables to find the table's logical_name, then call manage_table to update it.");
+                        "Use inspect_metadata(resource='tables') to find the table's logical_name, then call manage_table to update it.");
 
                 return CreateNewEntity(
                     display_name, display_collection_name, description,
@@ -312,7 +312,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         $"Cannot create table '{display_name}' because derived logical name '{entityName}' already exists.",
                         "Re-call manage_table with an explicit logical_name to update the existing entity, or choose a different display_name.");
                 if (collisionResolve.Status == ResolveStatus.Ambiguous || collisionResolve.Status == ResolveStatus.Error)
-                    return Error(collisionResolve.Error.Split("\r\n")[0], "Use get_tables to list entities.");
+                    return Error(collisionResolve.Error.Split("\r\n")[0], "Use inspect_metadata(resource='tables') to list entities.");
             }
 
             if (primary_attribute_max_length < 1) primary_attribute_max_length = 100;

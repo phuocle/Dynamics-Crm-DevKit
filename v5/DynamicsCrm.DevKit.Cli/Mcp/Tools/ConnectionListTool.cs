@@ -8,7 +8,6 @@ using System.Text.Json.Serialization;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public sealed class ConnectionListTool(IMcpConnectionResolver connections) : McpToolBase
     {
         [McpServerTool(Name = "connection_list", Title = "List connection groups, aliases and effective policy",
@@ -16,7 +15,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             OutputSchemaType = typeof(ConnectionListResult)),
          Description("List configured .env connection groups, aliases, startup selection and effective per-group policy without connecting or authenticating. File changes require restarting the server.\n\n" +
             "WHEN TO USE:\n- Discover connection IDs and aliases before targeting another environment\n- Inspect effective mutation protection and configured versus applied impersonation\n\n" +
-            "RELATED TOOLS:\n- whoami → verify the selected connection's live identity and runtime\n- get_tables → compare metadata by passing a connection ID or alias as env")]
+            "RELATED TOOLS:\n- get_context(action='whoami') → verify the selected connection's live identity and runtime\n- inspect_metadata(resource='tables') → compare metadata by passing a connection ID or alias as env")]
         public CallToolResult connection_list()
         {
             try

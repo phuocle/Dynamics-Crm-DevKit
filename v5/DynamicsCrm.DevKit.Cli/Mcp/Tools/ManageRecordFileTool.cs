@@ -58,8 +58,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Download a file or image to local disk (.devkit/manage_record_file/{entity}/{record}/)\n" +
             "- Clear a file/image column value without deleting the record\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_tables → find File/Image columns of a table\n" +
-            "- manage_record / search_records → find record_id\n" +
+            "- inspect_metadata(resource='tables') → find File/Image columns of a table\n" +
+            "- manage_record / query_data(mode='search') → find record_id\n" +
             "- manage_column → create file/image columns or raise MaxSizeInKB")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             McpServer server,
@@ -99,18 +99,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         "Provide one of: 'info', 'upload', 'download', 'delete'.");
                 if (string.IsNullOrWhiteSpace(entity_name))
                     return Error("entity_name is required.",
-                        "Use get_tables to discover table names.");
+                        "Use inspect_metadata(resource='tables') to discover table names.");
                 if (string.IsNullOrWhiteSpace(column_name))
                     return Error("column_name is required.",
-                        "Use get_tables(entity_name=..., detail_level='full') to list File/Image columns.");
+                        "Use inspect_metadata(resource='tables', name=..., detail_level='full') to list File/Image columns.");
                 if (!Guid.TryParse(record_id?.Trim(), out var recordId))
-                    return Error("record_id must be a valid GUID.", "Use search_records or parse_record_url to find the record id.");
+                    return Error("record_id must be a valid GUID.", "Use query_data(mode='search') or get_context(action='parse_url') to find the record id.");
 
                 var entityResolved = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "manage_record_file");
                 if (!entityResolved.IsSuccess)
                     return entityResolved.Status == ResolveStatus.NotFound
                         ? Error(entityResolved.Error.Split("\r\n")[0],
-                            "Use get_tables to list entities before calling manage_record_file.")
+                            "Use inspect_metadata(resource='tables') to list entities before calling manage_record_file.")
                         : Error(entityResolved.Error);
                 var entityLogical = entityResolved.Value.LogicalName;
 
@@ -118,7 +118,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!attrResolved.IsSuccess)
                     return attrResolved.Status == ResolveStatus.NotFound
                         ? Error(attrResolved.Error.Split("\r\n")[0],
-                            $"Use get_tables(entity_name='{entityLogical}') to list fields before calling manage_record_file.")
+                            $"Use inspect_metadata(resource='tables', name='{entityLogical}') to list fields before calling manage_record_file.")
                         : Error(attrResolved.Error);
                 var attribute = attrResolved.Value;
                 var fileAttr = attribute as FileAttributeMetadata;
@@ -126,7 +126,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (fileAttr == null && imageAttr == null)
                     return Error(
                         $"Column '{attribute.LogicalName}' on table '{entityLogical}' is of type '{attribute.AttributeType}' — not a file/image column.",
-                        "Use get_tables to list columns; file columns have type 'File', image columns have type 'Image'.");
+                        "Use inspect_metadata(resource='tables') to list columns; file columns have type 'File', image columns have type 'Image'.");
 
                 var workspaceFolder = action.Trim() is "upload" or "download"
                     ? await WorkspaceFolderHelper.GetAsync(server)

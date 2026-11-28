@@ -216,7 +216,7 @@ public sealed class ManageWebResourceFakeXrmEasyFullCoverageTests
         var result = NewTool().manage_webresource("list", solution_name: "nosuchsolution");
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(Text(result), "nosuchsolution' was not found by Display Name");
-        StringAssert.Contains(Text(result), "Use get_solution_components to find valid solution names.");
+        StringAssert.Contains(Text(result), "Use inspect_metadata(resource='solution_components') to find valid solution names.");
     }
 
     [TestMethod]
@@ -457,7 +457,7 @@ public sealed class ManageWebResourceFakeXrmEasyFullCoverageTests
             solution_name: "nosuchsolution");
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(Text(result), "nosuchsolution' was not found by Display Name");
-        StringAssert.Contains(Text(result), "Use get_solution_components to find valid solution names.");
+        StringAssert.Contains(Text(result), "Use inspect_metadata(resource='solution_components') to find valid solution names.");
     }
 
     [TestMethod]

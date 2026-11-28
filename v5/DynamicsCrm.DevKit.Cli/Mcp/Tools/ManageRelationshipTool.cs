@@ -52,7 +52,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Add or remove a polymorphic lookup target.\n\n" +
             "Read docs://schema_tools_guide before relationship changes for cascade, hierarchy and polymorphic lookup rules.\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_tables → discover relationships\n" +
+            "- inspect_metadata(resource='tables') → discover relationships\n" +
             "- manage_column → lookup columns\n" +
             "- publish_customizations → batch publish after multiple relationship changes")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
@@ -165,7 +165,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (string.IsNullOrWhiteSpace(solutionName))
                 return Error("solution_name is required for create_1n so the publisher prefix can be resolved.",
-                    "Provide solution_name (e.g., 'MyCustomSolution') to auto-resolve the prefix. Use get_solution_components to find valid solution names.");
+                    "Provide solution_name (e.g., 'MyCustomSolution') to auto-resolve the prefix. Use inspect_metadata(resource='solution_components') to find valid solution names.");
 
             var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName);
             if (!solResult.IsSuccess) return Error(solResult.Error);
@@ -292,7 +292,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (string.IsNullOrWhiteSpace(solutionName))
                 return Error("solution_name is required for create_nn so the publisher prefix can be resolved.",
-                    "Provide solution_name (e.g., 'MyCustomSolution') to auto-resolve the prefix. Use get_solution_components to find valid solution names.");
+                    "Provide solution_name (e.g., 'MyCustomSolution') to auto-resolve the prefix. Use inspect_metadata(resource='solution_components') to find valid solution names.");
 
             var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName);
             if (!solResult.IsSuccess) return Error(solResult.Error);
@@ -377,7 +377,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(relationshipName))
                 return Error("relationship_name is required for update.",
-                    "Use get_tables with entity_name to find relationship_name. Read docs://schema_tools_guide for cascade preset and type values.");
+                    "Use inspect_metadata(resource='tables') with entity_name to find relationship_name. Read docs://schema_tools_guide for cascade preset and type values.");
 
             relationshipName = relationshipName.Trim();
 
@@ -386,7 +386,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var solution = SolutionResolverHelper.Resolve(_orgService, solutionName, requireUnmanaged: true);
                 if (!solution.IsSuccess)
-                    return Error(solution.Error, "Use get_solution_components to find valid solution names.");
+                    return Error(solution.Error, "Use inspect_metadata(resource='solution_components') to find valid solution names.");
                 solutionUniqueName = solution.UniqueName;
             }
 
@@ -526,7 +526,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(relationshipName))
                 return Error("relationship_name is required for delete.",
-                    "Use get_tables with entity_name to find relationship_name.");
+                    "Use inspect_metadata(resource='tables') with entity_name to find relationship_name.");
 
             relationshipName = relationshipName.Trim();
 
@@ -582,13 +582,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (lookupAttr == null)
                 return Error($"Lookup attribute '{attributeName}' not found on entity '{entityName}'.",
-                    $"Use get_tables with entity_name='{entityName}' to inspect lookup columns.");
+                    $"Use inspect_metadata(resource='tables') with entity_name='{entityName}' to inspect lookup columns.");
 
             attributeName = lookupAttr.LogicalName;
 
             if (string.IsNullOrWhiteSpace(solutionName))
                 return Error("solution_name is required for add_target so the publisher prefix can be resolved.",
-                    "Provide solution_name (e.g., 'MyCustomSolution') to auto-resolve the prefix. Use get_solution_components to find valid solution names.");
+                    "Provide solution_name (e.g., 'MyCustomSolution') to auto-resolve the prefix. Use inspect_metadata(resource='solution_components') to find valid solution names.");
 
             var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName);
             if (!solResult.IsSuccess) return Error(solResult.Error);

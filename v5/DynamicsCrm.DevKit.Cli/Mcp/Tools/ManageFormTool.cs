@@ -64,10 +64,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Create a Quick Create form with action='create', form_type=7, form_name, and FormXML from the source form's detail result or a file\n" +
             "- Create a system dashboard with form_type=0, form_name, and formxml. Dashboard detail accepts form_id or a unique form_name match. Update and undo require form_id.\n" +
             "- Apply form operations via action=update (recommended: operations JSON) or raw formxml (advanced/undo)\n" +
-            "- Bind installed PCF controls to field or subgrid instances with manage_custom_control operations. Discover names and manifest parameters with get_custom_controls.\n" +
+            "- Bind installed PCF controls to field or subgrid instances with manage_custom_control operations. Discover names and manifest parameters with inspect_metadata(resource='custom_controls').\n" +
             "- Rename a form, or restore a form from a .formxml backup (undo) — the result's backupPath points to the pre-change backup; pass it as formxml to action='undo' to restore\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_tables → entity logical names; manage_view → entity views; publish_customizations → batch publish\n" +
+            "- inspect_metadata(resource='tables') → entity logical names; manage_view → entity views; publish_customizations → batch publish\n" +
             "- See schema://formxml + docs://instructions_for_formxml for FormXML structure and operation examples")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             McpServer server,
@@ -115,7 +115,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!dashboard)
                 {
                     if (string.IsNullOrWhiteSpace(entity_name))
-                        return Error("entity_name is required.", "Use get_tables to find the entity logical name.");
+                        return Error("entity_name is required.", "Use inspect_metadata(resource='tables') to find the entity logical name.");
                     var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "manage_form", out entityCatalog);
                     if (!entityResult.IsSuccess)
                         return Error(entityResult.Error);
@@ -141,7 +141,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var resolved = SolutionResolverHelper.Resolve(_orgService, solution_name, requireUnmanaged: true);
                     if (!resolved.IsSuccess || string.IsNullOrWhiteSpace(resolved.UniqueName))
                         return Error(resolved.Error ?? $"Solution '{solution_name}' has no unique name.",
-                            "Use get_solution_components to find valid solution names.");
+                            "Use inspect_metadata(resource='solution_components') to find valid solution names.");
                     solution = resolved.UniqueName;
                 }
 

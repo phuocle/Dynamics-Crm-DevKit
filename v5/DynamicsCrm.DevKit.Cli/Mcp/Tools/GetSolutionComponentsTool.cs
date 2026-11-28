@@ -15,7 +15,6 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class GetSolutionComponentsTool : McpToolBase
     {
         private readonly IOrganizationService _orgService;
@@ -35,15 +34,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetSolutionComponentsResult)),
         Description(
-            "List components in a Dataverse solution. Returns: solution info + count-per-type summary + detail (componentType, objectId, name). Full Entity components (rootComponentBehavior=0) listed as-is — use get_tables for sub-components. solution_name resolves Display Name contains first, then unique name contains; ambiguity returns IsError=true with candidates.\n\n" +
+            "List components in a Dataverse solution. Returns: solution info + count-per-type summary + detail (componentType, objectId, name). Full Entity components (rootComponentBehavior=0) listed as-is — use inspect_metadata(resource='tables') for sub-components. solution_name resolves Display Name contains first, then unique name contains; ambiguity returns IsError=true with candidates.\n\n" +
 
             "WHEN TO USE:\n" +
             "- Audit solution contents before packaging/deploying\n" +
             "- Find objectIds for plugins, web resources, workflows\n" +
             "- Identify unmanaged customizations before importing managed solutions\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_tables → entity/attribute metadata for sub-components\n" +
-            "- get_plugins → plugin assembly/type/step detail\n" +
+            "- inspect_metadata(resource='tables') → entity/attribute metadata for sub-components\n" +
+            "- inspect_automation(resource='plugins') → plugin assembly/type/step detail\n" +
             "- manage_webresource → web resource detail")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Solution unique/display name; multiple matches return choices.")] string solution_name = "",
@@ -101,10 +100,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     if (solutionResult.Status == ResolveStatus.NotFound)
                         return Error(
                             $"'{solution_name.Trim()}' was not found by Display Name or Logical/Unique/Schema Name.",
-                            "Use get_solution_components with a more specific solution_name.");
+                            "Use inspect_metadata(resource='solution_components') with a more specific solution_name.");
 
                     return Error(solutionResult.Error.Split("\r\n")[0],
-                        "Use get_solution_components with a more specific solution_name.");
+                        "Use inspect_metadata(resource='solution_components') with a more specific solution_name.");
                 }
 
                 var solution = solutionResult.Value;
@@ -175,7 +174,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 candidates,
                 "[AmbiguousSolution]",
                 "[NotFoundSolution]",
-                "Use get_solution_components with a more specific solution_name.",
+                "Use inspect_metadata(resource='solution_components') with a more specific solution_name.",
                 "solution_name");
         }
 

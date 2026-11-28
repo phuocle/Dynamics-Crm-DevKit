@@ -45,7 +45,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Inspect default/current values; move config between environments via solutions\n\n" +
             "RELATED TOOLS:\n" +
             "- execute_webapi → environmentvariable* endpoints are blocked; use this tool\n" +
-            "- get_solution_components → verify a variable's solution membership")]
+            "- inspect_metadata(resource='solution_components') → verify a variable's solution membership")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("'list', 'detail', 'create', 'update', 'delete', 'clear'.")] string action = "",
             [Description("Display/schema name with prefix (e.g. 'v4_ApiEndpoint'). Required: detail/update/delete/clear. Omit for create (derived from solution).")] string variable_name = "",
@@ -131,7 +131,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Resolve solution → publisher prefix
             var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName.Trim());
             if (!solResult.IsSuccess)
-                return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
+                return Error(solResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='solution_components') to find valid solution names.");
 
             // Layer 2 (code gate): block 'new' prefix — it means the solution's publisher is misconfigured
             // or the AI bypassed the layer-1 gate by guessing a default prefix
@@ -179,7 +179,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName.Trim());
                 if (!solResult.IsSuccess)
-                    return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
+                    return Error(solResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='solution_components') to find valid solution names.");
                 solutionName = solResult.UniqueName;
             }
 

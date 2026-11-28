@@ -91,7 +91,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Combine with build_form_xml + manage_form to wire JS into a form\n" +
             "- Creating a JS web resource for view icons/tooltips → the function contract (rowData/{col}_Value, [imgName, tooltip] return) is in docs://instructions_for_views — read it first\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_solution_components → find solution names for create\n" +
+            "- inspect_metadata(resource='solution_components') → find solution names for create\n" +
             "- manage_form → wire the JS library into a form\n" +
             "- publish_customizations → publish other components (create/update auto-publish)")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
@@ -183,7 +183,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName.Trim());
                 if (!solResult.IsSuccess)
-                    return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
+                    return Error(solResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='solution_components') to find valid solution names.");
 
                 solutionName = solResult.UniqueName;
                 solutionJoin = $@"
@@ -341,11 +341,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (string.IsNullOrWhiteSpace(solutionName))
                 return Error("solution_name is required for 'create'.",
-                             "Provide the solution unique name or display name. Use get_solution_components to find available solutions.");
+                             "Provide the solution unique name or display name. Use inspect_metadata(resource='solution_components') to find available solutions.");
 
             var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName.Trim());
             if (!solResult.IsSuccess)
-                return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
+                return Error(solResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='solution_components') to find valid solution names.");
 
             name = name.Trim();
 

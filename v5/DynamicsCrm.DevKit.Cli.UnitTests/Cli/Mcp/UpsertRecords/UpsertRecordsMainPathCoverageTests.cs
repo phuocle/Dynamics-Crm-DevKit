@@ -57,7 +57,7 @@ public class UpsertRecordsMainPathCoverageTests
         Assert.IsTrue(result.IsError, "Entity resolution failure must return an error.");
         var text = result.GetText();
         Assert.IsTrue(text.Contains("Failed to resolve entity 'account'"), $"Should surface the resolver failure. Got: {text}");
-        Assert.IsTrue(text.Contains("Use get_tables"), $"Hint should point at get_tables. Got: {text}");
+        Assert.IsTrue(text.Contains("Use inspect_metadata(resource='tables')"), $"Hint should point at inspect_metadata(resource='tables'). Got: {text}");
     }
 
     [TestMethod]

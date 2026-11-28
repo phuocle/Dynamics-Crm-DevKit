@@ -19,7 +19,6 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Plugin;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class GetPluginsTool : McpToolBase
     {
         private readonly IOrganizationService _orgService;
@@ -101,9 +100,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Find synchronous plugins (mode='sync'; Pre-op can cancel/rollback)\n\n" +
             "For plugin and related server-logic inspection modes, read docs://server_logic_guide.\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_plugin_trace_logs → execution traces\n" +
-            "- get_system_jobs → async failures\n" +
-            "- get_messages → SDK messages + legacy Custom Actions\n" +
+            "- inspect_diagnostics(resource='plugin_traces') → execution traces\n" +
+            "- inspect_diagnostics(resource='system_jobs') → async failures\n" +
+            "- inspect_automation(resource='messages') → SDK messages + legacy Custom Actions\n" +
             "- manage_custom_api → modern Custom API definitions")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Assembly name contains. 1 match → detail; 0/2+ → disambiguation. Empty = list all.")] string assembly_name = "",
@@ -173,12 +172,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         if (!string.IsNullOrWhiteSpace(package_id))
                         {
                             if (!Guid.TryParse(package_id.Trim(), out var parsedPackageId) || parsedPackageId == Guid.Empty)
-                                return Error("package_id must be a non-empty GUID.", "Use the packageId returned in packages by get_plugins.");
+                                return Error("package_id must be a non-empty GUID.", "Use the packageId returned in packages by inspect_automation(resource='plugins').");
                             packageId = parsedPackageId;
                         }
                         var packageMatches = GetPackages(2, package_name?.Trim(), packageId);
                         if (packageMatches.Count == 0)
-                            return Error("No plugin package found for download.", "Use get_plugins without filters to list available packages.");
+                            return Error("No plugin package found for download.", "Use inspect_automation(resource='plugins') without filters to list available packages.");
                         if (packageMatches.Count > 1)
                             return Error($"Multiple plugin packages match '{package_name.Trim()}'. No file written.",
                                 "Use package_id from the package list to select exactly one package.",
@@ -196,18 +195,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     if (!string.IsNullOrWhiteSpace(assembly_id))
                     {
                         if (!Guid.TryParse(assembly_id.Trim(), out var parsedId) || parsedId == Guid.Empty)
-                            return Error("assembly_id must be a non-empty GUID.", "Use the assemblyId returned by get_plugins.");
+                            return Error("assembly_id must be a non-empty GUID.", "Use the assemblyId returned by inspect_automation(resource='plugins').");
                         assemblyId = parsedId;
                         if (!string.IsNullOrWhiteSpace(assembly_name))
                             return Error("Provide either assembly_name or assembly_id for download, not both.", "Use assembly_id to select an assembly unambiguously.");
                     }
                     else if (string.IsNullOrWhiteSpace(assembly_name))
-                        return Error("assembly_name or assembly_id is required for download.", "Use get_plugins without filters to list available assemblies.");
+                        return Error("assembly_name or assembly_id is required for download.", "Use inspect_automation(resource='plugins') without filters to list available assemblies.");
 
                     // Always inspect at least two matches, even when max_records=1.
                     var matches = FetchAssemblies(assembly_name?.Trim(), 2, assemblyId);
                     if (matches.Count == 0)
-                        return Error("No plugin assembly found for download.", "Use get_plugins without filters to list available assemblies.");
+                        return Error("No plugin assembly found for download.", "Use inspect_automation(resource='plugins') without filters to list available assemblies.");
                     if (matches.Count > 1)
                         return Error($"Multiple plugin assemblies match '{assembly_name.Trim()}'. No file written.",
                             "Use assembly_id from the assembly list to select exactly one assembly.",
@@ -241,23 +240,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (!string.IsNullOrWhiteSpace(message_name) && ResolveSdkMessageId(message_name.Trim()) == null)
                     return Error($"SDK message '{message_name.Trim()}' not found.",
-                        "Use get_messages to discover valid SDK message names.");
+                        "Use inspect_automation(resource='messages') to discover valid SDK message names.");
 
                 // ── Mode dispatch ───────────────────────────────────────────
                 // entity_name → steps on entity (wins over assembly_name)
                 if (!string.IsNullOrWhiteSpace(entity_name))
                 {
-                    var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "get_plugins");
+                    var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "inspect_automation(resource='plugins')");
                     if (!entityResult.IsSuccess)
                         return Error(
                             $"entity_name '{entity_name.Trim()}': {entityResult.Error.Split("\r\n")[0]}",
-                            "Use get_tables to list entities before calling get_plugins.");
+                            "Use inspect_metadata(resource='tables') to list entities before calling inspect_automation(resource='plugins').");
 
                     var resolvedEntityName = entityResult.Value.LogicalName;
                     var otc = GetObjectTypeCode(resolvedEntityName);
                     if (otc == null)
                         return Error($"Entity '{resolvedEntityName}' not found.",
-                            "Use get_tables to discover valid entity names.");
+                            "Use inspect_metadata(resource='tables') to discover valid entity names.");
 
                     var steps = GetSteps(null, otc.Value, message_name, type_name, stage, mode, active_only, include_config, max_records);
                     // Post-filter: outer join can leak steps from other entities or unbound steps
@@ -285,7 +284,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var assemblies = FetchAssemblies(asmName, max_records);
                     if (assemblies.Count == 0)
                         return Error($"No plugin assembly matching '{asmName}' found.",
-                            "Use get_plugins without assembly_name to list all available assemblies.");
+                            "Use inspect_automation(resource='plugins') without assembly_name to list all available assemblies.");
 
                     // Multiple matches → disambiguation list
                     if (assemblies.Count > 1)

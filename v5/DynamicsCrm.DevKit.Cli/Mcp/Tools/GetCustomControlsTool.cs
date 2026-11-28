@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class GetCustomControlsTool : McpToolBase
     {
         private readonly IOrganizationService _orgService;
@@ -36,7 +35,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Look up the exact registered name and required manifest mappings before binding\n\n" +
             "RELATED TOOLS:\n" +
             "- manage_form → bind, update, or unbind the PCF with manage_custom_control operations\n" +
-            "- get_tables → inspect the Dataverse columns available for property mappings")]
+            "- inspect_metadata(resource='tables') → inspect the Dataverse columns available for property mappings")]
         public Task<CallToolResult> InvokeAsync(
             [Description("Filter by the registered PCF name.")] string name = "",
             [Description("Name match: contains (default), prefix, or exact.")] string name_match = "contains",

@@ -350,13 +350,13 @@ public sealed class ManageRibbonFakeXrmEasySweepTests
         Assert.IsFalse(result.IsError == true, Text(result));
         StringAssert.Contains(Text(result), "environment_busy");
         StringAssert.Contains(Text(result), "ImportSolution InProgress");
-        StringAssert.Contains(Text(result), "get_system_jobs");
+        StringAssert.Contains(Text(result), "inspect_diagnostics");
 
         var structured = Struct(result);
         Assert.AreEqual("environment_busy", structured.GetProperty("status").GetString());
         Assert.IsTrue(structured.GetProperty("needsWait").GetBoolean());
         Assert.AreEqual(jobId.ToString(), structured.GetProperty("asyncOperationId").GetString());
-        Assert.AreEqual("get_system_jobs", structured.GetProperty("waitTool").GetString());
+        Assert.AreEqual("inspect_diagnostics", structured.GetProperty("waitTool").GetString());
         Assert.IsFalse(structured.GetProperty("readbackAllowed").GetBoolean());
         Assert.AreEqual(3, structured.GetProperty("pollScheduleSeconds").GetArrayLength());
         Assert.AreEqual(3, structured.GetProperty("maxPollAttempts").GetInt32());

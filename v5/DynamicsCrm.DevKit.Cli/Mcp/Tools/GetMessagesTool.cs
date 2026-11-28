@@ -15,7 +15,6 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class GetMessagesTool : McpToolBase
     {
         private readonly MetadataService _metadataService;
@@ -61,8 +60,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "MIGRATION RULE (STRICT): Inspect and convert ONE custom action at a time in detail mode. Never batch-convert actions.\n\n" +
             "RELATED TOOLS:\n" +
             "- manage_custom_api → modern Custom API definitions (replaces Custom Actions)\n" +
-            "- get_plugins → plugin assemblies/types/steps registered on these messages\n" +
-            "- get_workflows → classic workflow definitions (background + realtime)")]
+            "- inspect_automation(resource='plugins') → plugin assemblies/types/steps registered on these messages\n" +
+            "- inspect_automation(resource='workflows') → classic workflow definitions (background + realtime)")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Entity Display/logical name. 'none'/empty = global. Ignored in detail mode.")] string entity_name = "none",
             [Description("Message/Action name → detail mode. Empty = list mode.")] string message_name = "",
@@ -95,7 +94,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrEmpty(scopeResult.Error))
                     return Error(
                         scopeResult.Error.Split("\r\n")[0],
-                        "Use get_tables to list entities before calling get_messages.");
+                        "Use inspect_metadata(resource='tables') to list entities before calling inspect_automation(resource='messages').");
                 entity_name = scopeResult.Scope;
                 if (max_records <= 0) max_records = 100;
                 if (max_records > 500) max_records = 500;
@@ -139,7 +138,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 entityName.Trim().Equals("none", StringComparison.OrdinalIgnoreCase))
                 return ("none", null);
 
-            var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "get_messages");
+            var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "inspect_automation(resource='messages')");
             if (!entityResult.IsSuccess)
                 return (null, $"entity_name '{entityName.Trim()}': {entityResult.Error}");
 
@@ -175,7 +174,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             return Error(
                 $"Message or Custom Action '{messageName}' not found.",
-                "Call get_messages without message_name to list all available messages for the entity.");
+                "Call inspect_automation(resource='messages') without message_name to list all available messages for the entity.");
         }
 
         private CallToolResult FormatSdkMessageDetail(Entity sdkMsg, bool isCustomOperation)

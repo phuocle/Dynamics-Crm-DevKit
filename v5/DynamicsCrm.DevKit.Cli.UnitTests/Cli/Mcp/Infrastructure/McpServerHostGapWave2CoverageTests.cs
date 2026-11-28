@@ -17,21 +17,21 @@ public sealed class McpServerHostGapWave2CoverageTests
     {
         var catalog = McpServerHost.GetToolCatalog();
         var resourceCount = McpServerHost.GetResourceCount();
-        Assert.IsTrue(catalog.Any(tool => tool.Name == "execute_sql"));
+        Assert.IsTrue(catalog.Any(tool => tool.Name == "query_data"));
         Assert.AreEqual(14, resourceCount);
 
         try
         {
-            McpServerHost.DisabledToolSet.Add(nameof(ExecuteSqlTool));
+            McpServerHost.DisabledToolSet.Add(nameof(QueryDataTool));
             var filtered = McpServerHost.GetToolCatalog();
 
             Assert.AreEqual(catalog.Count - 1, filtered.Count);
-            Assert.IsFalse(filtered.Any(tool => tool.Name == "execute_sql"));
+            Assert.IsFalse(filtered.Any(tool => tool.Name == "query_data"));
             Assert.AreEqual(resourceCount - 1, McpServerHost.GetResourceCount());
         }
         finally
         {
-            McpServerHost.DisabledToolSet.Remove(nameof(ExecuteSqlTool));
+            McpServerHost.DisabledToolSet.Remove(nameof(QueryDataTool));
         }
 
         Assert.AreEqual(catalog.Count, McpServerHost.GetToolCatalog().Count);

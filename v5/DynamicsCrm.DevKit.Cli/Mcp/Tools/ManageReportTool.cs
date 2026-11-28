@@ -56,7 +56,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Manage Dataverse SSRS reports and local RDL files: list/detail/download read Dataverse; update writes an existing unmanaged report. create, add_dataset and update_dataset operate locally only. New reports are deployed via VSIX/CLI; update needs no publish.\n\n" +
             "Before RDL or dataset work, read docs://instructions_for_manage_report for local paths, backups, FetchXML support, language selection and deployment behavior. Dataset actions require file_path, dataset_name and fetchxml; a system view name also requires entity_name.\n\n" +
-            "Use get_solution_components to find solutions and execute_fetchxml to query report records.")]
+            "Use inspect_metadata(resource='solution_components') to find solutions and query_data(mode='fetchxml') to query report records.")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             McpServer server,
             [Description("'list', 'detail', 'create', 'download', 'update', 'add_dataset', 'update_dataset'.")] string action = "",
@@ -146,7 +146,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var solResult = SolutionResolverHelper.Resolve(_orgServiceAsync, solutionName.Trim());
                 if (!solResult.IsSuccess)
-                    return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
+                    return Error(solResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='solution_components') to find valid solution names.");
                 resolvedSolutionName = solResult.UniqueName;
                 solutionJoin = $@"
     <link-entity name='solutioncomponent' from='objectid' to='reportid' link-type='inner'>
@@ -479,7 +479,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return (false, "entity_name is required when fetchxml is a system view name.", "Provide the entity display/logical name together with the system view name.", null, null);
                 var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgServiceAsync, entityName.Trim(), "manage_report");
                 if (!entityResult.IsSuccess)
-                    return (false, entityResult.Error.Split("\r\n")[0], "Use get_tables to resolve a valid entity name.", null, null);
+                    return (false, entityResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='tables') to resolve a valid entity name.", null, null);
                 logicalName = entityResult.Value.LogicalName;
                 var viewQuery = new QueryExpression("savedquery")
                 {

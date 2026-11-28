@@ -65,7 +65,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                     candidates,
                     "[AmbiguousField]",
                     "[NotFoundField]",
-                    $"Tip: Use get_tables(entity_name='{entityName}') to list fields before calling manage_form.",
+                    $"Tip: Use inspect_metadata(resource='tables', name='{entityName}') to list fields before calling manage_form.",
                     "operations field");
 
                 if (!result.IsSuccess)
@@ -175,7 +175,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                 if (similar.Count > 0)
                     sb.AppendLine($"  Similar: {string.Join(", ", similar)}");
             }
-            sb.AppendLine($"\nTip: Use get_tables('{entityName}') to list all available fields.");
+            sb.AppendLine($"\nTip: Use inspect_metadata(resource='tables', name='{entityName}') to list all available fields.");
             throw new FormXmlOperationsException(sb.ToString());
         }
 

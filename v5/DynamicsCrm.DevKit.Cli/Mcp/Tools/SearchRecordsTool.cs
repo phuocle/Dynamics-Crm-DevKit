@@ -22,7 +22,6 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class SearchRecordsTool : McpToolBase
     {
         private readonly IOrganizationService _orgService;
@@ -53,8 +52,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- detail_level='full' → raw API payload saved to {workspace}/.devkit/search_records/ (workspace auto-resolved from MCP roots or server cwd; path returned in the result's filePath); read it with file tools\n\n" +
             "Read docs://data_operations_guide for search operators, filtering and prerequisites.\n\n" +
             "RELATED TOOLS:\n" +
-            "- execute_fetchxml → deterministic field filters and joins\n" +
-            "- get_tables → discover searchable entity logical names")]
+            "- query_data(mode='fetchxml') → deterministic field filters and joins\n" +
+            "- inspect_metadata(resource='tables') → discover searchable entity logical names")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             McpServer server,
             [Description("'search' (default) or 'status'.")] string action = "search",
@@ -143,7 +142,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
                 return Error(
                     $"entities '{failed.Input}': {failed.Result.Error.Split("\r\n")[0]}",
-                    "Use get_tables to discover valid entity names.");
+                    "Use inspect_metadata(resource='tables') to discover valid entity names.");
             }
             var requestBody = BuildSearchRequestBody(trimmedTerm, resolvedEntities.Values, top, filter);
 
@@ -239,7 +238,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var resolved = new List<string>();
             foreach (var input in entities.Split(',').Select(e => e.Trim()).Where(e => !string.IsNullOrEmpty(e)))
             {
-                var r = DisplayNameFirstResolver.ResolveEntity(_orgService, input, "search_records");
+                var r = DisplayNameFirstResolver.ResolveEntity(_orgService, input, "query_data(mode='search')");
                 if (!r.IsSuccess)
                     return (null, (input, r));
                 if (!string.IsNullOrWhiteSpace(r.Value?.LogicalName))

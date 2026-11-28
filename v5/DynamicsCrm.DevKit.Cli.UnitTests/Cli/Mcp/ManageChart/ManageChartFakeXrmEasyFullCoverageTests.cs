@@ -218,7 +218,7 @@ public sealed class ManageChartFakeXrmEasyFullCoverageTests
     {
         var result = await NewTool().manage_chart(null!, "create", "nosuchentity", chart_name: "X");
         Assert.IsTrue(result.IsError == true);
-        StringAssert.Contains(Text(result), "Use get_tables to list entities");
+        StringAssert.Contains(Text(result), "Use inspect_metadata(resource='tables') to list entities");
     }
 
     [TestMethod]

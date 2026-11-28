@@ -400,7 +400,7 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
     {
         var result = NewTool().manage_column(entity_name: "Accou", attribute_type: "string", display_name: "X", solution_name: "DevKit");
         AssertError(result, "Multiple candidates match 'Accou' during display name search.");
-        StringAssert.Contains(Text(result), "Use get_tables to list entities.");
+        StringAssert.Contains(Text(result), "Use inspect_metadata(resource='tables') to list entities.");
     }
 
     [TestMethod]
@@ -765,7 +765,7 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
     {
         var result = NewTool().manage_column(entity_name: "account", logical_name: "Dup Field", display_name: "X");
         AssertError(result, "Multiple candidates match 'Dup Field' during display name search.");
-        StringAssert.Contains(Text(result), "Use get_tables to list entities and attributes.");
+        StringAssert.Contains(Text(result), "Use inspect_metadata(resource='tables') to list entities and attributes.");
     }
 
     [TestMethod]

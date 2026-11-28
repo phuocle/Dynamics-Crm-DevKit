@@ -103,7 +103,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                                 "Table-scoped commands apply across all apps.");
                         if (string.IsNullOrWhiteSpace(entityName))
                             return Error($"entity_name is required when hiding or showing a global command at scope='{effectiveScope}'.",
-                                "Pass the entity Display Name or logical name. Use get_tables to list available tables.");
+                                "Pass the entity Display Name or logical name. Use inspect_metadata(resource='tables') to list available tables.");
                         if (effectiveScope == "app" && wantHidden && string.IsNullOrWhiteSpace(appId) && string.IsNullOrWhiteSpace(appName))
                             return Error("app_id or app_name is required for action='hide'.",
                                 "Multiple apps may exist — specify which app to apply the hide override to, or pass scope='table' to hide across all apps.");
@@ -123,7 +123,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         var (targetEntityLogical, targetEntityErr) = ResolveEntityLogicalName(entityName);
                         if (targetEntityErr != null)
                             return Error(targetEntityErr.Split("\r\n")[0],
-                                "Use get_tables to list available tables.");
+                                "Use inspect_metadata(resource='tables') to list available tables.");
 
                         var existingLabel = existing.GetAttributeValue<string>("buttonlabeltext");
                         var effectiveLabel = !string.IsNullOrWhiteSpace(label)
@@ -275,7 +275,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         "Table-scoped commands apply across all apps.");
                 if (string.IsNullOrWhiteSpace(entityName))
                     return Error($"entity_name is required when using label lookup for action='{verb}'.",
-                        "Pass the entity Display Name or logical name. Use get_tables to list available tables.");
+                        "Pass the entity Display Name or logical name. Use inspect_metadata(resource='tables') to list available tables.");
                 if (string.IsNullOrWhiteSpace(location))
                     return Error($"location is required when using label lookup for action='{verb}'.",
                         "Pass one of: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', 'dashboard'.");
@@ -286,7 +286,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var (tableEntityLogical, tableEntityErr) = ResolveEntityLogicalName(entityName);
                 if (tableEntityErr != null)
                     return Error(tableEntityErr.Split("\r\n")[0],
-                        "Use get_tables to list available tables.");
+                        "Use inspect_metadata(resource='tables') to list available tables.");
 
                 return ExecuteEntityScopedHideShow(label.Trim(), tableEntityLogical, tableLocValue, "table", appId, appName, wantHidden, solutionName: solutionName);
             }
@@ -297,7 +297,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Pass command_id (appaction GUID), or label together with entity_name and location for fuzzy lookup.");
             if (string.IsNullOrWhiteSpace(entityName))
                 return Error($"entity_name is required when using label lookup for action='{verb}'.",
-                    "Pass the entity Display Name or logical name. Use get_tables to list available tables.");
+                    "Pass the entity Display Name or logical name. Use inspect_metadata(resource='tables') to list available tables.");
             if (string.IsNullOrWhiteSpace(location))
                 return Error($"location is required when using label lookup for action='{verb}'.",
                     "Pass one of: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', 'dashboard'.");
@@ -312,7 +312,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var (resolvedEntityName, entityError) = ResolveEntityLogicalName(entityName);
             if (entityError != null)
                 return Error(entityError.Split("\r\n")[0],
-                    "Use get_tables to list available tables.");
+                    "Use inspect_metadata(resource='tables') to list available tables.");
 
             return ExecuteEntityScopedHideShow(label.Trim(), resolvedEntityName, locationValue, "app", appId, appName, wantHidden, solutionName: solutionName);
         }

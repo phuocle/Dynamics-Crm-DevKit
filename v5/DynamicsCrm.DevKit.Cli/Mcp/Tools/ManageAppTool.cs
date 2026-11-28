@@ -74,7 +74,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Read docs://instructions_for_manage_app before update_navigation for operation fields, positions, and examples.\n" +
             "- App is resolved by Display Name first, then unique name/GUID; ambiguous Display Names return the candidates\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_solution_components → solution names for create\n" +
+            "- inspect_metadata(resource='solution_components') → solution names for create\n" +
             "- publish_customizations → publish other components (manage_app mutations auto-publish the app)\n" +
             "- execute_webapi → blocked for appmodule/sitemap/appmodulecomponent; use this tool instead")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
@@ -262,7 +262,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         }).ToList(),
                         Published = false
                     });
-                return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
+                return Error(solResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='solution_components') to find valid solution names.");
             }
 
             var appUniqueName = string.IsNullOrWhiteSpace(uniqueName)
@@ -780,7 +780,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var resolved = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "manage_app");
                 if (!resolved.IsSuccess)
-                    return Error(resolved.Error, "Use get_tables to find the table's logical name.");
+                    return Error(resolved.Error, "Use inspect_metadata(resource='tables') to find the table's logical name.");
                 entityMetadata = resolved.Value;
             }
 

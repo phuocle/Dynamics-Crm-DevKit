@@ -19,8 +19,8 @@ public class McpCommandCoverageTests
         var (exitCode, stdout, stderr) = await ExecuteWithConsoleAsync(new McpCommandArgs { ListTools = true });
 
         Assert.AreEqual(0, exitCode);
-        StringAssert.Contains(stdout, "DevKit MCP Tools (42)");
-        StringAssert.Contains(stdout, "whoami");
+        StringAssert.Contains(stdout, "DevKit MCP Tools (29)");
+        StringAssert.Contains(stdout, "get_context");
         StringAssert.Contains(stdout, "manage_record");
         var lines = stdout.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
         Assert.AreEqual("=========================================================================", lines[^2]);
@@ -62,7 +62,7 @@ public class McpCommandCoverageTests
         StringAssert.Contains(envExample, "DEVKIT_1_DRY_RUN=true");
         StringAssert.Contains(stdout[clientConfig..verifyGroups], "args = [\"mcp\", \"devkit-codex\"]");
         StringAssert.Contains(stdout[verifyGroups..startupGroup], "env=default, dryRun=false");
-        StringAssert.Contains(stdout[verifyGroups..startupGroup], "{\"env\":\"org-b\"}      env=1, dryRun=true");
+        StringAssert.Contains(stdout[verifyGroups..startupGroup], "{\"action\":\"whoami\",\"env\":\"org-b\"}            env=1, dryRun=true");
         StringAssert.Contains(stdout[startupGroup..optionalServer], "args = [\"mcp\", \"devkit-codex\", \"--env\", \"org-b\"]");
         StringAssert.Contains(stdout, "OAuth (legacy) and AD (on-premises) use URL, USERNAME and PASSWORD.");
         StringAssert.Contains(stdout[clientConfig..optionalServer], ".mcp.json");

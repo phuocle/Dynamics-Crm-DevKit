@@ -529,7 +529,7 @@ public sealed class UpsertRecordsFakeSdkMainPathTests
         var result = await NewTool().upsert_records(entity, """[{"name":"A"}]""", 1, false, "nonexistent_key");
 
         Assert.IsTrue(result.IsError == true, result.GetText());
-        StringAssert.Contains(result.GetText(), "Use get_tables");
+        StringAssert.Contains(result.GetText(), "Use inspect_metadata(resource='tables', name=");
     }
 
     [TestMethod]

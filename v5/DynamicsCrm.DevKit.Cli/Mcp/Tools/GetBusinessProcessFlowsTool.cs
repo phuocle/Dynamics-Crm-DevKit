@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
@@ -15,7 +15,6 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class GetBusinessProcessFlowsTool : McpToolBase
     {
         private readonly IOrganizationService _orgService;
@@ -54,9 +53,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Resolve BPF unique/logical name for the auto-created entity\n\n" +
             "For BPF and related server-logic inspection modes, read docs://server_logic_guide.\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_workflows → classic workflow definitions (background async + realtime sync)\n" +
-            "- get_business_rules → client-side business rules\n" +
-            "- get_flows → Power Automate cloud flows")]
+            "- inspect_automation(resource='workflows') → classic workflow definitions (background async + realtime sync)\n" +
+            "- inspect_automation(resource='business_rules') → client-side business rules\n" +
+            "- inspect_automation(resource='flows') → Power Automate cloud flows")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("GUID -> detail. Empty = list.")] string? bpf_id = null,
             [Description("Name contains. 1 match -> auto-detail. Omit or pass null to list all.")] string? bpf_name = null,
@@ -113,11 +112,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 string? resolvedEntityName = null;
                 if (!string.IsNullOrWhiteSpace(entity_name))
                 {
-                    var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "get_business_process_flows");
+                    var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "inspect_automation(resource='bpfs')");
                     if (!entityResult.IsSuccess)
                         return Error(
                             entityResult.Error.Split("\r\n")[0],
-                            "Use get_tables to list entities before calling get_business_process_flows.");
+                            "Use inspect_metadata(resource='tables') to list entities before calling inspect_automation(resource='bpfs').");
                     resolvedEntityName = entityResult.Value.LogicalName;
                 }
 
@@ -136,7 +135,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     return Error(
                         $"No Business Process Flow matched bpf_name '{bpf_name.Trim()}'.",
-                        "Use get_business_process_flows without bpf_name to list available BPFs.");
+                        "Use inspect_automation(resource='bpfs') without bpf_name to list available BPFs.");
                 }
 
                 if (bpfs.Count == 0)
@@ -237,7 +236,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
                 return Error($"Business Process Flow '{bpfId}' not found (or not a BPF workflow).",
-                    "Use get_business_process_flows without bpf_id to list available BPFs.");
+                    "Use inspect_automation(resource='bpfs') without bpf_id to list available BPFs.");
 
             var entity = result.Entities[0];
             var entry = MapBpfEntry(entity);

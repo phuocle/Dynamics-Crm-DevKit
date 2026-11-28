@@ -440,7 +440,7 @@ public sealed class ManageColumnFakeXrmEasyFullCoverageTests
         var result = NewTool().manage_column(entity_name: "account", attribute_type: "string",
             display_name: "Dev X", solution_name: "Ghost");
         Assert.IsTrue(result.IsError == true);
-        StringAssert.Contains(result.GetText(), "Use get_solution_components");
+        StringAssert.Contains(result.GetText(), "Use inspect_metadata(resource='solution_components')");
     }
 
     [TestMethod]

@@ -37,7 +37,7 @@ public sealed class SmallToolGateCoverageWave3bTests
         var tool = NewBpfTool(null);
         var result = await CallWorker(tool, "get_business_process_flows",
             ("entity_name", "NoSuchEntity"));
-        StringAssert.Contains(Text(result), "Use get_tables to list entities before calling");
+        StringAssert.Contains(Text(result), "Use inspect_metadata(resource='tables') to list entities before calling");
     }
 
     [TestMethod]
@@ -120,7 +120,7 @@ public sealed class SmallToolGateCoverageWave3bTests
     {
         var tool = new GetBusinessRulesTool(NewScriptService(null));
         var result = await CallWorker(tool, "get_business_rules", ("entity_name", "NoSuchEntity"));
-        StringAssert.Contains(Text(result), "Use get_tables to list entities before calling");
+        StringAssert.Contains(Text(result), "Use inspect_metadata(resource='tables') to list entities before calling");
     }
 
     [TestMethod]

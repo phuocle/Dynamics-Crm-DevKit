@@ -150,7 +150,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var resolved = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "manage_command");
                 if (!resolved.IsSuccess)
-                    return (null, Error(resolved.Error.Split("\r\n")[0], "Use get_tables to list available tables."));
+                    return (null, Error(resolved.Error.Split("\r\n")[0], "Use inspect_metadata(resource='tables') to list available tables."));
 
                 var table = query.Criteria.AddFilter(LogicalOperator.Or);
                 table.AddCondition("contextvalue", ConditionOperator.Equal, resolved.Value.LogicalName);

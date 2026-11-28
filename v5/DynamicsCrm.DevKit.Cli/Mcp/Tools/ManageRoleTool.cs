@@ -46,16 +46,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Manage Dataverse security roles: list/detail/user, assign/unassign, create/update/delete/copy and restore. Mutations require System Administrator. list shows root roles; user includes direct and team-inherited roles.\n\n" +
             "update/delete save a pre-change backup; restore takes backupPath. Restoring a deleted role creates a new role ID and does not restore user/team assignments. Managed roles cannot be deleted; copy them instead. Ambiguous role-name matches return candidates.\n\n" +
-            "Use user with entity_name to inspect effective privileges; detail shows role privileges. Use whoami for the current user.\n\n" +
+            "Use user with entity_name to inspect effective privileges; detail shows role privileges. Use get_context(action='whoami') for the current user.\n\n" +
             "WHEN TO USE:\n" +
             "- Debug 'access denied' (action='user' + entity_name)\n" +
             "- Audit role privileges (action='detail')\n" +
             "- Provision access (assign/unassign or create/copy)\n" +
             "- Roll back a bad privilege update or a mistaken delete (action='restore')\n\n" +
             "RELATED TOOLS:\n" +
-            "- whoami → verify the connected user and their direct roles\n" +
+            "- get_context(action='whoami') → verify the connected user and their direct roles\n" +
             "- manage_record → read/create/update role and team records directly\n" +
-            "- execute_fetchxml → query roles and privileges with deterministic filters")]
+            "- query_data(mode='fetchxml') → query roles and privileges with deterministic filters")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             McpServer server,
             [Description("list, detail, user, assign, unassign, create, update, delete, copy, restore.")] string action = "",
@@ -117,7 +117,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                     var solution = SolutionResolverHelper.Resolve(_orgService, solution_name, requireUnmanaged: true);
                     if (!solution.IsSuccess)
-                        return Error(solution.Error, "Use get_solution_components to find an unmanaged solution.");
+                        return Error(solution.Error, "Use inspect_metadata(resource='solution_components') to find an unmanaged solution.");
 
                     solutionUniqueName = solution.UniqueName;
                 }
@@ -712,7 +712,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         }
                         return Error(
                             $"privileges entity '{change.Entity}': {resolvedEntity.Error.Split("\r\n")[0]}",
-                            "Fix privileges[].entity: pass a valid entity Display Name or logical name (use get_tables to discover).");
+                            "Fix privileges[].entity: pass a valid entity Display Name or logical name (use inspect_metadata(resource='tables') to discover).");
                     }
                     var entityLogical = resolvedEntity.Value.LogicalName;
 
@@ -1541,7 +1541,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             return Error(
                 $"entity_name '{entityFilter.Trim()}': {resolved.Error.Split("\r\n")[0]}",
-                "Use get_tables to discover valid entity names.");
+                "Use inspect_metadata(resource='tables') to discover valid entity names.");
         }
 
         private static (string right, string entity) ParsePrivilegeName(string privilegeName)

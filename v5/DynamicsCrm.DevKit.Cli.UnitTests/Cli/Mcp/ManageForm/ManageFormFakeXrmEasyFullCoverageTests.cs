@@ -217,7 +217,7 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
         var result = await NewTool().manage_form(null!, action: "list", entity_name: " ", form_type: 2);
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(Text(result), "[Error] entity_name is required.");
-        StringAssert.Contains(Text(result), "Use get_tables to find the entity logical name.");
+        StringAssert.Contains(Text(result), "Use inspect_metadata(resource='tables') to find the entity logical name.");
     }
 
     [TestMethod]
@@ -235,7 +235,7 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
         var result = await NewTool().manage_form(null!, action: "list", entity_name: "nosuchentity");
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(Text(result), "'nosuchentity' was not found by Display Name");
-        StringAssert.Contains(Text(result), "Hint: Use get_tables to list entities before calling manage_form.");
+        StringAssert.Contains(Text(result), "Hint: Use inspect_metadata(resource='tables') to list entities before calling manage_form.");
     }
 
     [TestMethod]

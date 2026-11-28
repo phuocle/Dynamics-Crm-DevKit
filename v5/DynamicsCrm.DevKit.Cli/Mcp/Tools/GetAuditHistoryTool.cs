@@ -17,7 +17,6 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class GetAuditHistoryTool : McpToolBase
     {
         private readonly IOrganizationService _orgService;
@@ -66,9 +65,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Identify who changed a record, when, and which logical fields changed\n" +
             "- Browse recent audited create/update/delete/state events\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_plugin_trace_logs → plugin execution traces\n" +
-            "- get_system_jobs → asynchronous failures\n" +
-            "- get_tables → verify entity and attribute logical names")]
+            "- inspect_diagnostics(resource='plugin_traces') → plugin execution traces\n" +
+            "- inspect_diagnostics(resource='system_jobs') → asynchronous failures\n" +
+            "- inspect_metadata(resource='tables') → verify entity and attribute logical names")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Entity Display/logical name. Required with record_id. Optional in browse mode.")] string entity_name = "",
             [Description("GUID → detail mode. Empty = browse list.")] string record_id = "",
@@ -143,7 +142,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // ── Resolve entity → logical name ───────────────────────────────────
             if (!string.IsNullOrWhiteSpace(entityName))
             {
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "get_audit_history");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "inspect_diagnostics(resource='audit')");
                 if (!entityResult.IsSuccess)
                     return Error($"entity_name '{entityName}': {entityResult.Error}");
                 entityName = entityResult.Value.LogicalName;
@@ -152,7 +151,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // ── Resolve attribute → logical name (detail mode only) ─────────────
             if (!string.IsNullOrWhiteSpace(recordId) && !string.IsNullOrWhiteSpace(attributeName))
             {
-                var attributeResult = DisplayNameFirstResolver.ResolveAttribute(_orgService, entityName, attributeName, "get_audit_history");
+                var attributeResult = DisplayNameFirstResolver.ResolveAttribute(_orgService, entityName, attributeName, "inspect_diagnostics(resource='audit')");
                 if (!attributeResult.IsSuccess)
                     return Error($"attribute_name '{attributeName}': {attributeResult.Error}");
                 attributeName = attributeResult.Value.LogicalName;

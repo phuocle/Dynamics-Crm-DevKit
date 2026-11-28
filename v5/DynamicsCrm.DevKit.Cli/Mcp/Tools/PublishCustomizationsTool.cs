@@ -65,8 +65,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- After metadata mutations with auto_publish=false, or when changes are not showing up\n" +
             "- Batch many changes then publish once at the end\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_system_jobs → track PublishAll async operation status\n" +
-            "- get_tables / manage_app / manage_form / manage_webresource → discover valid target identifiers")]
+            "- inspect_diagnostics(resource='system_jobs') → track PublishAll async operation status\n" +
+            "- inspect_metadata(resource='tables') / manage_app / manage_form / manage_webresource → discover valid target identifiers")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Comma-separated entity Display Names or logical names (e.g. 'Account,contact'). Empty with no other targets = PublishAll.")] string entities = "",
             [Description("Comma-separated global option set unique names (e.g. 'new_priority,new_status'). Use instead of include_global_optionset for targeted publish.")] string optionset_names = "",
@@ -119,14 +119,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (entitiesProvided && entityList is null)
                     return Error(
                         $"entities '{entities}': could not be resolved. One or more names were not found by Display Name or Logical/Unique/Schema Name.",
-                        "Use get_tables to list entities before calling publish_customizations.");
+                        "Use inspect_metadata(resource='tables') to list entities before calling publish_customizations.");
                 entityList ??= [];
 
                 if (entitiesProvided && entityList.Count == 0)
                 {
                     return Error(
                         "No valid entity names found after parsing the 'entities' parameter.",
-                        "Valid format: comma-separated logical names (e.g., 'account,contact,lead') or leave empty to publish all customizations. Use get_tables to verify logical names.");
+                        "Valid format: comma-separated logical names (e.g., 'account,contact,lead') or leave empty to publish all customizations. Use inspect_metadata(resource='tables') to verify logical names.");
                 }
 
                 var appModulesProvided = !string.IsNullOrWhiteSpace(appmodules);
@@ -152,7 +152,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (dashboardList is null)
                     return Error(
                         $"dashboards '{dashboards}': contains a value that is not a valid GUID.",
-                        "Provide comma-separated system-form (dashboard) GUIDs, e.g. 'b52daa0a-996f-f111-ab0e-0022480a530f'. Use manage_form or get_solution_components to find valid dashboard IDs.");
+                        "Provide comma-separated system-form (dashboard) GUIDs, e.g. 'b52daa0a-996f-f111-ab0e-0022480a530f'. Use manage_form or inspect_metadata(resource='solution_components') to find valid dashboard IDs.");
                 dashboardList ??= [];
 
                 // Web resource GUIDs or logical names
@@ -206,7 +206,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         DurationSeconds = Math.Round(sw.Elapsed.TotalSeconds, 1)
                     };
                     return Success(
-                        $"Published ALL customizations asynchronously (AsyncOperationId {jobId}, {sw.Elapsed.TotalSeconds:F1}s). Use get_system_jobs(record_id=\"{jobId}\") to check status.",
+                        $"Published ALL customizations asynchronously (AsyncOperationId {jobId}, {sw.Elapsed.TotalSeconds:F1}s). Use inspect_diagnostics(resource='system_jobs', record_id=\"{jobId}\") to check status.",
                         structured);
                 }
 
@@ -249,7 +249,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return published
                     ? Success(summary, specificStructured)
                     : Error(summary,
-                        "Dataverse rejected the publish batch — verify the target names via get_tables / manage_app / manage_webresource and retry. If any entity name is invalid the entire batch is rejected.",
+                        "Dataverse rejected the publish batch — verify the target names via inspect_metadata(resource='tables') / manage_app / manage_webresource and retry. If any entity name is invalid the entire batch is rejected.",
                         specificStructured);
             }
             catch (Exception ex)

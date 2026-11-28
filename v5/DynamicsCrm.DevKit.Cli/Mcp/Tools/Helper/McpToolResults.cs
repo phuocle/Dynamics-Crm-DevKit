@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using Microsoft.Xrm.Sdk;
 using ModelContextProtocol.Protocol;
@@ -420,12 +420,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 // Example original:
                 //   "'Account' entity doesn't contain attribute with Name = 'nonexistent_field' and NameMapping = 'Logical'..."
                 return Error("Attribute not found on entity.",
-                    "Check attribute logical name (case-sensitive). Use get_tables(entity_name=...) to list valid fields." + detailSuffix);
+                    "Check attribute logical name (case-sensitive). Use inspect_metadata(resource='tables', name=...) to list valid fields." + detailSuffix);
             }
             else if (lower.Contains("with a name =") && lower.Contains("with namemapping = 'logical' was not found"))
             {
                 return Error("Entity not found in Dataverse metadata.",
-                    "Use get_tables to discover the correct logical name." + detailSuffix);
+                    "Use inspect_metadata(resource='tables') to discover the correct logical name." + detailSuffix);
             }
             else if (lower.Contains("unknown condition operator:"))
             {
@@ -441,7 +441,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             else if (lower.Contains("could not find a relationship with name"))
             {
                 return Error("Relationship not found in Dataverse. Check the relationship SchemaName.",
-                    "Use get_tables(entity_name=..., detail_level='full') to inspect relationships." + detailSuffix);
+                    "Use inspect_metadata(resource='tables', name=..., detail_level='full') to inspect relationships." + detailSuffix);
             }
             else if (lower.Contains("cannot create another parental relation"))
             {
@@ -456,7 +456,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             else if (lower.Contains("canchangehierarchicalrelationship"))
             {
                 return Error("Hierarchical relationship managed property is locked.",
-                    "The entity may already have a hierarchical relationship; use get_tables(entity_name=..., detail_level='full') to check, or create a non-hierarchical relationship." + detailSuffix);
+                    "The entity may already have a hierarchical relationship; use inspect_metadata(resource='tables', name=..., detail_level='full') to check, or create a non-hierarchical relationship." + detailSuffix);
             }
             else if (lower.Contains("navigation property name cannot be the same on both sides"))
             {
@@ -473,7 +473,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 // User-input validation surfacing as ArgumentException from EntityParserHelper —
                 // rewrite so it reads as a normal validation error, not a tool bug.
                 rewritten = $"{ErrorPrefix} fields_json must be a non-empty JSON object.\n"
-                         + "[Hint] Provide at least one field, e.g. {\"name\": \"value\"}. Use get_tables(entity_name=...) to list valid field names.";
+                         + "[Hint] Provide at least one field, e.g. {\"name\": \"value\"}. Use inspect_metadata(resource='tables', name=...) to list valid field names.";
             }
             else if (lower.Contains("does not exist") && lower.Contains("dataversefault:"))
             {
@@ -497,13 +497,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     var entityName2 = recordMatch.Groups["entity"].Value;
                     var recordId2 = recordMatch.Groups["id"].Value;
                     recordSb.Append($"{ErrorPrefix} {entityName2} record with id {recordId2} does not exist. It may have been deleted.");
-                    recordSb.Append("\n[Hint] Verify with manage_record(action='read'), or find the correct id via search_records / parse_record_url.");
+                    recordSb.Append("\n[Hint] Verify with manage_record(action='read'), or find the correct id via query_data(mode='search') / get_context(action='parse_url').");
                     recordSb.Append($"\n[Detail] {{\"entity\":{SerializeTextDetail(entityName2)},\"id\":\"{recordId2}\",\"errorCode\":\"0x80040217\",\"message\":{SerializeTextDetail(faultMessage)}}}");
                 }
                 else
                 {
                     recordSb.Append($"{ErrorPrefix} [RecordNotFound] {faultMessage}");
-                    recordSb.Append("\n[Hint] The record may have been deleted, or the record_id/entity_name pair is wrong. Verify with manage_record(action='read'), or find the correct id via search_records / parse_record_url.");
+                    recordSb.Append("\n[Hint] The record may have been deleted, or the record_id/entity_name pair is wrong. Verify with manage_record(action='read'), or find the correct id via query_data(mode='search') / get_context(action='parse_url').");
                     if (detail.Length > 0)
                         recordSb.Append('\n').Append(detail);
                 }

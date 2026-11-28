@@ -60,7 +60,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var (resolvedEntityName, entityError) = ResolveEntityLogicalName(entityName);
                 if (entityError != null)
                     return Error(entityError.Split("\r\n")[0],
-                        "Use get_tables to list available tables.");
+                        "Use inspect_metadata(resource='tables') to list available tables.");
                 entityName = resolvedEntityName;
             }
 
@@ -521,7 +521,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var (resolvedEntityName, entityError) = ResolveEntityLogicalName(entityName);
                 if (entityError != null)
                     return Error(entityError.Split("\r\n")[0],
-                        "Use get_tables to list available tables.");
+                        "Use inspect_metadata(resource='tables') to list available tables.");
                 entityName = resolvedEntityName;
                 filters.AppendLine($"      <condition attribute='contextvalue' operator='eq' value='{EscapeXml(entityName)}'/>");
             }

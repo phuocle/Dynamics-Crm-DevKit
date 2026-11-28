@@ -525,7 +525,7 @@ public sealed class GetPluginsFakeXrmEasySweepTests
 
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(Text(result), "SDK message 'Nope' not found.");
-        StringAssert.Contains(Text(result), "Use get_messages to discover valid SDK message names.");
+        StringAssert.Contains(Text(result), "Use inspect_automation(resource='messages') to discover valid SDK message names.");
     }
 
     [TestMethod]

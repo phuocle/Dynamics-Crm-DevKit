@@ -16,7 +16,6 @@ using Microsoft.Xrm.Sdk.Metadata;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class ExecuteSqlTool : McpToolBase
     {
         private readonly IWebApiExecutor _webApi;
@@ -49,9 +48,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Read-only analytical queries, multi-table joins, or summaries after validating logical names\n\n" +
             "Read docs://instructions_for_sql when composing complex queries, joins, aggregates or paged results.\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_tables → discover entity and attribute logical names before querying\n" +
-            "- execute_fetchxml → alternative for FetchXML-specific conditions or deep hierarchies\n" +
-            "- execute_webapi → raw REST calls (non-SQL; ?sql= returns guidance to call execute_sql)\n" +
+            "- inspect_metadata(resource='tables') → discover entity and attribute logical names before querying\n" +
+            "- query_data(mode='fetchxml') → alternative for FetchXML-specific conditions or deep hierarchies\n" +
+            "- execute_webapi → raw REST calls (non-SQL; ?sql= returns guidance to call query_data(mode='sql'))\n" +
             "- docs://instructions_for_sql → Dataverse SQL syntax rules and conversion cheat sheet")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("SQL SELECT query. Lowercase logical names. No SELECT *.")] string sql = "",
@@ -87,7 +86,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // Quote-aware so a semicolon inside a string literal (e.g. WHERE name = 'a;b') does not false-positive.
                 if (ContainsSemicolonOutsideLiteral(sql))
                     return Error("Multiple statements are not supported.",
-                        "execute_sql accepts a single SELECT statement only — remove the extra statements separated by ';'. " +
+                        "query_data(mode='sql') accepts a single SELECT statement only — remove the extra statements separated by ';'. " +
                         "Dataverse SQL is read-only; use manage_record for create, update, or delete operations.");
 
                 if (max_records < 1 || max_records > 50000)
@@ -96,7 +95,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 // Unwrap TOP n — the ?sql= endpoint rejects TOP; convert it to max_records instead.
                 if (SqlQueryResult.TopKeywordRegex.IsMatch(sql) && !SqlQueryResult.TopRegex.IsMatch(sql))
-                    return Error("TOP must be a positive integer supported by execute_sql.",
+                    return Error("TOP must be a positive integer supported by query_data(mode='sql').",
                         "Use TOP n or TOP (n), where n is a positive integer, or pass the limit with max_records.");
 
                 var topMatch = SqlQueryResult.TopRegex.Match(sql);
@@ -104,12 +103,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var topText = topMatch.Groups[2].Success ? topMatch.Groups[2].Value : topMatch.Groups[3].Value;
                     if (!int.TryParse(topText, out var top) || top < 1)
-                        return Error("TOP must be a positive integer supported by execute_sql.",
+                        return Error("TOP must be a positive integer supported by query_data(mode='sql').",
                             "Use TOP n or TOP (n), where n is a positive integer, or pass the limit with max_records.");
                     // Reject a numeric prefix of an expression or malformed parentheses before rewriting TOP.
                     // A following '*' is left to the existing SELECT-star guard below.
                     if (Regex.IsMatch(sql.Substring(topMatch.Length), @"^\s*(?:percent\b|with\s+ties\b|[(),.+\-/%&|^~<>=])", RegexOptions.IgnoreCase))
-                        return Error("TOP must be a positive integer supported by execute_sql.",
+                        return Error("TOP must be a positive integer supported by query_data(mode='sql').",
                             "Use TOP n or TOP (n), where n is a positive integer, or pass the limit with max_records.");
                     max_records = Math.Min(max_records, top);
                     sql = SqlQueryResult.TopRegex.Replace(sql, m => "SELECT " + m.Groups[1].Value, 1).Trim();
@@ -128,7 +127,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (SqlQueryResult.SelectStarRegex.IsMatch(syntaxSql))
                     return Error("SELECT * is not supported.",
-                        "Call get_tables(entity_name='<table>', detail_level='standard') to view column names, then name required columns explicitly.");
+                        "Call inspect_metadata(resource='tables', name='<table>', detail_level='standard') to view column names, then name required columns explicitly.");
 
                 if (SqlQueryResult.HavingRegex.IsMatch(syntaxSql))
                     return Error("HAVING clause is not supported.",
@@ -159,12 +158,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         if (IsEntityNotFound(metadataException))
                             return Error($"Table '{table}' was not found.",
-                                "Call get_tables(entity_name='<table>', detail_level='standard') to check the correct logical name, or get_tables() to list all tables.");
+                                "Call inspect_metadata(resource='tables', name='<table>', detail_level='standard') to check the correct logical name, or inspect_metadata(resource='tables') to list all tables.");
                         return ThrowExceptionFriendly(metadataException);
                     }
                     if (entityMetadata == null || string.IsNullOrEmpty(entityMetadata.EntitySetName))
                         return Error("Metadata response is missing EntitySetName.",
-                            "Retry metadata discovery with get_tables(entity_name='<table>', detail_level='standard').");
+                            "Retry metadata discovery with inspect_metadata(resource='tables', name='<table>', detail_level='standard').");
                     entitySetName = entityMetadata.EntitySetName;
                 }
 

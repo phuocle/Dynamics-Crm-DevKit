@@ -181,7 +181,7 @@ public sealed class ManageFunctionFakeXrmEasyTests
     {
         var result = NewTool().manage_function("list", solution_name: "Nope");
         Assert.IsTrue(result.IsError == true);
-        StringAssert.Contains(Text(result), "get_solution_components");
+        StringAssert.Contains(Text(result), "inspect_metadata(resource='solution_components')");
     }
 
     [TestMethod]

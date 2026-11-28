@@ -191,7 +191,7 @@ public sealed class ManageDeletedRecordsFakeXrmEasyFullCoverageTests
         var result = NewTool().manage_deleted_records("list", "nosuchentity");
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(Text(result), "'nosuchentity' was not found by Display Name or Logical/Unique/Schema Name.");
-        StringAssert.Contains(Text(result), "[Hint] Use get_tables to list entities.");
+        StringAssert.Contains(Text(result), "[Hint] Use inspect_metadata(resource='tables') to list entities.");
     }
 
     [TestMethod]

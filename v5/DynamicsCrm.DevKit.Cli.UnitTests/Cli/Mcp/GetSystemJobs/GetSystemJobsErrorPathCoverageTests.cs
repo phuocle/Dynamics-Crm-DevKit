@@ -86,7 +86,7 @@ public sealed class GetSystemJobsErrorPathCoverageTests
 
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(result.GetText(), "'zzz_no_such_entity' was not found");
-        StringAssert.Contains(result.GetText(), "Use get_tables to list entities before calling get_system_jobs.");
+        StringAssert.Contains(result.GetText(), "Use inspect_metadata(resource='tables') to list entities before calling inspect_diagnostics(resource='system_jobs').");
     }
 
     [TestMethod]
@@ -159,7 +159,7 @@ public sealed class GetSystemJobsErrorPathCoverageTests
 
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(result.GetText(), "not found");
-        StringAssert.Contains(result.GetText(), "Use get_system_jobs in list mode (record_id empty) to find a valid jobId.");
+        StringAssert.Contains(result.GetText(), "Use inspect_diagnostics(resource='system_jobs') in list mode (record_id empty) to find a valid jobId.");
     }
 
     // ── exceptions ──────────────────────────────────────────────────────────

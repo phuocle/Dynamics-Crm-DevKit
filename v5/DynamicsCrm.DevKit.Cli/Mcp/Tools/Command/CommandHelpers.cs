@@ -317,11 +317,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName.Trim(), requireUnmanaged: true);
             if (!solResult.IsSuccess)
                 return (null, Error(solResult.Error.Split("\r\n")[0],
-                    "Use get_solution_components to find valid solution names."));
+                    "Use inspect_metadata(resource='solution_components') to find valid solution names."));
 
             if (string.IsNullOrWhiteSpace(solResult.UniqueName))
                 return (null, Error($"Solution '{solutionName.Trim()}' resolved but unique name is null/empty.",
-                    "Pick another solution via get_solution_components, or omit solution_name."));
+                    "Pick another solution via inspect_metadata(resource='solution_components'), or omit solution_name."));
 
             return (solResult.UniqueName, null);
         }

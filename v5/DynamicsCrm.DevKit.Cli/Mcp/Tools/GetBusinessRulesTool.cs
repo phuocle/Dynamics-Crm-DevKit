@@ -15,7 +15,6 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class GetBusinessRulesTool : McpToolBase
     {
         private readonly IOrganizationService _orgService;
@@ -43,10 +42,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Check if a field is referenced in any client-side rule logic\n\n" +
             "For business-rule and related server-logic inspection modes, read docs://server_logic_guide.\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_workflows → classic workflow definitions (background async + realtime sync)\n" +
-            "- get_messages → legacy workflow Custom Actions (category=3) + SDK messages\n" +
+            "- inspect_automation(resource='workflows') → classic workflow definitions (background async + realtime sync)\n" +
+            "- inspect_automation(resource='messages') → legacy workflow Custom Actions (category=3) + SDK messages\n" +
             "- manage_custom_api → modern Custom API definitions\n" +
-            "- get_business_process_flows → BPF definitions + stages\n" +
+            "- inspect_automation(resource='bpfs') → BPF definitions + stages\n" +
             "- manage_record(action='read', columns='xaml') → raw XAML when parse is incomplete")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Entity display name, logical name, or schema name.")] string entity_name = "",
@@ -85,13 +84,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (string.IsNullOrWhiteSpace(entity_name))
                     return Error("entity_name is required for list and detail modes.",
-                        "Use get_tables to discover names.");
+                        "Use inspect_metadata(resource='tables') to discover names.");
 
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "get_business_rules");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "inspect_automation(resource='business_rules')");
                 if (!entityResult.IsSuccess)
                     return Error(
                         entityResult.Error.Split("\r\n")[0],
-                        "Use get_tables to list entities before calling get_business_rules.");
+                        "Use inspect_metadata(resource='tables') to list entities before calling inspect_automation(resource='business_rules').");
                 var logicalEntityName = entityResult.Value.LogicalName;
 
                 if (!string.IsNullOrWhiteSpace(rule_id))
@@ -184,13 +183,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var result = _orgService.RetrieveMultiple(query);
             if (result.Entities.Count == 0)
                 return Error($"Business rule '{ruleId}' not found.",
-                    "Use get_business_rules in list mode to find a valid ruleId.");
+                    "Use inspect_automation(resource='business_rules') in list mode to find a valid ruleId.");
             var entity = result.Entities[0];
 
             var category = entity.GetAttributeValue<OptionSetValue>("category")?.Value;
             if (category != 2)
                 return Error($"Record {ruleId} is not a business rule (category={category}, expected 2).",
-                    "Use get_workflows to inspect classic workflows (category=0).");
+                    "Use inspect_automation(resource='workflows') to inspect classic workflows (category=0).");
 
             var primary = entity.GetAttributeValue<string>("primaryentity") ?? "";
             if (!string.IsNullOrEmpty(entityName) && !primary.Equals(entityName, StringComparison.OrdinalIgnoreCase))

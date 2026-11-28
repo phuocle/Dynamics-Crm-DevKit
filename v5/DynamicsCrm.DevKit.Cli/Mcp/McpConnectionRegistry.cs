@@ -122,7 +122,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             var id = _snapshot.ResolveId(env);
             if (id == null) throw new McpConnectionSelectionException(
                 $"Unknown connection group '{SafeSelector(env)}'.",
-                "Use connection_list to list available groups, or omit env to use the startup connection.",
+                "Use get_context(action='connections') to list available groups, or omit env to use the startup connection.",
                 new { requested = SafeSelector(env), availableGroups = _snapshot.GroupIds, startupEnv = StartupEnvId });
             Task<ConnectionBundle> attempt;
             lock (_gate)
@@ -161,7 +161,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                 throw new McpConnectionSelectionException(missing
                     ? $"Environment group '{id}': {McpConnectionSnapshot.Key(id, "AUTH_TYPE")} or {McpConnectionSnapshot.Key(id, "CONNECTION")} is required for MCP server."
                     : $"Connection failed for group '{id}': authentication, authorization or connection validation failed.",
-                    missing ? "Add the required connection keys to the project .env and restart the MCP server; use connection_list to inspect groups."
+                    missing ? "Add the required connection keys to the project .env and restart the MCP server; use get_context(action='connections') to inspect groups."
                     : "Retry for a transient connection failure. If you change the project .env, restart the MCP server before retrying.",
                     new { requested = SafeSelector(env), env = id, authType = args.AuthType, url = SafeUrl(args.Url) });
             }

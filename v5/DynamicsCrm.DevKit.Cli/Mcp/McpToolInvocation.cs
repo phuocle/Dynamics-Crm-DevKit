@@ -12,7 +12,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
     /// <summary>Resolve once, execute with invocation-local dependencies, then attribute existing output.</summary>
     internal static class McpToolInvocation
     {
-        internal const string EnvDescription = "Optional .env connection group: numeric id such as \"1\", alias such as \"prod\", or \"default\" for the unnumbered group. Omit to use the startup connection. Use connection_list to list groups.";
+        internal const string EnvDescription = "Optional .env connection group: numeric id (\"1\"), alias (\"prod\"), or \"default\". Omit for startup connection. Call get_context(action='connections') to list groups.";
 
         internal static async Task<CallToolResult> InvokeAsync(IMcpConnectionResolver connections, string env,
             Func<ConnectionBundle, Task<CallToolResult>> invoke, CancellationToken cancellationToken)

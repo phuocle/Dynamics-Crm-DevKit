@@ -86,7 +86,7 @@ public sealed class ReadInstructionToolTests
         var fetchxml = Entry(schemas, "schema://fetchxml");
         var fetchRefs = fetchxml["referencedBy"] as JsonArray;
         Assert.IsNotNull(fetchRefs);
-        Assert.IsTrue(fetchRefs.Any(n => n?.GetValue<string>() == "execute_fetchxml"));
+        Assert.IsTrue(fetchRefs.Any(n => n?.GetValue<string>() == "query_data"));
     }
 
     [TestMethod]

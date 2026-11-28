@@ -45,7 +45,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Invoke a resolved function with typed arguments and read the real outputs\n\n" +
             "RELATED TOOLS:\n" +
             "- manage_custom_api → every Custom API, with or without an expression\n" +
-            "- get_solution_components → verify a function's solution membership")]
+            "- inspect_metadata(resource='solution_components') → verify a function's solution membership")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("'list', 'detail', 'validate', 'invoke'. 'create'/'update'/'delete' are gated.")] string action = "",
             [Description("Display name, unique name, or GUID (customapiid) of the Custom API. Required: detail/validate/invoke.")] string function_name = "",
@@ -121,7 +121,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName.Trim());
                 if (!solResult.IsSuccess)
-                    return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
+                    return Error(solResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='solution_components') to find valid solution names.");
                 solutionFilter = solResult.UniqueName;
             }
 

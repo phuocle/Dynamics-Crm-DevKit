@@ -236,7 +236,7 @@ public sealed class PublishCustomizationsFakeXrmEasySweepTests
 
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(Text(result), "entities 'zzz': could not be resolved.");
-        StringAssert.Contains(Text(result), "Use get_tables to list entities before calling publish_customizations.");
+        StringAssert.Contains(Text(result), "Use inspect_metadata(resource='tables') to list entities before calling publish_customizations.");
     }
 
     [TestMethod]
@@ -343,7 +343,7 @@ public sealed class PublishCustomizationsFakeXrmEasySweepTests
         var text = Text(result);
         StringAssert.Contains(text, "Published ALL customizations asynchronously");
         StringAssert.Contains(text, "99999999-9999-9999-9999-999999999999");
-        StringAssert.Contains(text, "Use get_system_jobs(record_id=\"99999999-9999-9999-9999-999999999999\")");
+        StringAssert.Contains(text, "Use inspect_diagnostics(resource='system_jobs', record_id=\"99999999-9999-9999-9999-999999999999\")");
 
         var payload = Payload(result);
         Assert.AreEqual("all_async", payload.Mode);

@@ -1,4 +1,4 @@
-﻿using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Crm.Sdk.Messages;
 using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
@@ -66,7 +66,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Check (status) or toggle (turn on/off) the org-level 'Keep deleted Dataverse records' setting\n\n" +
             "RELATED TOOLS:\n" +
             "- manage_record → live CRUD; delete becomes soft-delete when the bin is ON\n" +
-            "- get_audit_history → who deleted a record and when\n" +
+            "- inspect_diagnostics(resource='audit') → who deleted a record and when\n" +
             "- execute_webapi → raw access (Restore action is redirected here)")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Action: 'list' (default) | 'detail' | 'restore' | 'status' | 'turn'.")] string action = "list",
@@ -135,7 +135,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_deleted_records");
             if (!entityResult.IsSuccess)
-                return Error(entityResult.Error.Split("\r\n")[0], "Use get_tables to list entities.");
+                return Error(entityResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='tables') to list entities.");
             var logicalName = entityResult.Value.LogicalName;
             var displayName = entityResult.Value.DisplayName?.UserLocalizedLabel?.Label ?? logicalName;
             var primaryKey = entityResult.Value.PrimaryIdAttribute ?? GetPrimaryKeyAttribute(logicalName);
@@ -219,7 +219,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_deleted_records");
             if (!entityResult.IsSuccess)
-                return Error(entityResult.Error.Split("\r\n")[0], "Use get_tables to list entities.");
+                return Error(entityResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='tables') to list entities.");
             var logicalName = entityResult.Value.LogicalName;
             var displayName = entityResult.Value.DisplayName?.UserLocalizedLabel?.Label ?? logicalName;
 
@@ -314,7 +314,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             entityName = entityName.Trim();
             var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_deleted_records");
             if (!entityResult.IsSuccess)
-                return Error(entityResult.Error.Split("\r\n")[0], "Use get_tables to list entities.");
+                return Error(entityResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='tables') to list entities.");
             var logicalName = entityResult.Value.LogicalName;
             var displayName = entityResult.Value.DisplayName?.UserLocalizedLabel?.Label ?? logicalName;
             var primaryKey = entityResult.Value.PrimaryIdAttribute ?? GetPrimaryKeyAttribute(logicalName);

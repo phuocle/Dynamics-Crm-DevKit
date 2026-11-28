@@ -367,13 +367,13 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("""
                 Invoke these MCP tools from your client. The middle column is the JSON argument object.
 
-                  Tool              JSON arguments       Expected with this .env
-                  connection_list   {}                   default (org-a, startup), 1 (org-b, dry-run)
-                  whoami            {}                   env=default, dryRun=false
-                  whoami            {"env":"org-b"}      env=1, dryRun=true
+                  Tool          JSON arguments                               Expected with this .env
+                  get_context   {"action":"connections"}                     default (org-a, startup), 1 (org-b, dry-run)
+                  get_context   {"action":"whoami"}                          env=default, dryRun=false
+                  get_context   {"action":"whoami","env":"org-b"}            env=1, dryRun=true
 
-                Check that whoami returns the intended organization for each group. With just one
-                group configured, skip the org-b check.
+                Check that get_context(action='whoami') returns the intended organization for each group.
+                With just one group configured, skip the org-b check.
 
                 Pass env on any Dataverse tool call to select a group. "org-b" and "1" select
                 the same group on this server. Omit env to use the startup group.
@@ -386,8 +386,8 @@ namespace DynamicsCrm.DevKit.Cli.Commands
 
                   args = ["mcp", "devkit-codex", "--env", "org-b"]
 
-                After the change, whoami with {} returns env=1. Use {"env":"default"} to call the
-                unnumbered DEVKIT_* group when it is configured. --env accepts an ID, alias or default.
+                After the change, get_context(action='whoami') returns env=1. Use {"action":"whoami","env":"default"}
+                to call the unnumbered DEVKIT_* group when it is configured. --env accepts an ID, alias or default.
                 """);
             Console.WriteLine();
 
@@ -414,7 +414,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 - MCP reads the nearest .env found by searching upward from the launch directory.
                   Each group uses its own connection settings and may use a different auth type.
                   A missing or incomplete startup group stops the server. Other groups connect
-                  on their first tool call. connection_list lists groups without connecting them.
+                  on their first tool call. get_context(action='connections') lists groups without connecting them.
                 - Use positive numeric IDs without leading zeros (1, 2, 100). Aliases must be unique
                   ignoring case, start with an ASCII letter, and use only ASCII letters, digits, _ or -.
                   The alias default is reserved.
@@ -422,7 +422,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                   otherwise DEVKIT_DRY_RUN, otherwise false. Aliases and DRY_RUN (true/false) are
                   validated at startup. AS_USER applies to its own group and is checked when
                   that group connects. A failed impersonation stops that group's connection.
-                - Restart the server after editing .env. connection_list, read_instruction and
+                - Restart the server after editing .env. get_context(action='connections'), read_instruction and
                   resources have no env parameter. Use devkit mcp --tools for the tool list.
 
                 Authentication settings per group
@@ -460,7 +460,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                   tool_timeout_sec = 600
 
                 Both servers still serve the configured groups. After reloading the client, call
-                whoami with {} on each server to verify its startup group and process ID.
+                get_context(action='whoami') on each server to verify its startup group and process ID.
                 """);
         }
 

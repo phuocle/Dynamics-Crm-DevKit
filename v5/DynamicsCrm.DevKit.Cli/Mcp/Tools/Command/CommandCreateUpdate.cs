@@ -65,7 +65,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (normalizedScope != "global" && string.IsNullOrWhiteSpace(entityName))
                 return Error("entity_name is required for action='create'.",
-                    "Pass the entity Display Name or logical name. Use get_tables to list available tables.");
+                    "Pass the entity Display Name or logical name. Use inspect_metadata(resource='tables') to list available tables.");
             if (string.IsNullOrWhiteSpace(location))
                 return Error("location is required for action='create'.",
                     "Pass one of: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', 'dashboard'.");
@@ -101,7 +101,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var (resolvedLogical, createEntityError) = ResolveEntityLogicalName(entityName);
                 if (createEntityError != null)
                     return Error(createEntityError.Split("\r\n")[0],
-                        "Use get_tables to list available tables.");
+                        "Use inspect_metadata(resource='tables') to list available tables.");
                 createEntityLogical = resolvedLogical;
                 createEntityId = ResolveEntityId(createEntityLogical);
             }

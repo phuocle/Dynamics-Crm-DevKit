@@ -20,7 +20,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // scanning tool descriptions at first use (never hand-maintained).
         private static readonly List<CatalogEntry> CatalogEntries = new()
         {
-            new("docs://data_operations_guide", "data_operations_guide", "Guide for Dataverse data operations (manage_record, execute_fetchxml, search_records)", "instruction", () => Task.FromResult(InstructionResources.DataOperationsGuide())),
+            new("docs://data_operations_guide", "data_operations_guide", "Guide for Dataverse data operations (manage_record, query_data)", "instruction", () => Task.FromResult(InstructionResources.DataOperationsGuide())),
             new("docs://instructions_for_sql", "instructions_for_sql", "Instructions for Dataverse SQL queries", "instruction", () => Task.FromResult(InstructionResources.SqlInstructions())),
             new("docs://instructions_for_manage_ribbon", "instructions_for_manage_ribbon", "Instructions for classic ribbon operations", "instruction", () => Task.FromResult(InstructionResources.ManageRibbonInstructions())),
             new("docs://instructions_for_manage_command", "instructions_for_manage_command", "Instructions for deleting modern command bar appactions", "instruction", () => Task.FromResult(InstructionResources.ManageCommandInstructions())),
@@ -49,10 +49,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Check which instructions/schemas exist before a complex operation\n" +
             "- Re-read a guide on demand (FetchXML syntax, FormXML rules, schema tool contracts, server-logic modes)\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_tables → entity/attribute metadata (live data, not instructions)\n" +
+            "- inspect_metadata → entity/attribute metadata (live data, not instructions)\n" +
             "- every tool whose description references docs:// — see the catalog returned when name is empty")]
         public async Task<CallToolResult> read_instruction(
-            [Description("Resource name or URI: 'instructions_for_manage_ribbon', 'docs://instructions_for_views', 'schema://fetchxml'. Empty = return the catalog of all instructions and schemas.")] string name = "")
+            [Description("Resource name or URI: 'instructions_for_manage_ribbon', 'docs://instructions_for_views', 'schema://fetchxml'. Omit or pass empty to return the catalog of all instructions and schemas.")] string name = null)
         {
             try
             {
@@ -61,10 +61,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var entry = ResolveEntry(name);
                 if (entry == null)
+                {
+                    var instructionCount = CatalogEntries.Count(e => e.Kind == "instruction");
+                    var schemaCount = CatalogEntries.Count(e => e.Kind == "schema");
                     return Error(
                         $"Unknown instruction or schema '{name.Trim()}'.",
-                        "Call read_instruction with no name to list the 13 available resources (9 docs:// instructions, 4 schema:// schemas). " +
+                        $"Call read_instruction with no name to list the {CatalogEntries.Count} available resources ({instructionCount} docs:// instructions, {schemaCount} schema:// schemas). " +
                         $"Valid names: {string.Join(", ", CatalogEntries.Select(e => $"{e.Name} ({e.Uri})"))}.");
+                }
 
                 var content = await entry.Load();
                 var referencedBy = GetReferences()[entry.Uri] ?? new List<string>();

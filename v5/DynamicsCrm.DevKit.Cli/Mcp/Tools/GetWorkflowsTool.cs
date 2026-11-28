@@ -16,7 +16,6 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class GetWorkflowsTool : McpToolBase
     {
         private readonly IOrganizationService _orgService;
@@ -53,10 +52,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Inspect workflow triggers and execution metadata before refactoring/disabling\n\n" +
             "For workflow and related server-logic inspection modes, read docs://server_logic_guide.\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_business_process_flows → BPF definitions + stages\n" +
-            "- get_business_rules → client-side business rules\n" +
-            "- get_flows → Power Automate cloud flows + run history\n" +
-            "- get_system_jobs → workflow execution results (asyncoperation)")]
+            "- inspect_automation(resource='bpfs') → BPF definitions + stages\n" +
+            "- inspect_automation(resource='business_rules') → client-side business rules\n" +
+            "- inspect_automation(resource='flows') → Power Automate cloud flows + run history\n" +
+            "- inspect_diagnostics(resource='system_jobs') → workflow execution results (asyncoperation)")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("GUID → detail. Empty = list.")] string workflow_id = "",
             [Description("Entity Display Name or logical name (e.g. 'Account' or 'account'). Empty = all.")] string entity_name = "",
@@ -116,7 +115,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             int? objectTypeCode = null;
             if (!string.IsNullOrWhiteSpace(entityName))
             {
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "get_workflows");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "inspect_automation(resource='workflows')");
                 if (!entityResult.IsSuccess)
                 {
                     if (entityResult.Status == ResolveStatus.Ambiguous)
@@ -134,22 +133,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                     return Error(
                         $"entity_name '{entityName.Trim()}': {entityResult.Error.Split("\r\n")[0]}",
-                        "Use get_tables to discover valid entity names.");
+                        "Use inspect_metadata(resource='tables') to discover valid entity names.");
                 }
 
                 entityName = entityResult.Value.LogicalName;
                 objectTypeCode = GetObjectTypeCode(entityName);
                 if (objectTypeCode == null)
-                    return Error($"Entity '{entityName}' not found.", "Use get_tables to discover valid entity names.");
+                    return Error($"Entity '{entityName}' not found.", "Use inspect_metadata(resource='tables') to discover valid entity names.");
 
                 if (!string.IsNullOrWhiteSpace(triggerField))
                 {
-                    var fieldResult = DisplayNameFirstResolver.ResolveAttribute(_orgService, entityName, triggerField.Trim(), "get_workflows");
+                    var fieldResult = DisplayNameFirstResolver.ResolveAttribute(_orgService, entityName, triggerField.Trim(), "inspect_automation(resource='workflows')");
                     if (!fieldResult.IsSuccess)
                         return Error(
                             $"trigger_field '{triggerField.Trim()}': {fieldResult.Error.Split("\r\n")[0]}",
                             fieldResult.Status == ResolveStatus.NotFound
-                                ? "Use get_tables with entity_name set to list valid attribute names."
+                                ? "Use inspect_metadata(resource='tables') with entity_name set to list valid attribute names."
                                 : "Re-call with a more specific trigger_field value.");
                     triggerField = fieldResult.Value.LogicalName;
                 }

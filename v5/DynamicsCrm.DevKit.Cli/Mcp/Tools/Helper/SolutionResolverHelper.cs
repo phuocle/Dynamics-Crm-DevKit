@@ -38,7 +38,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     kind: "solution",
                     ambiguousTag: "[AmbiguousSolution]",
                     notFoundTag: "[NotFoundSolution]",
-                    notFoundTip: "Hint: Use get_solution_components to list available solutions.",
+                    notFoundTip: "Hint: Use inspect_metadata(resource='solution_components') to list available solutions.",
                     retryParameterName: "solution_name");
 
                 if (!resolved.IsSuccess)

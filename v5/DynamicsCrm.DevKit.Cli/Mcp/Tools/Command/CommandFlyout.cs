@@ -49,7 +49,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (string.IsNullOrWhiteSpace(entityName))
                 return Error("entity_name is required for action='add_flyout'.",
-                    "Pass the entity Display Name or logical name. Use get_tables to list available tables.");
+                    "Pass the entity Display Name or logical name. Use inspect_metadata(resource='tables') to list available tables.");
             if (string.IsNullOrWhiteSpace(location))
                 return Error("location is required for action='add_flyout'.",
                     "Pass one of: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', 'dashboard'.");
@@ -82,7 +82,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var (entityLogical, entityError) = ResolveEntityLogicalName(entityName);
             if (entityError != null)
                 return Error(entityError.Split("\r\n")[0],
-                    "Use get_tables to list available tables.");
+                    "Use inspect_metadata(resource='tables') to list available tables.");
             var publisherPrefix = ResolvePublisherPrefix(entityLogical);
             var appUniqueName = ResolveAppUniqueName(resolvedAppId.Value);
             var entityId = ResolveEntityId(entityLogical);
@@ -372,7 +372,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (string.IsNullOrWhiteSpace(entityName))
                 return Error("entity_name is required for action='add_split_button'.",
-                    "Pass the entity Display Name or logical name. Use get_tables to list available tables.");
+                    "Pass the entity Display Name or logical name. Use inspect_metadata(resource='tables') to list available tables.");
             if (string.IsNullOrWhiteSpace(location))
                 return Error("location is required for action='add_split_button'.",
                     "Pass one of: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', 'dashboard'.");
@@ -414,7 +414,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var (entityLogical, entityError) = ResolveEntityLogicalName(entityName);
             if (entityError != null)
                 return Error(entityError.Split("\r\n")[0],
-                    "Use get_tables to list available tables.");
+                    "Use inspect_metadata(resource='tables') to list available tables.");
             var publisherPrefix = ResolvePublisherPrefix(entityLogical);
             var appUniqueName = ResolveAppUniqueName(resolvedAppId.Value);
             var entityId = ResolveEntityId(entityLogical);

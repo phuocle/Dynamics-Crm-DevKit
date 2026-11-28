@@ -1,4 +1,4 @@
-﻿using DynamicsCrm.DevKit.Cli.Mcp;
+using DynamicsCrm.DevKit.Cli.Mcp;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools;
 using FakeXrmEasy.Middleware;
 using FakeXrmEasy.Middleware.Crud;
@@ -91,7 +91,7 @@ public sealed class ManageFormRareBranchWave3CoverageTests
 
         var unresolved = await tool.manage_form(null!, "create", entity_name: "account",
             form_name: "OK", form_type: 7, formxml: ValidFormXml, solution_name: "NoSuchSolution");
-        StringAssert.Contains(Text(unresolved), "Use get_solution_components to find valid solution names");
+        StringAssert.Contains(Text(unresolved), "Use inspect_metadata(resource='solution_components') to find valid solution names");
     }
 
     [TestMethod]

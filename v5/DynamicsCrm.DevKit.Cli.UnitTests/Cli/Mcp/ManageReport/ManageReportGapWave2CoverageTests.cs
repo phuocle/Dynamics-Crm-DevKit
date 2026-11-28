@@ -243,7 +243,7 @@ public sealed class ManageReportGapWave2CoverageTests
             dataset_name: "Views", fetchxml: "My Missing View", entity_name: "No Such Entity");
 
         Assert.IsTrue(result.IsError == true);
-        StringAssert.Contains(result.GetText(), "Use get_tables to resolve a valid entity name.");
+        StringAssert.Contains(result.GetText(), "Use inspect_metadata(resource='tables') to resolve a valid entity name.");
     }
 
     [TestMethod]

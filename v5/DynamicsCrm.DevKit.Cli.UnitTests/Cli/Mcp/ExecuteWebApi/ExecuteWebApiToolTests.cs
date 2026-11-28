@@ -573,7 +573,7 @@ public class ExecuteWebApiToolTests
         var result = GetBlockedReason(HttpMethod.Get, "EntityDefinitions");
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Contains("instead"));
-        Assert.IsTrue(result.Contains("get_tables"));
+        Assert.IsTrue(result.Contains("inspect_metadata(resource='tables')"));
     }
 
     [TestMethod]
@@ -582,7 +582,7 @@ public class ExecuteWebApiToolTests
         var result = GetBlockedReason(HttpMethod.Get, "AttributeDefinitions");
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Contains("instead"));
-        Assert.IsTrue(result.Contains("get_tables"));
+        Assert.IsTrue(result.Contains("inspect_metadata(resource='tables')"));
     }
 
     [TestMethod]
@@ -591,7 +591,7 @@ public class ExecuteWebApiToolTests
         var result = GetBlockedReason(HttpMethod.Get, "RelationshipDefinitions");
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Contains("instead"));
-        Assert.IsTrue(result.Contains("get_tables") || result.Contains("manage_relationship"));
+        Assert.IsTrue(result.Contains("inspect_metadata(resource='tables')") || result.Contains("manage_relationship"));
     }
 
     [TestMethod]

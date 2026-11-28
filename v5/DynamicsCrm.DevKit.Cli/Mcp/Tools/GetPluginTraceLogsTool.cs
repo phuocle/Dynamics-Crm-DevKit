@@ -12,7 +12,6 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class GetPluginTraceLogsTool : McpToolBase
     {
         private readonly IOrganizationService _orgService;
@@ -37,8 +36,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Diagnose synchronous or asynchronous plugin execution\n" +
             "- Correlate traces by entity, message, plugin type, or request ID\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_plugins → plugin registrations and steps\n" +
-            "- get_system_jobs → asynchronous job failures")]
+            "- inspect_automation(resource='plugins') → plugin registrations and steps\n" +
+            "- inspect_diagnostics(resource='system_jobs') → asynchronous job failures")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("plugintracelog GUID → detail. Empty = list.")] string record_id = "",
             [Description("Plugin type name (contains). NOT table name.")] string type_name = "",
@@ -90,7 +89,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var detailResult = _orgService.RetrieveMultiple(detailQuery);
                     if (detailResult.Entities.Count == 0)
                         return Error($"Plugin trace log '{detailId}' not found.",
-                            "Use get_plugin_trace_logs in list mode to find a valid record_id.");
+                            "Use inspect_diagnostics(resource='plugin_traces') in list mode to find a valid record_id.");
                     var detailEntity = detailResult.Entities[0];
                     var detailEntry = BuildEntry(detailEntity, includeDetail: true);
                     var detailStructured = new GetPluginTraceLogsResult
@@ -123,11 +122,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 string primaryEntityLogical = null;
                 if (!string.IsNullOrWhiteSpace(entity_name))
                 {
-                    var resolved = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "get_plugin_trace_logs");
+                    var resolved = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "inspect_diagnostics(resource='plugin_traces')");
                     if (!resolved.IsSuccess)
                         return Error(
                             $"entity_name '{entity_name.Trim()}': {resolved.Error.Split("\r\n")[0]}",
-                            "Use get_tables to list entities before calling get_plugin_trace_logs.");
+                            "Use inspect_metadata(resource='tables') to list entities before calling inspect_diagnostics(resource='plugin_traces').");
                     primaryEntityLogical = resolved.Value.LogicalName;
                 }
 

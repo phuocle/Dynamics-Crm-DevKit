@@ -61,8 +61,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Restore a view from a backup pair written by update/rename/undo (undo) — the result's fetchXmlBackupPath + layoutXmlBackupPath point to the pre-change backup; pass both to action='undo' to restore\n\n" +
             "Read docs://instructions_for_views before creating or changing views, especially layout cell attributes and icon/tooltip functions.\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_tables → column logical names for FetchXML attributes/conditions\n" +
-            "- execute_fetchxml → test a FetchXML before putting it into a view\n" +
+            "- inspect_metadata(resource='tables') → column logical names for FetchXML attributes/conditions\n" +
+            "- query_data(mode='fetchxml') → test a FetchXML before putting it into a view\n" +
             "- manage_form → entity forms; publish_customizations → batch publish; execute_webapi → raw savedquery access")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             McpServer server,
@@ -107,7 +107,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return Error("action is required.", "Valid values: 'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.");
 
                 if (string.IsNullOrWhiteSpace(entity_name))
-                    return Error("entity_name is required.", "Use get_tables to list valid entity names.");
+                    return Error("entity_name is required.", "Use inspect_metadata(resource='tables') to list valid entity names.");
 
                 var normalizedAction = action.Trim().ToLowerInvariant();
                 var entityName = entity_name.Trim();
@@ -138,7 +138,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                     return Error(
                         $"entity_name '{entityName}': {entityResult.Error.Split("\r\n")[0]}",
-                        "Use get_tables to discover valid entity names.");
+                        "Use inspect_metadata(resource='tables') to discover valid entity names.");
                 }
                 entityName = entityResult.Value.LogicalName;
 
@@ -156,10 +156,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         columns: new ColumnSet("solutionid", "friendlyname", "uniquename", "ismanaged"),
                         displayColumn: "friendlyname", logicalColumn: null, uniqueColumn: "uniquename",
                         schemaColumn: null, kind: "solution", ambiguousTag: "[AmbiguousSolution]",
-                        notFoundTag: "[NotFoundSolution]", notFoundTip: "Hint: Use get_solution_components to list available solutions.",
+                        notFoundTag: "[NotFoundSolution]", notFoundTip: "Hint: Use inspect_metadata(resource='solution_components') to list available solutions.",
                         retryParameterName: "solution_name");
                     if (!solution.IsSuccess)
-                        return Error(solution.Error, "Use get_solution_components to find valid solution names.");
+                        return Error(solution.Error, "Use inspect_metadata(resource='solution_components') to find valid solution names.");
                     if (solution.Value.GetAttributeValue<bool>("ismanaged"))
                         return Error($"Solution '{solution_name.Trim()}' is managed.", "Pass an unmanaged solution in solution_name.");
 
@@ -323,7 +323,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var fetchNormalization = NormalizeFetchXmlNames(newFetchXml, entityName);
             if (fetchNormalization.Errors.Count > 0)
                 return Error(NameResolutionMessage("create", entityName, fetchNormalization.Errors),
-                    $"Use get_tables(entity_name='{entityName}') to list valid fields. Use a more specific name when matches are ambiguous.", new { errors = fetchNormalization.Errors });
+                    $"Use inspect_metadata(resource='tables', name='{entityName}') to list valid fields. Use a more specific name when matches are ambiguous.", new { errors = fetchNormalization.Errors });
             newFetchXml = fetchNormalization.Xml;
             newFetchXml = EnsureLayoutBuildableFetchXml(newFetchXml, meta);
 
@@ -344,7 +344,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (fieldErrors.Count > 0)
                 return Error(
                     $"CREATE view '{viewName}' on '{entityName}' blocked — {fieldErrors.Count} field(s) not found in entity metadata. First: {fieldErrors[0]}",
-                    $"Use get_tables('{entityName}') to list all available fields.",
+                    $"Use inspect_metadata(resource='tables', name='{entityName}') to list all available fields.",
                     new UpsertViewResult
                     {
                         Action = "create", Entity = entityName, ViewName = viewName,
@@ -362,7 +362,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var layout = BuildLayoutXmlFromFetch(entityName, newFetchXml, meta);
             if (layout.Error != null)
                 return Error($"CREATE view '{viewName}' on '{entityName}' blocked — {layout.Error}",
-                    $"Fix the FetchXML — grid columns are auto-generated from its attributes. Use get_tables(entity_name='{entityName}') to list valid fields.");
+                    $"Fix the FetchXML — grid columns are auto-generated from its attributes. Use inspect_metadata(resource='tables', name='{entityName}') to list valid fields.");
             var newLayoutXml = layout.Xml;
 
             var syncErrors = ViewXmlHelper.ValidateSync(newFetchXml, newLayoutXml);
@@ -476,7 +476,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var fetchNormalization = NormalizeFetchXmlNames(newFetchXml, entityName);
                 if (fetchNormalization.Errors.Count > 0)
                     return Error(NameResolutionMessage("update", entityName, fetchNormalization.Errors),
-                        $"Use get_tables(entity_name='{entityName}') to list valid fields. Use a more specific name when matches are ambiguous.", new { errors = fetchNormalization.Errors });
+                        $"Use inspect_metadata(resource='tables', name='{entityName}') to list valid fields. Use a more specific name when matches are ambiguous.", new { errors = fetchNormalization.Errors });
                 newFetchXml = fetchNormalization.Xml;
             }
 
@@ -506,7 +506,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var built = BuildLayoutXmlFromFetch(returnedTypeCode, newFetchXml, meta);
                 if (built.Error != null)
                     return Error($"UPDATE view '{currentViewName}' ({updateId}) on '{entityName}' blocked — {built.Error}",
-                        $"Fix the FetchXML — grid columns are auto-generated from its attributes. Use get_tables(entity_name='{entityName}') to list valid fields.");
+                        $"Fix the FetchXML — grid columns are auto-generated from its attributes. Use inspect_metadata(resource='tables', name='{entityName}') to list valid fields.");
                 newLayoutXml = ViewXmlHelper.MergeCellAttributes(built.Xml, currentLayoutXml);
             }
             if (hasCellUpdates)
@@ -519,7 +519,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var cellNameErrors = NormalizeCellUpdateNames(instructions, effectiveFetchXml, entityName);
                 if (cellNameErrors.Count > 0)
                     return Error(NameResolutionMessage("update", entityName, cellNameErrors),
-                        $"Use get_tables(entity_name='{entityName}') to list valid fields. Use a more specific name when matches are ambiguous.", new { errors = cellNameErrors });
+                        $"Use inspect_metadata(resource='tables', name='{entityName}') to list valid fields. Use a more specific name when matches are ambiguous.", new { errors = cellNameErrors });
 
                 var iconError = NormalizeAndValidateIconUpdates(instructions);
                 if (iconError != null)
@@ -559,7 +559,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (fieldErrors.Count > 0)
                     return Error(
                         $"UPDATE view '{currentViewName}' ({updateId}) on '{entityName}' blocked — {fieldErrors.Count} field(s) not found in entity metadata. First: {fieldErrors[0]}",
-                        $"Use get_tables('{entityName}') to list all available fields.",
+                        $"Use inspect_metadata(resource='tables', name='{entityName}') to list all available fields.",
                         BuildBlockedValidationDto("update", entityName, updateId, currentViewName,
                             fieldErrors, null));
             }

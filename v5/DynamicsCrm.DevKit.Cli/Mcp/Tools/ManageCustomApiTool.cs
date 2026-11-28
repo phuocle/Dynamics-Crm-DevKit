@@ -109,10 +109,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Create, update, or delete unmanaged Custom APIs with their request parameters and response properties in a target solution\n\n" +
             "For Custom API and related server-logic inspection modes, read docs://server_logic_guide.\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_messages → legacy workflow Custom Actions (category=3) + SDK messages\n" +
-            "- get_plugins → plugin assemblies/types/steps registered on these APIs\n" +
+            "- inspect_automation(resource='messages') → legacy workflow Custom Actions (category=3) + SDK messages\n" +
+            "- inspect_automation(resource='plugins') → plugin assemblies/types/steps registered on these APIs\n" +
             "- manage_function → Power Fx functions backed by Custom APIs\n" +
-            "- get_solution_components → verify Custom API solution membership")]
+            "- inspect_metadata(resource='solution_components') → verify Custom API solution membership")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("'list', 'detail', 'create', 'update', 'delete'.")] string action = "",
             [Description("Display Name, unique name, or GUID. Required: detail/update/delete. Optional on create (auto-derived from solution prefix + display_name if omitted; must start with publisher prefix if provided).")] string api_name = "",
@@ -213,7 +213,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!entityResult.IsSuccess)
                     return Error(
                         entityResult.Error.Split("\r\n")[0],
-                        "Use get_tables to list entities before calling manage_custom_api.");
+                        "Use inspect_metadata(resource='tables') to list entities before calling manage_custom_api.");
                 resolvedEntity = entityResult.Value.LogicalName;
             }
 
@@ -307,7 +307,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName.Trim(), requireUnmanaged: true);
             if (!solResult.IsSuccess)
-                return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid unmanaged solution names.");
+                return Error(solResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='solution_components') to find valid unmanaged solution names.");
 
             if (solResult.Prefix.Equals("new", StringComparison.OrdinalIgnoreCase))
                 return Error(
@@ -355,7 +355,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         "Provide the bound table's display or logical name.");
                 var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "manage_custom_api");
                 if (!entityResult.IsSuccess)
-                    return Error(entityResult.Error.Split("\r\n")[0], "Use get_tables to verify the bound entity logical name.");
+                    return Error(entityResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='tables') to verify the bound entity logical name.");
                 boundEntityLogicalName = entityResult.Value.LogicalName;
             }
 
@@ -492,7 +492,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName.Trim(), requireUnmanaged: true);
                 if (!solResult.IsSuccess)
-                    return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid unmanaged solution names.");
+                    return Error(solResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='solution_components') to find valid unmanaged solution names.");
                 resolvedSolutionName = solResult.UniqueName;
             }
 

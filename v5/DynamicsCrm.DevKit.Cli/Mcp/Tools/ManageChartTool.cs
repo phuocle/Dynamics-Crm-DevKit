@@ -76,7 +76,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Create a chart from group-by/aggregate columns, update chart type or columns, rename, set the entity default chart\n" +
             "- Restore a chart from a .chart.json backup written by update (undo)\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_tables → column logical names for group_by_column/aggregate_column\n" +
+            "- inspect_metadata(resource='tables') → column logical names for group_by_column/aggregate_column\n" +
             "- publish_customizations → batch publish after multiple metadata changes\n" +
             "- manage_view → views; execute_webapi → raw savedqueryvisualization access")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
@@ -240,7 +240,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var entityResolve = DisplayNameFirstResolver.ResolveEntity(_orgService, entityNameInput.Trim(), "manage_chart");
             if (!entityResolve.IsSuccess)
-                return Error(entityResolve.Error.Split("\r\n")[0], "Use get_tables to list entities before calling manage_chart.");
+                return Error(entityResolve.Error.Split("\r\n")[0], "Use inspect_metadata(resource='tables') to list entities before calling manage_chart.");
 
             var entityName = entityResolve.Value.LogicalName;
 
@@ -421,9 +421,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName.Trim());
                 if (!solResult.IsSuccess)
-                    return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
+                    return Error(solResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='solution_components') to find valid solution names.");
                 if (string.IsNullOrWhiteSpace(solResult.UniqueName))
-                    return Error($"Solution '{solutionName}' resolved but unique name is null/empty. Chart was not created.", "Pick another solution via get_solution_components, or omit solution_name.");
+                    return Error($"Solution '{solutionName}' resolved but unique name is null/empty. Chart was not created.", "Pick another solution via inspect_metadata(resource='solution_components'), or omit solution_name.");
                 resolvedSolutionUniqueName = solResult.UniqueName;
             }
 
@@ -624,9 +624,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName.Trim());
                 if (!solResult.IsSuccess)
-                    return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
+                    return Error(solResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='solution_components') to find valid solution names.");
                 if (string.IsNullOrWhiteSpace(solResult.UniqueName))
-                    return Error($"Solution '{solutionName}' resolved but unique name is null/empty.", "Pick another solution via get_solution_components, or omit solution_name.");
+                    return Error($"Solution '{solutionName}' resolved but unique name is null/empty.", "Pick another solution via inspect_metadata(resource='solution_components'), or omit solution_name.");
                 resolvedSolutionUniqueName = solResult.UniqueName;
             }
 
@@ -870,9 +870,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(entityName))
                 return (null, null, "entity logical name is required to build chart data specification.", "Pass entity_name (Display Name or logical name, e.g. 'Account' or 'account').");
             if (string.IsNullOrWhiteSpace(groupByCol))
-                return (null, null, "category/group_by_column is required to build chart data specification.", "Pass group_by_column (see get_tables for column logical names).");
+                return (null, null, "category/group_by_column is required to build chart data specification.", "Pass group_by_column (see inspect_metadata(resource='tables') for column logical names).");
             if (string.IsNullOrWhiteSpace(aggregateCol))
-                return (null, null, "legend/aggregate_column is required to build chart data specification.", "Pass aggregate_column (see get_tables for column logical names).");
+                return (null, null, "legend/aggregate_column is required to build chart data specification.", "Pass aggregate_column (see inspect_metadata(resource='tables') for column logical names).");
 
             var targetEntity = entityName.Trim().ToLowerInvariant();
             var resolvedGroupBy = groupByCol.Trim().ToLowerInvariant();
@@ -928,7 +928,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(entityName))
                 return (null, null, "entity logical name is required to build chart data specification.", "Pass entity_name (Display Name or logical name, e.g. 'Account' or 'account').");
             if (string.IsNullOrWhiteSpace(groupByCol))
-                return (null, null, "category/group_by_column is required to build chart data specification.", "Pass group_by_column (see get_tables for column logical names).");
+                return (null, null, "category/group_by_column is required to build chart data specification.", "Pass group_by_column (see inspect_metadata(resource='tables') for column logical names).");
 
             var targetEntity = entityName.Trim().ToLowerInvariant();
             var resolvedGroupBy = groupByCol.Trim().ToLowerInvariant();
@@ -1036,7 +1036,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (string.IsNullOrEmpty(label)) label = null;
 
                 if (!Regex.IsMatch(column, @"^[a-z_][a-z0-9_]*$"))
-                    return (null, $"measures column '{column}' is not a valid column logical name.", "Use a lowercase logical name (letters, digits, underscore). Use get_tables to list column names.");
+                    return (null, $"measures column '{column}' is not a valid column logical name.", "Use a lowercase logical name (letters, digits, underscore). Use inspect_metadata(resource='tables') to list column names.");
                 if (!ValidAggregateTypes.Contains(aggType))
                     return (null, $"measures aggregate type '{aggType}' is invalid.", "Valid values: count, countcolumn, sum, avg, min, max.");
 
@@ -1110,7 +1110,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var field = seg.Substring(0, idx).Trim().ToLowerInvariant();
                     var value = seg.Substring(idx + symbol.Length).Trim();
                     if (!Regex.IsMatch(field, @"^[a-z_][a-z0-9_]*$"))
-                        return (null, $"filter field '{field}' is not a valid column logical name.", "Use a lowercase logical name (letters, digits, underscore). Use get_tables to list column names.");
+                        return (null, $"filter field '{field}' is not a valid column logical name.", "Use a lowercase logical name (letters, digits, underscore). Use inspect_metadata(resource='tables') to list column names.");
                     if (value.Length == 0)
                         return (null, $"filter segment '{seg}' has an empty value.", "Expected format: field<op>value. Operators: =, !=, >, >=, <, <=, like, in, null, not-null.");
                     conditions.Add(new ChartFilterCondition { Field = field, Operator = op, Value = value });

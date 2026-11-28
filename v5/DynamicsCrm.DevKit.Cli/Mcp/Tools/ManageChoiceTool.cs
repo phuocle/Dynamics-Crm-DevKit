@@ -50,7 +50,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Inspect a global choice before binding it to a column\n\n" +
             "RELATED TOOLS:\n" +
             "- manage_column → local picklists; bind a global choice to a column\n" +
-            "- get_tables → see which columns use a choice\n" +
+            "- inspect_metadata(resource='tables') → see which columns use a choice\n" +
             "- publish_customizations → batch publish after multiple metadata changes")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("'list', 'detail', 'create', 'update'.")] string action = "",
@@ -180,7 +180,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName);
                 if (!solResult.IsSuccess)
-                    return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
+                    return Error(solResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='solution_components') to find valid solution names.");
                 var maxExisting = existingMeta.Options != null && existingMeta.Options.Count > 0
                     ? existingMeta.Options.Max(o => o.Value ?? 0)
                     : solResult.OptionValuePrefix * 10000 - 1;
@@ -491,7 +491,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName);
             if (!solResult.IsSuccess)
-                return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
+                return Error(solResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='solution_components') to find valid solution names.");
 
             var publisherPrefix = solResult.Prefix.ToLowerInvariant();
 

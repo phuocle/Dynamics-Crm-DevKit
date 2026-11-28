@@ -71,7 +71,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Pin specific FK values across all rows via field_overrides 'eq'\n\n" +
             "RELATED TOOLS:\n" +
             "- upsert_records → import generated JSON into Dataverse\n" +
-            "- get_tables → discover entity fields before generating")]
+            "- inspect_metadata(resource='tables') → discover entity fields before generating")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             McpServer server,
             [Description("Entity logical name (e.g., 'account').")] string entity_name = "",
@@ -149,7 +149,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                     return Error(
                         entityResult.Error.Split("\r\n")[0],
-                        "Use get_tables to discover valid entity names.");
+                        "Use inspect_metadata(resource='tables') to discover valid entity names.");
                 }
                 var entityName = entityResult.Value.LogicalName;
 
@@ -382,7 +382,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     candidates,
                     "[AmbiguousField]",
                     "[NotFoundField]",
-                    $"Tip: Use get_tables(entity_name='{entityName}') to discover valid fields.",
+                    $"Tip: Use inspect_metadata(resource='tables', name='{entityName}') to discover valid fields.",
                     "fields");
 
                 if (resolved.IsSuccess)
@@ -417,7 +417,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     candidates,
                     "[AmbiguousField]",
                     "[NotFoundField]",
-                    $"Tip: Use get_tables(entity_name='{entityName}') to discover valid fields.",
+                    $"Tip: Use inspect_metadata(resource='tables', name='{entityName}') to discover valid fields.",
                     "field_overrides[].logicalname");
 
                 if (!resolved.IsSuccess)

@@ -1,4 +1,4 @@
-﻿using DynamicsCrm.DevKit.Cli.Mcp;
+using DynamicsCrm.DevKit.Cli.Mcp;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.CrossTool;
@@ -44,7 +44,7 @@ public sealed class ManageTableErrorPathCoverageTests
             display_name: "Widget", display_collection_name: "Widgets", solution_name: "MissingSolution");
 
         Assert.IsTrue(result.IsError == true, result.GetText());
-        StringAssert.Contains(result.GetText(), "get_solution_components");
+        StringAssert.Contains(result.GetText(), "inspect_metadata(resource='solution_components')");
     }
 
     [TestMethod]
@@ -59,7 +59,7 @@ public sealed class ManageTableErrorPathCoverageTests
         Assert.IsTrue(result.IsError == true, result.GetText());
         // FormatAmbiguous wording — no "Ambiguous" tag appears in the message.
         StringAssert.Contains(result.GetText(), "Multiple candidates match 'Dup Thing' during display name search.");
-        StringAssert.Contains(result.GetText(), "Use get_tables to list entities.");
+        StringAssert.Contains(result.GetText(), "Use inspect_metadata(resource='tables') to list entities.");
     }
 
     [TestMethod]

@@ -115,7 +115,7 @@ public sealed class SearchRecordsErrorPathCoverageTests
 
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(result.GetText(), "'zzz_no_such_entity' was not found by Display Name or Logical/Unique/Schema Name");
-        StringAssert.Contains(result.GetText(), "Use get_tables to discover valid entity names.");
+        StringAssert.Contains(result.GetText(), "Use inspect_metadata(resource='tables') to discover valid entity names.");
     }
 
     [TestMethod]

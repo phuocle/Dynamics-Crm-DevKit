@@ -42,7 +42,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                 return Unbind(target, description, fallback, byFactor, factors, subgrid);
 
             var name = ReadString(operation, "custom_control_name")
-                ?? throw new InvalidOperationException($"{verb} requires 'custom_control_name'. Use get_custom_controls to find the exact registered name.");
+                ?? throw new InvalidOperationException($"{verb} requires 'custom_control_name'. Use inspect_metadata(resource='custom_controls') to find the exact registered name.");
             var replace = ReadReplace(operation, verb);
             foreach (var factor in factors)
             {
@@ -56,7 +56,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             var matches = _catalog.Find(name, "exact").Where(item => NamesMatch(name, item.Name)).ToArray();
             if (matches.Length != 1)
                 throw new InvalidOperationException(matches.Length == 0
-                    ? $"PCF '{name}' is not registered in this environment. Use get_custom_controls."
+                    ? $"PCF '{name}' is not registered in this environment. Use inspect_metadata(resource='custom_controls')."
                     : $"Multiple installed controls match PCF '{name}'.");
             var component = matches[0];
             if (component.ManifestError != null)

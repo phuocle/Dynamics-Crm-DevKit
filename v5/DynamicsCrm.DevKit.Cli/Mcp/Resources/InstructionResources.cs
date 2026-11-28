@@ -84,7 +84,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
         [McpServerResource(
             MimeType = "text/markdown",
             Name = "data_operations_guide",
-            Title = "Guide for Dataverse data operations (manage_record, execute_fetchxml, search_records)",
+            Title = "Guide for Dataverse data operations (manage_record, query_data)",
             UriTemplate = "docs://data_operations_guide"),
         Description(
             "Field type formats, FetchXML relationship joins, and search syntax. " +
@@ -107,7 +107,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
             Title = "Instructions for Dataverse SQL queries",
             UriTemplate = "docs://instructions_for_sql"),
         Description(
-            "Rules, supported operators, and T-SQL conversion cheat sheet for execute_sql. " +
+            "Rules, supported operators, and T-SQL conversion cheat sheet for query_data(mode='sql'). " +
             "Read this before writing complex SQL SELECT queries against Dataverse.")]
         public static string SqlInstructions() => ReadInstruction("instructions_for_sql.md");
     }

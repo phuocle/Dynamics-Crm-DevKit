@@ -54,8 +54,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Verify a record before destructive changes\n\n" +
             "For field value formats, lookup targets and delete considerations, read docs://data_operations_guide before constructing fields_json.\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_tables → entity/attribute names before building fields_json\n" +
-            "- execute_fetchxml → find lookup GUIDs and record_id\n" +
+            "- inspect_metadata(resource='tables') → entity/attribute names before building fields_json\n" +
+            "- query_data(mode='fetchxml') → find lookup GUIDs and record_id\n" +
             "- upsert_records → bulk create or update multiple records\n" +
             "- execute_webapi → raw OData JSON/annotations")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
@@ -70,7 +70,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default,
             [Description("Unmanaged solution display or unique name. Required for add_to_solution, remove_from_solution, and add_solution_component. Optional when creating a supported component record.")] string solution_name = null,
-            [Description("Required for add_solution_component only. Component type name (e.g., 'workflow', 'connectionreference', or 'role') or integer ID as returned by get_solution_components.")] JsonElement? component_type = null)
+            [Description("Required for add_solution_component only. Component type name (e.g., 'workflow', 'connectionreference', or 'role') or integer ID as returned by inspect_metadata(resource='solution_components').")] JsonElement? component_type = null)
         {
             return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
             {
@@ -101,7 +101,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return HandleAddSolutionComponent(record_id, solution_name, component_type);
 
                 if (string.IsNullOrWhiteSpace(entity_name))
-                    return Error("entity_name is required.", "Use get_tables to discover entity logical names.");
+                    return Error("entity_name is required.", "Use inspect_metadata(resource='tables') to discover entity logical names.");
 
                 var changesSolutionMembership = normalizedAction is "add_to_solution" or "remove_from_solution";
                 if (!changesSolutionMembership && normalizedAction is not ("create" or "read" or "update" or "delete" or "associate" or "disassociate" or "list_solutions"))
@@ -126,7 +126,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     if (string.IsNullOrWhiteSpace(fields_json))
                         return Error(
                             $"fields_json is required for '{normalizedAction}'.",
-                            "Provide a JSON object with field logical names as keys. Use get_tables for field names and types.");
+                            "Provide a JSON object with field logical names as keys. Use inspect_metadata(resource='tables') for field names and types.");
                 }
                 if (normalizedAction is "associate" or "disassociate")
                 {
@@ -135,14 +135,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     if (string.IsNullOrWhiteSpace(related_record_id))
                         return Error($"related_record_id is required for '{normalizedAction}'.", "Provide a GUID for the related record.");
                     if (string.IsNullOrWhiteSpace(relationship_name))
-                        return Error($"relationship_name is required for '{normalizedAction}'.", "Provide the N:N relationship schema name. Use get_tables(entity_name=..., detail_level='full') to list relationships.");
+                        return Error($"relationship_name is required for '{normalizedAction}'.", "Provide the N:N relationship schema name. Use inspect_metadata(resource='tables', name=..., detail_level='full') to list relationships.");
                 }
                 if (normalizedAction == "create" && !string.IsNullOrWhiteSpace(record_id))
                     return Error("record_id must be empty for 'create'. Use 'update' to modify an existing record.", "Omit record_id when creating a new record.");
 
                 var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "manage_record");
                 if (!entityResult.IsSuccess)
-                    return Error(entityResult.Error, "Use get_tables to discover valid entity logical/display names.");
+                    return Error(entityResult.Error, "Use inspect_metadata(resource='tables') to discover valid entity logical/display names.");
 
                 var entityName = entityResult.Value.LogicalName;
 
@@ -190,7 +190,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var solution = SolutionResolverHelper.Resolve(_orgService, solutionName, requireUnmanaged: true);
                 if (!solution.IsSuccess)
-                    return Error(solution.Error, "Use get_solution_components to find an unmanaged solution.");
+                    return Error(solution.Error, "Use inspect_metadata(resource='solution_components') to find an unmanaged solution.");
 
                 solutionUniqueName = solution.UniqueName;
             }
@@ -235,7 +235,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (!Guid.TryParse(recordId, out var componentId) || componentId == Guid.Empty)
                 return Error("record_id must be a non-empty GUID for 'add_solution_component'.",
-                    "Pass the component's objectId from get_solution_components or its Dataverse record GUID.");
+                    "Pass the component's objectId from inspect_metadata(resource='solution_components') or its Dataverse record GUID.");
             if (string.IsNullOrWhiteSpace(solutionName))
                 return Error("solution_name is required for 'add_solution_component'.", "Pass the display or unique name of a custom unmanaged solution.");
 
@@ -247,7 +247,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             if (string.IsNullOrWhiteSpace(typeText))
                 return Error("component_type must be a name or integer for 'add_solution_component'.",
-                    "Use a name such as 'workflow' or pass the typeId returned by get_solution_components.");
+                    "Use a name such as 'workflow' or pass the typeId returned by inspect_metadata(resource='solution_components').");
 
             var solution = SolutionResolverHelper.Resolve(_orgService, solutionName, requireUnmanaged: true, rejectSystemSolutions: true);
             if (!solution.IsSuccess)
@@ -256,7 +256,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var (componentType, primaryEntityName) = SolutionComponentDefinitions.ResolveType(_orgService, typeText);
             if (componentType == 0)
                 return Error($"Component type '{typeText}' is unknown or ambiguous in this environment.",
-                    "Use the component's typeId from get_solution_components in the current environment.");
+                    "Use the component's typeId from inspect_metadata(resource='solution_components') in the current environment.");
 
             var source = FindComponentSource(componentId, componentType, primaryEntityName);
             if (source == null)
@@ -324,7 +324,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 solution = SolutionResolverHelper.Resolve(_orgService, solutionName, requireUnmanaged: true);
                 if (!solution.IsSuccess)
-                    return Error(solution.Error, "Use get_solution_components to find an unmanaged solution.");
+                    return Error(solution.Error, "Use inspect_metadata(resource='solution_components') to find an unmanaged solution.");
             }
 
             var componentType = entityName switch
@@ -511,7 +511,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var relatedEntityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, relatedEntityName.Trim(), "manage_record");
             if (!relatedEntityResult.IsSuccess)
-                return Error(relatedEntityResult.Error, "Use get_tables to discover valid related entity names.");
+                return Error(relatedEntityResult.Error, "Use inspect_metadata(resource='tables') to discover valid related entity names.");
             var resolvedRelatedEntity = relatedEntityResult.Value.LogicalName;
 
             if (_options.DryRun)
@@ -538,7 +538,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var relatedEntityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, relatedEntityName.Trim(), "manage_record");
             if (!relatedEntityResult.IsSuccess)
-                return Error(relatedEntityResult.Error, "Use get_tables to discover valid related entity names.");
+                return Error(relatedEntityResult.Error, "Use inspect_metadata(resource='tables') to discover valid related entity names.");
             var resolvedRelatedEntity = relatedEntityResult.Value.LogicalName;
 
             if (_options.DryRun)

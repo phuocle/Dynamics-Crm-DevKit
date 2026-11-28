@@ -139,7 +139,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- manage_ribbon → classic/legacy RibbonDiffXml buttons (NOT modern appaction)\n" +
             "- manage_app → app module metadata for app-scoped commands\n" +
-            "- get_tables → entity logical/display names for entity_name\n" +
+            "- inspect_metadata(resource='tables') → entity logical/display names for entity_name\n" +
             "- publish_customizations → publish after flyout/split item changes (create/update/hide/show already auto-publish)")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("list/detail/create/update/delete/hide/show/add_flyout/update_flyout/add_flyout_item/remove_flyout_item/add_split_button/update_split_button.")] string action = "",

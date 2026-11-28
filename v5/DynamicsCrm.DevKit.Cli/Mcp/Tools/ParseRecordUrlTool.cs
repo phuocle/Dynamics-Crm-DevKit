@@ -13,7 +13,6 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class ParseRecordUrlTool : McpToolBase
     {
         private readonly IOrganizationService _orgService;
@@ -39,7 +38,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Extract a GUID while preserving its URL context\n\n" +
             "RELATED TOOLS:\n" +
             "- manage_record → read or change a parsed record\n" +
-            "- get_tables → resolve or verify an unknown entity logical name")]
+            "- inspect_metadata(resource='tables') → resolve or verify an unknown entity logical name")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("URL, GUID, or text. URL-decoded automatically; first matching parser wins.")] string input = "",
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
@@ -155,7 +154,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 RecordId = guid,
                 Source = source,
                 Tip = logicalName == null
-                    ? $"Resolve entity set name '{entitySetName}' with get_tables"
+                    ? $"Resolve entity set name '{entitySetName}' with inspect_metadata(resource='tables')"
                     : null
             };
         }

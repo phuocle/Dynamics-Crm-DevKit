@@ -129,7 +129,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- generate_demo_data → produce JSON to pipe into records_json\n" +
             "- manage_record → single-record create/update/delete/associate/disassociate\n" +
-            "- search_records / execute_fetchxml → verify created or updated records")]
+            "- query_data(mode='search') / query_data(mode='fetchxml') → verify created or updated records")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Entity Display Name or logical name (Display Name resolved first).")] string entity_name = "",
             [Description("Inline JSON array, .json file path, or .csv file path. Max 5000 records.")] string records_json = "",
@@ -204,7 +204,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                     return Error(
                         entityResult.Error.Split("\r\n")[0],
-                        $"Use get_tables to list entities before calling {toolName}.");
+                        $"Use inspect_metadata(resource='tables') to list entities before calling {toolName}.");
                 }
                 var entityName = entityResult.Value.LogicalName;
                 var primaryKey = entityResult.Value.PrimaryIdAttribute ?? entityName + "id";
@@ -223,7 +223,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         }
                         catch (Exception ex)
                         {
-                            return Error(ex.Message, $"Use get_tables(entity_name='{entityName}') to discover valid alternate key field names.");
+                            return Error(ex.Message, $"Use inspect_metadata(resource='tables', name='{entityName}') to discover valid alternate key field names.");
                         }
                     }
                 }
@@ -820,7 +820,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     candidates,
                     "[AmbiguousField]",
                     "[NotFoundField]",
-                    $"Tip: Use get_tables(entity_name='{entityName}') to discover valid CSV headers.",
+                    $"Tip: Use inspect_metadata(resource='tables', name='{entityName}') to discover valid CSV headers.",
                     "CSV header");
                 if (resolved.IsSuccess)
                 {
@@ -830,7 +830,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     // ambiguous and data-corrupting. Reject the entire CSV.
                     if (columnMap.Any(c => c.logicalName == attr.LogicalName))
                         throw new InvalidOperationException(
-                            $"CSV header '{header}' (column {i + 1}) maps to field '{attr.LogicalName}', but a previous column already maps to the same field. Duplicate field mapping is not allowed. Tip: Use get_tables(entity_name='{entityName}') to find unique Display Names or logical names for each column.");
+                            $"CSV header '{header}' (column {i + 1}) maps to field '{attr.LogicalName}', but a previous column already maps to the same field. Duplicate field mapping is not allowed. Tip: Use inspect_metadata(resource='tables', name='{entityName}') to find unique Display Names or logical names for each column.");
                     columnMap[i] = (i, attr.LogicalName, attr);
                     validColumns++;
                 }

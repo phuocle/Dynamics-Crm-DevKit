@@ -145,7 +145,7 @@ public class FormFieldMetadataCoverageTests
         StringAssert.Contains(ex.Message, "Field(s) not found");
         StringAssert.Contains(ex.Message, "'nam' not found");
         StringAssert.Contains(ex.Message, "Similar: name");
-        StringAssert.Contains(ex.Message, "Use get_tables");
+        StringAssert.Contains(ex.Message, "Use inspect_metadata(resource='tables', name='account')");
     }
 
     [TestMethod]

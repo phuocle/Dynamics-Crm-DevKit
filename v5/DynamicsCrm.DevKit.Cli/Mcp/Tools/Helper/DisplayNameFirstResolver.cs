@@ -220,7 +220,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     candidates,
                     "[AmbiguousEntity]",
                     "[NotFoundEntity]",
-                    withNotFoundTip ? $"Hint: Use get_tables to list entities before calling {callerToolName}." : null,
+                    withNotFoundTip ? $"Hint: Use inspect_metadata(resource='tables') to list entities before calling {callerToolName}." : null,
                     "entity_name");
             }
             catch (Exception ex)
@@ -282,7 +282,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     candidates,
                     "[AmbiguousField]",
                     "[NotFoundField]",
-                    $"Hint: Use get_tables(entity_name='{entityLogicalName}') to list fields before calling {callerToolName}.",
+                    $"Hint: Use inspect_metadata(resource='tables', name='{entityLogicalName}') to list fields before calling {callerToolName}.",
                     "attribute_name");
             }
             catch (Exception ex)

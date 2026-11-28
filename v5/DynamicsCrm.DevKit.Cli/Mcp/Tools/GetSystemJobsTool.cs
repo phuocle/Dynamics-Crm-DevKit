@@ -14,7 +14,6 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class GetSystemJobsTool : McpToolBase
     {
         private readonly IOrganizationService _orgService;
@@ -49,11 +48,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Debug async failures (list failed → detail for message + friendlyMessage)\n" +
             "- Monitor bulk ops (operation_type='bulk_delete'/'import'/'solution')\n" +
             "- Trace one request (correlation_id across jobs)\n" +
-            "- Async plugin failures: combine with get_plugin_trace_logs\n\n" +
+            "- Async plugin failures: combine with inspect_diagnostics(resource='plugin_traces')\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_plugin_trace_logs → plugin execution traces (sync + async)\n" +
-            "- get_workflows → classic workflow definitions (background + realtime)\n" +
-            "- get_flows → Power Automate cloud flows + run history")]
+            "- inspect_diagnostics(resource='plugin_traces') → plugin execution traces (sync + async)\n" +
+            "- inspect_automation(resource='workflows') → classic workflow definitions (background + realtime)\n" +
+            "- inspect_automation(resource='flows') → Power Automate cloud flows + run history")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("GUID → detail. Empty = list.")] string record_id = "",
             [Description("Filter by entity Display Name or logical name (e.g. 'Account' or 'account').")] string entity_name = "",
@@ -120,16 +119,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             int? primaryEntityTypeCode = null;
             if (!string.IsNullOrWhiteSpace(entityName))
             {
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "get_system_jobs");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "inspect_diagnostics(resource='system_jobs')");
                 if (!entityResult.IsSuccess)
                     return Error(
                         $"entity_name {entityResult.Error.Split("\r\n")[0]}",
-                        "Use get_tables to list entities before calling get_system_jobs.");
+                        "Use inspect_metadata(resource='tables') to list entities before calling inspect_diagnostics(resource='system_jobs').");
 
                 primaryEntityLogical = entityResult.Value.LogicalName;
                 primaryEntityTypeCode = ResolveEntityTypeCode(primaryEntityLogical);
                 if (primaryEntityTypeCode == null)
-                    return Error($"Entity '{entityName.Trim()}' not found.", "Use get_tables to find valid entity names.");
+                    return Error($"Entity '{entityName.Trim()}' not found.", "Use inspect_metadata(resource='tables') to find valid entity names.");
                 entityName = primaryEntityLogical;
             }
 
@@ -228,7 +227,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
-                return Error($"System job '{recordId.Trim()}' not found.", "Use get_system_jobs in list mode (record_id empty) to find a valid jobId.");
+                return Error($"System job '{recordId.Trim()}' not found.", "Use inspect_diagnostics(resource='system_jobs') in list mode (record_id empty) to find a valid jobId.");
 
             var entry = BuildEntry(result.Entities[0], includeDetail: true);
             var structured = new GetSystemJobsResult

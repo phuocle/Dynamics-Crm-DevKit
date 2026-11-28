@@ -62,7 +62,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(ManageColumnResult)),
         Description(
             "Dataverse columns: create or update is detected automatically. Create requires entity_name, attribute_type, display_name, solution_name; update identifies an existing column by logical_name. Attribute type is immutable.\n\n" +
-            "For lookup/customer/choice types, autonumbers and formulas, see docs://schema_tools_guide. Use formula_definition to clone a formula from get_tables, formula_expression to edit an existing Power Fx column in place, or raw_formula_definition to set raw XAML on a Calculated or Rollup column. Updating any formula saves a pre-change backup under .devkit/manage_column/{entity_name}/ and returns backupPath. For statuscode use add_options/update_options/delete_options; statecode is read-only.\n\n" +
+            "For lookup/customer/choice types, autonumbers and formulas, see docs://schema_tools_guide. Use formula_definition to clone a formula from inspect_metadata(resource='tables'), formula_expression to edit an existing Power Fx column in place, or raw_formula_definition to set raw XAML on a Calculated or Rollup column. Updating any formula saves a pre-change backup under .devkit/manage_column/{entity_name}/ and returns backupPath. For statuscode use add_options/update_options/delete_options; statecode is read-only.\n\n" +
             "Create requests match the exact target logical name first. An exact display name can identify an existing column when both logical_name and schema_name are omitted. Omit attribute_type to look up an update target by display name. Ambiguous matches return candidates.\n\n" +
             "WHEN TO USE:\n" +
             "- Create a new attribute on an existing table (need attribute_type + display_name)\n" +
@@ -73,7 +73,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Update mutable metadata, format, required_level, and picklist options\n" +
             "- Add/rename/remove options on an existing picklist via add_options/update_options/delete_options\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_tables → discover entities and attribute logical names\n" +
+            "- inspect_metadata(resource='tables') → discover entities and attribute logical names\n" +
             "- manage_table → create the table before its columns\n" +
             "- manage_relationship → 1:N / N:N relationships (lookup_target auto-creates 1:N)\n" +
             "- manage_choice → global option sets\n" +
@@ -109,7 +109,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Make column sortable in views. CREATE: pass to override Dataverse default (true, when supported by the attribute type). UPDATE: omit=null keeps current.")] bool? is_sortable = null,
             [Description("picklist/boolean create or update: default option value. Picklist: one integer matching an option. Boolean: 'true'/'false' or '1'/'0'. Omit on update to keep current; unsupported for multipicklist.")] string default_value = "",
             [Description("SchemaName for the new column (e.g. 'devkit_InvoiceLineId'). If provided, used AS-IS as SchemaName (skip auto-derive from display_name). Caller responsible for casing. Create only — ignored on update. Must start with the publisher prefix.")] string schema_name = "",
-            [Description("Formula clone reference from get_tables: source_table_logical_name:source_column_logical_name (e.g. account:new_total). CREATE clones the column formula. UPDATE replaces the formula of an existing formula column. For a Power Fx target, reference a Power Fx source. Mutually exclusive with formula_expression and raw_formula_definition.")] string formula_definition = "",
+            [Description("Formula clone reference from inspect_metadata(resource='tables'): source_table_logical_name:source_column_logical_name (e.g. account:new_total). CREATE clones the column formula. UPDATE replaces the formula of an existing formula column. For a Power Fx target, reference a Power Fx source. Mutually exclusive with formula_expression and raw_formula_definition.")] string formula_definition = "",
             [Description("Use powerfx, calculated, or rollup to create an empty formula column (or specify calculated/rollup when creating with raw_formula_definition). Omit this when cloning from a source reference or passing formula_expression.")] string formula_source_type = "",
             [Description("image only. CREATE: true = store the full-sized image (default false). UPDATE: omit = keep current.")] bool? can_store_full_image = null,
             [Description("Autonumber pattern for string columns, e.g. 'TKT-{SEQNUM:5}-{RANDSTRING:3}'. Placeholders: {SEQNUM:n} (n>=1, minimum zero-padded length), {RANDSTRING:n} (1-6), {DATETIMEUTC:format}. CREATE: sets the pattern; UPDATE: changes it (omit = keep current). format must be Text. Validated client-side — Dataverse only rejects bad patterns at record-save time.")] string auto_number_format = "",
@@ -120,7 +120,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             System.Threading.CancellationToken cancellationToken = default,
             [Description("UPDATE only on an existing Power Fx column. A Power Fx expression with an optional leading '='. Mutually exclusive with formula_definition, formula_source_type, and raw_formula_definition.")] string formula_expression = null,
 #nullable enable
-            [Description("File path to a XAML/XML file (or .formula.json backup) or inline raw XAML formula definition (<Activity ...>) from get_tables(detail_level='full') rawFormulaDefinition for CREATE or UPDATE on a Calculated or Rollup column. Mutually exclusive with formula_definition and formula_expression.")] string? raw_formula_definition = null,
+            [Description("File path to a XAML/XML file (or .formula.json backup) or inline raw XAML formula definition (<Activity ...>) from inspect_metadata(resource='tables', name=detail_level='full') rawFormulaDefinition for CREATE or UPDATE on a Calculated or Rollup column. Mutually exclusive with formula_definition and formula_expression.")] string? raw_formula_definition = null,
             McpServer? server = null)
 #nullable restore
         {
@@ -162,7 +162,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Make column sortable in views. CREATE: pass to override Dataverse default (true, when supported by the attribute type). UPDATE: omit=null keeps current.")] bool? is_sortable = null,
             [Description("picklist/boolean create or update: default option value. Picklist: one integer matching an option. Boolean: 'true'/'false' or '1'/'0'. Omit on update to keep current; unsupported for multipicklist.")] string default_value = "",
             [Description("SchemaName for the new column (e.g. 'devkit_InvoiceLineId'). If provided, used AS-IS as SchemaName (skip auto-derive from display_name). Caller responsible for casing. Create only — ignored on update. Must start with the publisher prefix.")] string schema_name = "",
-            [Description("Formula clone reference from get_tables: source_table_logical_name:source_column_logical_name (e.g. account:new_total). CREATE clones the column formula. UPDATE replaces the formula of an existing formula column. For a Power Fx target, reference a Power Fx source. Mutually exclusive with formula_expression and raw_formula_definition.")] string formula_definition = "",
+            [Description("Formula clone reference from inspect_metadata(resource='tables'): source_table_logical_name:source_column_logical_name (e.g. account:new_total). CREATE clones the column formula. UPDATE replaces the formula of an existing formula column. For a Power Fx target, reference a Power Fx source. Mutually exclusive with formula_expression and raw_formula_definition.")] string formula_definition = "",
             [Description("Use powerfx, calculated, or rollup to create an empty formula column (or specify calculated/rollup when creating with raw_formula_definition). Omit this when cloning from a source reference or passing formula_expression.")] string formula_source_type = "",
             [Description("image only. CREATE: true = store the full-sized image (default false). UPDATE: omit = keep current.")] bool? can_store_full_image = null,
             [Description("Autonumber pattern for string columns, e.g. 'TKT-{SEQNUM:5}-{RANDSTRING:3}'. Placeholders: {SEQNUM:n} (n>=1, minimum zero-padded length), {RANDSTRING:n} (1-6), {DATETIMEUTC:format}. CREATE: sets the pattern; UPDATE: changes it (omit = keep current). format must be Text. Validated client-side — Dataverse only rejects bad patterns at record-save time.")] string auto_number_format = "",
@@ -171,7 +171,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Create or remove a single-column Alternate Key (EntityKeyMetadata) for this column. CREATE: true creates an alternate key using the column's schema_name, logical_name, and display_name. UPDATE: true creates the alternate key if missing; false deletes it; omit = keep current.")] bool? is_alternate_key = null,
             [Description("UPDATE only on an existing Power Fx column. A Power Fx expression with an optional leading '='. Mutually exclusive with formula_definition, formula_source_type, and raw_formula_definition.")] string formula_expression = null,
 #nullable enable
-            [Description("File path to a XAML/XML file (or .formula.json backup) or inline raw XAML formula definition (<Activity ...>) from get_tables(detail_level='full') rawFormulaDefinition for CREATE or UPDATE on a Calculated or Rollup column. Mutually exclusive with formula_definition and formula_expression.")] string? raw_formula_definition = null)
+            [Description("File path to a XAML/XML file (or .formula.json backup) or inline raw XAML formula definition (<Activity ...>) from inspect_metadata(resource='tables', name=detail_level='full') rawFormulaDefinition for CREATE or UPDATE on a Calculated or Rollup column. Mutually exclusive with formula_definition and formula_expression.")] string? raw_formula_definition = null)
 #nullable restore
         {
             _requestedAlternateKey = is_alternate_key;
@@ -180,7 +180,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // --- Validate required parameters ---
             if (string.IsNullOrWhiteSpace(entity_name))
-                return Error("entity_name is required.", "Use get_tables to list entities.");
+                return Error("entity_name is required.", "Use inspect_metadata(resource='tables') to list entities.");
 
             entity_name = entity_name.Trim();
             logical_name = logical_name?.Trim() ?? "";
@@ -219,14 +219,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         return Error(
                             $"raw_formula_definition file not found: '{raw_formula_definition}'. If passing inline XAML, it must contain a valid Calculated or Rollup XAML definition (<Activity ...>).",
-                            "Pass an existing file path containing the XAML definition, or pass the inline <Activity ...> XML string from get_tables(detail_level='full') rawFormulaDefinition.");
+                            "Pass an existing file path containing the XAML definition, or pass the inline <Activity ...> XML string from inspect_metadata(resource='tables', name=detail_level='full') rawFormulaDefinition.");
                     }
                 }
 
                 var xamlError = ValidateRawFormulaXaml(raw_formula_definition);
                 if (xamlError != null)
                     return Error(xamlError,
-                        "Copy rawFormulaDefinition from get_tables(detail_level='full') for a Calculated or Rollup column (or pass a file path containing it) and ensure it is well-formed XML with an <Activity ...> root element.");
+                        "Copy rawFormulaDefinition from inspect_metadata(resource='tables', name=detail_level='full') for a Calculated or Rollup column (or pass a file path containing it) and ensure it is well-formed XML with an <Activity ...> root element.");
             }
 
             // --- Early validation: attribute_type, required_level, format, behavior ---
@@ -320,7 +320,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // --- Resolve entity_name: Display Name first, then logical/schema contains ---
             var (resolvedEntity, entityError) = ResolveEntityName(_orgService, entity_name);
             if (entityError != null)
-                return Error(entityError.Split("\r\n")[0], "Use get_tables to list entities.");
+                return Error(entityError.Split("\r\n")[0], "Use inspect_metadata(resource='tables') to list entities.");
             entity_name = resolvedEntity;
 
             // ===== Resolve publisher prefix from solution (needed when schema_name/logical_name lack one) =====
@@ -332,7 +332,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!solResult.IsSuccess)
                     return Error(
                         solResult.Error.Split("\r\n")[0],
-                        "Use get_solution_components to find valid solution names.");
+                        "Use inspect_metadata(resource='solution_components') to find valid solution names.");
                 resolvedPrefix = solResult.Prefix;
                 resolvedSolutionUniqueName = solResult.UniqueName;
             }
@@ -372,7 +372,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
                 else if (attributeResolve.Status == ResolveStatus.Ambiguous || attributeResolve.Status == ResolveStatus.Error)
                 {
-                    return Error(attributeResolve.Error.Split("\r\n")[0], "Use get_tables to list entities and attributes.");
+                    return Error(attributeResolve.Error.Split("\r\n")[0], "Use inspect_metadata(resource='tables') to list entities and attributes.");
                 }
             }
 
@@ -383,14 +383,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     if (existingMetadata.SourceType != 3)
                         return Error("formula_expression requires an existing Power Fx column.",
-                            "Use get_tables to find the logical name of a Power Fx column.");
+                            "Use inspect_metadata(resource='tables') to find the logical name of a Power Fx column.");
                     _requestedFormulaUpdate = new FormulaColumnSpec(3, formula_expression, "powerfx");
                 }
                 else if (raw_formula_definition != null)
                 {
                     if (existingMetadata.SourceType is not (1 or 2))
                         return Error("raw_formula_definition requires an existing Calculated or Rollup column.",
-                            "Use get_tables to find the logical name of a Calculated or Rollup column. For Power Fx columns, use formula_expression.");
+                            "Use inspect_metadata(resource='tables') to find the logical name of a Calculated or Rollup column. For Power Fx columns, use formula_expression.");
 
                     var existingKind = existingMetadata.SourceType == 1 ? "calculated" : "rollup";
                     if (!string.IsNullOrWhiteSpace(formula_source_type))
@@ -424,7 +424,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         return Error(
                             "Formula cloning on update requires an existing formula column and formula_definition.",
-                            "Use the formulaDefinition reference from get_tables. Use formula_source_type by itself only to create an empty formula column.");
+                            "Use the formulaDefinition reference from inspect_metadata(resource='tables'). Use formula_source_type by itself only to create an empty formula column.");
                     }
                 }
                 return UpdateExistingAttribute(entity_name, logical_name, existingMetadata,
@@ -439,7 +439,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // --- CREATE MODE ---
             if (formula_expression != null)
                 return Error("formula_expression requires an existing Power Fx column.",
-                    "Use get_tables to verify entity_name and logical_name before updating the formula.");
+                    "Use inspect_metadata(resource='tables') to verify entity_name and logical_name before updating the formula.");
 
             if (string.IsNullOrWhiteSpace(attribute_type))
             {
@@ -449,10 +449,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         "To UPDATE: pass logical_name (e.g. 'new_priority'). To CREATE: pass attribute_type + display_name + solution_name.");
                 if (raw_formula_definition != null)
                     return Error("raw_formula_definition on update requires an existing Calculated or Rollup column.",
-                        "Use get_tables to verify entity_name and logical_name before updating the formula, or provide attribute_type + display_name + solution_name to create a new column.");
+                        "Use inspect_metadata(resource='tables') to verify entity_name and logical_name before updating the formula, or provide attribute_type + display_name + solution_name to create a new column.");
                 return Error(
                     $"No existing column found for logical_name '{logical_name}' on entity '{entity_name}'.",
-                    "To CREATE a new column, also provide attribute_type + display_name + solution_name. To UPDATE, double-check the logical name (use get_tables to list attributes).");
+                    "To CREATE a new column, also provide attribute_type + display_name + solution_name. To UPDATE, double-check the logical name (use inspect_metadata(resource='tables') to list attributes).");
             }
             if (string.IsNullOrWhiteSpace(display_name))
                 return Error(
@@ -1244,7 +1244,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(lookupTarget))
                 return Error(
                     "lookup_target is required for lookup type.",
-                    "Provide a target entity logical name (e.g. 'contact'). For polymorphic, comma-separate: 'account,contact,lead'. Use get_tables to find valid entity logical names.");
+                    "Provide a target entity logical name (e.g. 'contact'). For polymorphic, comma-separate: 'account,contact,lead'. Use inspect_metadata(resource='tables') to find valid entity logical names.");
 
             var targetInputs = lookupTarget.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(t => t.Trim())
@@ -1255,13 +1255,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var targetResolve = DisplayNameFirstResolver.ResolveEntity(_orgService, targetInput, "manage_column");
                 if (!targetResolve.IsSuccess)
-                    return Error($"lookup_target '{targetInput}': {targetResolve.Error.Split("\r\n")[0]}", "Use get_tables to find valid entity logical names.");
+                    return Error($"lookup_target '{targetInput}': {targetResolve.Error.Split("\r\n")[0]}", "Use inspect_metadata(resource='tables') to find valid entity logical names.");
                 targets.Add(targetResolve.Value.LogicalName);
             }
             targets = targets.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
 
             if (targets.Count == 0)
-                return Error($"No valid target entities found in lookup_target: '{lookupTarget}'.", "Use get_tables to find valid entity logical names.");
+                return Error($"No valid target entities found in lookup_target: '{lookupTarget}'.", "Use inspect_metadata(resource='tables') to find valid entity logical names.");
 
             // Multiple targets → Polymorphic Lookup
             if (targets.Count > 1)
@@ -2099,7 +2099,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var parts = rawRef.Split(':');
             if (parts.Length != 2 || string.IsNullOrWhiteSpace(parts[0]) || string.IsNullOrWhiteSpace(parts[1]))
             {
-                error = "Invalid formula_definition. Pass the exact `table_logical_name:column_logical_name` reference returned by get_tables.";
+                error = "Invalid formula_definition. Pass the exact `table_logical_name:column_logical_name` reference returned by inspect_metadata(resource='tables').";
                 return false;
             }
 
@@ -2238,7 +2238,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (!TryResolveFormulaCloneSource(formulaDefinition, out var resolvedFormula, out var sourceTypeVal,
                     out var kind, out var sourceEntity, out var sourceAttribute, out var sourceError))
-                    return Error(sourceError, "Use get_tables to read the source column and pass its formulaDefinition reference unchanged.");
+                    return Error(sourceError, "Use inspect_metadata(resource='tables') to read the source column and pass its formulaDefinition reference unchanged.");
 
                 if (!string.IsNullOrWhiteSpace(formulaSourceType))
                 {
@@ -2762,7 +2762,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 return Error(
                     $"Attribute '{attributeName}' already exists on entity '{entityName}'.",
-                    "Use get_tables to inspect existing attributes, or choose a different name.",
+                    "Use inspect_metadata(resource='tables') to inspect existing attributes, or choose a different name.",
                     details: new { serverMessage = msg });
             }
 
@@ -2772,7 +2772,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 return Error(
                     $"Entity '{entityName}' not found.",
-                    "Use get_tables to find the correct entity logical name.",
+                    "Use inspect_metadata(resource='tables') to find the correct entity logical name.",
                     details: new { serverMessage = msg });
             }
 
@@ -2782,13 +2782,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 return Error(
                     $"Solution '{solutionName}' not found.",
-                    "Use get_solution_components to find valid solution names.",
+                    "Use inspect_metadata(resource='solution_components') to find valid solution names.",
                     details: new { serverMessage = msg });
             }
 
             return Error(
                 $"Failed to create attribute '{entityName}.{attributeName}'.",
-                "Check the parameters and the server message in [Detail]; use get_tables to verify entity/attribute names.",
+                "Check the parameters and the server message in [Detail]; use inspect_metadata(resource='tables') to verify entity/attribute names.",
                 details: new { serverMessage = msg });
         }
 
@@ -2871,7 +2871,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     if (metadata is not StringAttributeMetadata)
                         return Error(
                             $"auto_number_format/auto_number_seed/clear_auto_number are only supported for string columns, but '{attributeName}' is {GetAttributeTypeName(metadata)}.",
-                            "An autonumber column is a StringAttributeMetadata with AutoNumberFormat set. get_tables shows the column type.");
+                            "An autonumber column is a StringAttributeMetadata with AutoNumberFormat set. inspect_metadata(resource='tables') shows the column type.");
 
                     var autoNumberStringMeta = (StringAttributeMetadata)metadata;
 
@@ -2901,7 +2901,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         if (string.IsNullOrEmpty(effectivePattern))
                             return Error(
                                 $"auto_number_seed requires an autonumber pattern, but '{attributeName}' would have none after this call.",
-                                "Pass auto_number_format together with auto_number_seed, or seed an existing autonumber column (get_tables shows autoNumberFormat).");
+                                "Pass auto_number_format together with auto_number_seed, or seed an existing autonumber column (inspect_metadata(resource='tables') shows autoNumberFormat).");
                     }
                 }
 
@@ -3226,12 +3226,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     return Error(
                         $"Entity or attribute not found: '{entityName}.{attributeName}'.",
-                        "Use get_tables to find the correct names.",
+                        "Use inspect_metadata(resource='tables') to find the correct names.",
                         details: new { serverMessage = msg });
                 }
                 return Error(
                     $"Failed to update attribute '{entityName}.{attributeName}'.",
-                    "Check the parameters and the server message in [Detail]; use get_tables to verify entity/attribute names.",
+                    "Check the parameters and the server message in [Detail]; use inspect_metadata(resource='tables') to verify entity/attribute names.",
                     details: new { serverMessage = msg });
             }
         }

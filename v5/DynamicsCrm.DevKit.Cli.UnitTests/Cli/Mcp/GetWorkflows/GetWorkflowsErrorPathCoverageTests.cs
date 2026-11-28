@@ -106,7 +106,7 @@ public sealed class GetWorkflowsErrorPathCoverageTests
 
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(result.GetText(), "'zzz_no_such_entity' was not found");
-        StringAssert.Contains(result.GetText(), "Use get_tables to discover valid entity names.");
+        StringAssert.Contains(result.GetText(), "Use inspect_metadata(resource='tables') to discover valid entity names.");
     }
 
     [TestMethod]
@@ -134,7 +134,7 @@ public sealed class GetWorkflowsErrorPathCoverageTests
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(result.GetText(), "trigger_field 'ghostfield'");
         StringAssert.Contains(result.GetText(), "was not found");
-        StringAssert.Contains(result.GetText(), "Use get_tables with entity_name set to list valid attribute names.");
+        StringAssert.Contains(result.GetText(), "Use inspect_metadata(resource='tables') with entity_name set to list valid attribute names.");
     }
 
     [TestMethod]

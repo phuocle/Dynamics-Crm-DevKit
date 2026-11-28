@@ -45,7 +45,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 // would silently overwrite each other. Reject early.
                 if (!seenLogicalNames.Add(resolvedField))
                     throw new ArgumentException(
-                        $"fields_json key '{key}' resolves to field '{resolvedField}', but a previous key already resolved to the same field. Duplicate field mapping is not allowed. Tip: Use get_tables(entity_name='{entityLogicalName}') to find unique field names.");
+                        $"fields_json key '{key}' resolves to field '{resolvedField}', but a previous key already resolved to the same field. Duplicate field mapping is not allowed. Tip: Use inspect_metadata(resource='tables', name='{entityLogicalName}') to find unique field names.");
 
                 var targetEntity = ResolveTargetEntity(orgService, targetEntityInput);
 
@@ -100,7 +100,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 attrIndex.Candidates,
                 "[AmbiguousField]",
                 "[NotFoundField]",
-                $"Tip: Use get_tables(entity_name='{entityLogicalName}') to discover valid field names.",
+                $"Tip: Use inspect_metadata(resource='tables', name='{entityLogicalName}') to discover valid field names.",
                 "fields_json key");
 
             if (resolved.IsSuccess)

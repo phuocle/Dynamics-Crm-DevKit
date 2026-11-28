@@ -13,7 +13,6 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class GetFlowsTool : McpToolBase
     {
         private readonly IOrganizationService _orgService;
@@ -48,7 +47,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetFlowsResult)),
         Description(
-            "Power Automate cloud flows + run history. Modes: no flow_id = list (filtered); flow_id + action='list' = detail + last 5 runs; flow_id + action='runs' = extended run history. For classic (category=0) workflows use get_workflows.\n\n" +
+            "Power Automate cloud flows + run history. Modes: no flow_id = list (filtered); flow_id + action='list' = detail + last 5 runs; flow_id + action='runs' = extended run history. For classic (category=0) workflows use inspect_automation(resource='workflows').\n\n" +
 
             "WHEN TO USE:\n" +
             "- List flows by name/owner/status\n" +
@@ -56,9 +55,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Drill into run history with status_filter (debug failures)\n\n" +
             "For cloud-flow list/detail/run modes and filters, read docs://server_logic_guide.\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_workflows → classic workflows (category=0)\n" +
-            "- get_business_process_flows → BPF definitions + stages\n" +
-            "- get_business_rules → client-side business rules")]
+            "- inspect_automation(resource='workflows') → classic workflows (category=0)\n" +
+            "- inspect_automation(resource='bpfs') → BPF definitions + stages\n" +
+            "- inspect_automation(resource='business_rules') → client-side business rules")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("GUID. Empty = list. Set: action determines detail vs runs.")] string flow_id = "",
             [Description("'list' or 'runs'. 'runs' needs flow_id.")] string action = "list",
@@ -253,7 +252,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
                 return Error($"Cloud flow '{flowId}' not found (or not a cloud flow).",
-                    "Use get_flows without flow_id to list available flows.");
+                    "Use inspect_automation(resource='flows') without flow_id to list available flows.");
             var entity = result.Entities[0];
             var entry = MapFlowEntry(entity);
             entry.Description = NullIfEmpty(entity.GetAttributeValue<string>("description"));
@@ -281,7 +280,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var flowName = GetFlowName(flowId);
             if (flowName == null)
                 return Error($"Cloud flow '{flowId}' not found (or not a cloud flow).",
-                    "Use get_flows without flow_id to list available flows.");
+                    "Use inspect_automation(resource='flows') without flow_id to list available flows.");
 
             var fromDate = DateTime.UtcNow.AddMinutes(-minutesAgo).ToString("o");
             var statusCondition = BuildStatusFilter(statusFilter);

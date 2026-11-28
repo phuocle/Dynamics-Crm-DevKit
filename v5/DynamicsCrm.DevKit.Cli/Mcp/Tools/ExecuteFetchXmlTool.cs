@@ -13,7 +13,6 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class ExecuteFetchXmlTool : McpToolBase
     {
         private readonly IOrganizationService _orgService;
@@ -40,8 +39,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Page through a bounded result after validating logical names\n\n" +
             "For FetchXML joins, operators and paging rules, read docs://data_operations_guide when building a query.\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_tables → discover entity and attribute logical names\n" +
-            "- search_records → keyword relevance search\n" +
+            "- inspect_metadata(resource='tables') → discover entity and attribute logical names\n" +
+            "- query_data(mode='search') → keyword relevance search\n" +
             "- schema://fetchxml → FetchXML syntax and examples")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("FetchXML starting with <fetch>. Lowercase logical names.")] string fetchxml = "",

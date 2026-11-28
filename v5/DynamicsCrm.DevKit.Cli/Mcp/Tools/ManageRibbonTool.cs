@@ -27,7 +27,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private const int PublishMaxWaitSeconds = 210;
         private const string PublishWaitTimeoutAction = "stop_without_readback";
         private const string PublishWaitTimeoutInstruction =
-            "After the third get_system_jobs poll, if the PublishAll system job is not Succeeded or no result is returned, stop waiting, do not call manage_ribbon(buttons/detail), and report the ribbon result to the user with a note that Dataverse publish is still running or did not complete successfully and the user must wait/check the job.";
+            "After the third inspect_diagnostics(resource='system_jobs') poll, if the PublishAll system job is not Succeeded or no result is returned, stop waiting, do not call manage_ribbon(buttons/detail), and report the ribbon result to the user with a note that Dataverse publish is still running or did not complete successfully and the user must wait/check the job.";
         private const string OperationsDescription =
             "update: non-empty JSON array serialized as a string. Each object has an action and action-specific fields. " +
             "The optional dependency_libraries field (string[]) preloads JS web resources in order on add_button, update_button, and the main action of add_split_button and update_split_button. " +
@@ -68,7 +68,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "RELATED TOOLS:\n" +
             "- manage_command → modern Power Fx command bar (appaction)\n" +
-            "- get_system_jobs → poll the PublishAll async job\n" +
+            "- inspect_diagnostics(resource='system_jobs') → poll the PublishAll async job\n" +
             "- publish_customizations → manual publish if the async publish did not finish\n" +
             "- manage_webresource → list/verify web resources used as button libraries and icons")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
@@ -110,7 +110,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     case "buttons":
                         if (string.IsNullOrWhiteSpace(entity_name))
                             return Error("entity_name is required for action='buttons'.",
-                                "Provide entity_name, e.g. entity_name='account'. Use get_tables to find valid entity names.");
+                                "Provide entity_name, e.g. entity_name='account'. Use inspect_metadata(resource='tables') to find valid entity names.");
                         {
                             var (entityName, entityError) = ResolveEntityLogicalName(entity_name);
                             if (entityError != null) return entityError;
@@ -121,7 +121,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     case "detail":
                         if (string.IsNullOrWhiteSpace(entity_name))
                             return Error("entity_name is required for action='detail'.",
-                                "Provide entity_name, e.g. entity_name='account'. Use get_tables to find valid entity names.");
+                                "Provide entity_name, e.g. entity_name='account'. Use inspect_metadata(resource='tables') to find valid entity names.");
                         {
                             var (entityName, entityError) = ResolveEntityLogicalName(entity_name);
                             if (entityError != null) return entityError;
@@ -132,7 +132,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     case "update":
                         if (string.IsNullOrWhiteSpace(entity_name))
                             return Error("entity_name is required for action='update'.",
-                                "Provide entity_name, e.g. entity_name='account'. Use get_tables to find valid entity names.");
+                                "Provide entity_name, e.g. entity_name='account'. Use inspect_metadata(resource='tables') to find valid entity names.");
                         _workspaceFolder = await WorkspaceFolderHelper.GetAsync(server);
                         {
                             var (updateEntityName, updateEntityError) = ResolveEntityLogicalName(entity_name);
@@ -166,7 +166,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     case "undo":
                         if (string.IsNullOrWhiteSpace(entity_name))
                             return Error("entity_name is required for action='undo'.",
-                                "Provide entity_name, e.g. entity_name='account'. Use get_tables to find valid entity names.");
+                                "Provide entity_name, e.g. entity_name='account'. Use inspect_metadata(resource='tables') to find valid entity names.");
                         if (string.IsNullOrWhiteSpace(ribbonxml))
                             return Error(
                                 "ribbonxml is required for action='undo'.",

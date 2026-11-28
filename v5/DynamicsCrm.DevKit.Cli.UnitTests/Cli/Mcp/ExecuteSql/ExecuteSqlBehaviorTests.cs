@@ -314,7 +314,7 @@ public sealed class ExecuteSqlBehaviorTests
         var result = await Tool().execute_sql($"SELECT TOP {top} name FROM account");
 
         Assert.IsTrue(result.IsError == true, result.GetText());
-        StringAssert.Contains(result.GetText(), "TOP must be a positive integer supported by execute_sql.");
+        StringAssert.Contains(result.GetText(), "TOP must be a positive integer supported by query_data(mode='sql').");
         Assert.AreEqual(0, metadataRequests);
         Assert.IsEmpty(_webApi.Requests);
     }
@@ -403,7 +403,7 @@ public sealed class ExecuteSqlBehaviorTests
         var result = await Tool().execute_sql($"SELECT TOP {top} name FROM account");
 
         Assert.IsTrue(result.IsError == true, top);
-        Assert.AreEqual("TOP must be a positive integer supported by execute_sql.", Structured(result).GetProperty("error").GetString());
+        Assert.AreEqual("TOP must be a positive integer supported by query_data(mode='sql').", Structured(result).GetProperty("error").GetString());
         StringAssert.Contains(result.GetText(), "TOP n or TOP (n)");
         StringAssert.Contains(result.GetText(), "max_records");
         AssertNoRequests();
@@ -527,7 +527,7 @@ public sealed class ExecuteSqlBehaviorTests
         var result = await Tool().execute_sql("SELECT * FROM account");
 
         Assert.IsTrue(result.IsError == true);
-        StringAssert.Contains(result.GetText(), "get_tables(entity_name=");
+        StringAssert.Contains(result.GetText(), "inspect_metadata(resource='tables', name=");
         StringAssert.Contains(result.GetText(), "detail_level='standard'");
         Assert.IsFalse(result.GetText().Contains("get_tables(name=", StringComparison.Ordinal));
         Assert.IsFalse(result.GetText().Contains("include_columns", StringComparison.Ordinal));
@@ -588,7 +588,7 @@ public sealed class ExecuteSqlBehaviorTests
 
         Assert.IsTrue(result.IsError == true);
         Assert.AreEqual("Table 'missing_entity' was not found.", Structured(result).GetProperty("error").GetString());
-        StringAssert.Contains(result.GetText(), "get_tables(entity_name=");
+        StringAssert.Contains(result.GetText(), "inspect_metadata(resource='tables', name=");
         StringAssert.Contains(result.GetText(), "detail_level='standard'");
         Assert.HasCount(1, _metadataRequests);
         Assert.IsEmpty(_webApi.Requests);

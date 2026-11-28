@@ -48,7 +48,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
         Description(
             "Returns the XML schema defining the FetchXML query language. " +
             "Structure: fetch > entity > attribute, filter, link-entity, order. " +
-            "Note: The execute_fetchxml tool description already provides a curated guide. " +
+            "Note: The query_data(mode='fetchxml') tool description and docs://data_operations_guide provide a curated guide. " +
             "This schema is for advanced/edge cases.")]
         public async Task<string> FetchXmlSchema()
         {

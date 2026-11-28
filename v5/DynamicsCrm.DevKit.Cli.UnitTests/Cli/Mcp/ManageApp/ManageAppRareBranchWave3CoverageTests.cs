@@ -75,7 +75,7 @@ public sealed class ManageAppRareBranchWave3CoverageTests
 
         var unknownEntity = await tool.manage_app(null!, action: "add_components", app: "Sales",
             entity_name: "NoSuchEntity", view_ids: new[] { _viewId.ToString() });
-        StringAssert.Contains(Text(unknownEntity), "Use get_tables to find the table");
+        StringAssert.Contains(Text(unknownEntity), "Use inspect_metadata(resource='tables') to find the table");
 
         var noMetadataId = NewTool(script => script.MetadataIdNull = true);
         var missingMetadataId = await noMetadataId.manage_app(null!, action: "add_components", app: "Sales", entity_name: "account");

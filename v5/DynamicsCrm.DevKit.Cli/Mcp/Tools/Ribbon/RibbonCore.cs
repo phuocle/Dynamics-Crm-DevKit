@@ -25,7 +25,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(entityName))
                 return (null, Error("entity_name is required.",
-                    "Provide entity_name, e.g. entity_name='account'. Use get_tables to find valid entity names."));
+                    "Provide entity_name, e.g. entity_name='account'. Use inspect_metadata(resource='tables') to find valid entity names."));
             var trimmed = entityName.Trim();
             var result = DisplayNameFirstResolver.ResolveEntity(_orgService, trimmed, "manage_ribbon", withNotFoundTip: false);
             if (result.IsSuccess)
@@ -33,7 +33,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (result.Status == ResolveStatus.NotFound)
                 return (null, Error(
                     $"entity_name '{trimmed}': {result.Error}",
-                    "Use get_tables to list entities before calling manage_ribbon."));
+                    "Use inspect_metadata(resource='tables') to list entities before calling manage_ribbon."));
             if (result.Status == ResolveStatus.Ambiguous)
                 return (null, Error(
                     $"entity_name '{trimmed}': {result.Error.Split("\r\n")[0]}",
@@ -48,7 +48,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         }).ToList()
                     }));
             return (null, Error($"entity_name '{trimmed}': {result.Error}",
-                "Use get_tables to find valid entity names."));
+                "Use inspect_metadata(resource='tables') to find valid entity names."));
         }
 
         // ── Busy-environment gate (blocks ribbon action while a solution job runs) ──
@@ -69,7 +69,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             return Success(
                 $"manage_ribbon {action} — {entityName}: environment_busy, {operationType} {status} ({jobId}). " +
-                $"Use get_system_jobs(record_id=\"{jobId}\") to wait.", new ManageRibbonResult
+                $"Use inspect_diagnostics(resource='system_jobs', record_id=\"{jobId}\") to wait.", new ManageRibbonResult
             {
                 Action = action,
                 EntityName = entityName,
@@ -77,13 +77,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Published = false,
                 AsyncOperationId = jobId,
                 NeedsWait = true,
-                WaitTool = "get_system_jobs",
+                WaitTool = "inspect_diagnostics",
                 PollAfterSeconds = 30,
                 PollScheduleSeconds = NewPublishPollScheduleSeconds(),
                 MaxPollAttempts = PublishMaxPollAttempts,
                 MaxWaitSeconds = PublishMaxWaitSeconds,
                 ReadbackAllowed = false,
-                NextAllowedActions = new List<string> { "get_system_jobs" },
+                NextAllowedActions = new List<string> { "inspect_diagnostics" },
                 WaitReason = "A solution import/export or PublishAll job is still active. Wait for it to finish before touching the ribbon.",
                 WaitTimeoutAction = PublishWaitTimeoutAction,
                 WaitTimeoutInstruction = PublishWaitTimeoutInstruction
@@ -293,7 +293,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static void AppendPublishWaitGuidance(StringBuilder sb)
         {
-            sb.AppendLine("Wait schedule: call get_system_jobs after 30 seconds, then after 60 seconds, then after 120 seconds (total wait: 3 minutes 30 seconds).");
+            sb.AppendLine("Wait schedule: call inspect_diagnostics(resource='system_jobs') after 30 seconds, then after 60 seconds, then after 120 seconds (total wait: 3 minutes 30 seconds).");
             sb.AppendLine("After the third poll, if the job is not Succeeded or no result is returned, stop waiting, do not read back with manage_ribbon(buttons/detail), and report the result to the user with a note that Dataverse publish is still running or did not complete successfully and the user must wait/check the job.");
         }
 

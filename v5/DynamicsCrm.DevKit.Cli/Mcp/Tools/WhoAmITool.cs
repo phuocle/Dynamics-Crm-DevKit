@@ -17,7 +17,6 @@ using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class WhoAmITool : McpToolBase
     {
         internal string RoutingEnvId { get; set; } = "default";
@@ -47,7 +46,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Verify the active environment and user before reading or changing data\n" +
             "- Verify MCP process version, build timestamp, assembly path, and SHA after reinstall\n\n" +
             "RELATED TOOLS:\n" +
-            "- execute_fetchxml → query records with the returned userId\n" +
+            "- query_data(mode='fetchxml') → query records with the returned userId\n" +
             "- manage_role → inspect role definitions and assignments")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,

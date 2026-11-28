@@ -75,7 +75,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var validation = new RibbonValidation(_orgService);
             var entityError = validation.ValidateEntityExists(entityName);
             if (entityError != null)
-                return Error(entityError, "Use get_tables to find valid entity names.");
+                return Error(entityError, "Use inspect_metadata(resource='tables') to find valid entity names.");
 
             // Step 2: Parse operations JSON (invalid JSON returns a friendly error instead of an exception)
             List<JsonElement> ops;
@@ -203,13 +203,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 FunctionSignatures = functionSignatures.Count > 0 ? functionSignatures : null,
                 AsyncOperationId = asyncJobId.ToString(),
                 NeedsWait = true,
-                WaitTool = "get_system_jobs",
+                WaitTool = "inspect_diagnostics",
                 PollAfterSeconds = 30,
                 PollScheduleSeconds = NewPublishPollScheduleSeconds(),
                 MaxPollAttempts = PublishMaxPollAttempts,
                 MaxWaitSeconds = PublishMaxWaitSeconds,
                 ReadbackAllowed = false,
-                NextAllowedActions = new List<string> { "get_system_jobs" },
+                NextAllowedActions = new List<string> { "inspect_diagnostics" },
                 WaitReason = "PublishAll started asynchronously; wait for the system job before ribbon readback or the next prompt.",
                 WaitTimeoutAction = PublishWaitTimeoutAction,
                 WaitTimeoutInstruction = PublishWaitTimeoutInstruction
@@ -261,13 +261,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Published = true,
                 AsyncOperationId = asyncJobId.ToString(),
                 NeedsWait = true,
-                WaitTool = "get_system_jobs",
+                WaitTool = "inspect_diagnostics",
                 PollAfterSeconds = 30,
                 PollScheduleSeconds = NewPublishPollScheduleSeconds(),
                 MaxPollAttempts = PublishMaxPollAttempts,
                 MaxWaitSeconds = PublishMaxWaitSeconds,
                 ReadbackAllowed = false,
-                NextAllowedActions = new List<string> { "get_system_jobs" },
+                NextAllowedActions = new List<string> { "inspect_diagnostics" },
                 WaitReason = "PublishAll started asynchronously; wait for the system job before ribbon readback or the next prompt.",
                 WaitTimeoutAction = PublishWaitTimeoutAction,
                 WaitTimeoutInstruction = PublishWaitTimeoutInstruction
