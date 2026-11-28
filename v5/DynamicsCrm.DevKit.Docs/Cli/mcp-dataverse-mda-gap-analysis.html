@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Phân tích Lỗ hổng Dataverse &amp; MDA — Đề xuất Bổ sung cho Bộ MCP Tools | DynamicsCrm.DevKit</title>
+<style>
+  :root {
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --surface-2: #f1f5f9;
+    --border: #e2e8f0;
+    --text: #0f172a;
+    --text-muted: #475569;
+    --text-subtle: #64748b;
+    --primary: #2563eb;
+    --primary-soft: #eff6ff;
+    --primary-border: #bfdbfe;
+    --green: #059669;
+    --green-soft: #ecfdf5;
+    --green-border: #a7f3d0;
+    --amber: #d97706;
+    --amber-soft: #fffbeb;
+    --amber-border: #fde68a;
+    --red: #dc2626;
+    --red-soft: #fef2f2;
+    --red-border: #fecaca;
+    --purple: #7c3aed;
+    --purple-soft: #f5f3ff;
+    --purple-border: #ddd6fe;
+    --teal: #0d9488;
+    --teal-soft: #f0fdfa;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(15, 23, 42, .06), 0 4px 16px rgba(15, 23, 42, .04);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.62;
+    font-size: 15px;
+  }
+  a { color: var(--primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code {
+    font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
+    background: #eef2ff;
+    color: #1e3a8a;
+    padding: 2px 6px;
+    border-radius: 5px;
+    font-size: 0.87em;
+  }
+  .layout { display: grid; grid-template-columns: 268px minmax(0, 1fr); min-height: 100vh; }
+  .sidebar {
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    background: #0f172a; color: #cbd5e1; padding: 24px 18px;
+    border-right: 1px solid #1e293b;
+  }
+  .sidebar .brand { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .sidebar .sub { font-size: 12px; color: #94a3b8; margin-bottom: 18px; }
+  .sidebar .nav-group { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #64748b; margin: 18px 0 8px 10px; font-weight: 700; }
+  .sidebar a {
+    display: block; padding: 7px 10px; border-radius: 8px;
+    color: #cbd5e1; font-size: 13.3px; margin-bottom: 2px;
+  }
+  .sidebar a:hover { background: #1e293b; color: #fff; text-decoration: none; }
+  .sidebar .b { float: right; font-size: 11px; padding: 1px 6px; border-radius: 99px; background: #1e293b; color: #93c5fd; font-weight: 600; }
+  .main { padding: 32px 44px 72px; max-width: 1240px; }
+  @media (max-width: 980px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; }
+    .main { padding: 20px 16px 48px; }
+  }
+  .hero {
+    background: linear-gradient(135deg, #0f172a 0%, #312e81 55%, #0f766e 100%);
+    color: #fff; border-radius: 16px; padding: 32px 36px;
+    box-shadow: var(--shadow); margin-bottom: 26px;
+  }
+  .hero .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22);
+    padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 700;
+    letter-spacing: .03em; margin-bottom: 12px;
+  }
+  .hero h1 { margin: 0 0 10px; font-size: 27px; line-height: 1.25; letter-spacing: -0.02em; }
+  .hero p { margin: 0; color: #e0e7ff; font-size: 15.2px; max-width: 860px; }
+  .meta-bar {
+    display: flex; flex-wrap: wrap; gap: 18px; margin-top: 18px;
+    font-size: 13px; color: #ccfbf1; border-top: 1px solid rgba(255,255,255,.18); padding-top: 14px;
+  }
+  .kpi-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px; margin-bottom: 28px;
+  }
+  .kpi {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 17px 19px; box-shadow: var(--shadow);
+  }
+  .kpi .label { font-size: 12px; color: var(--text-subtle); font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+  .kpi .val { font-size: 25px; font-weight: 800; margin: 5px 0 3px; letter-spacing: -0.02em; }
+  .kpi .sub { font-size: 12.8px; color: var(--text-muted); }
+  .kpi.red .val { color: var(--red); }
+  .kpi.blue .val { color: var(--primary); }
+  .kpi.green .val { color: var(--green); }
+  .kpi.purple .val { color: var(--purple); }
+  .kpi.amber .val { color: var(--amber); }
+
+  section { margin-bottom: 36px; scroll-margin-top: 20px; }
+  h2 {
+    font-size: 21px; margin: 0 0 14px; padding-bottom: 10px;
+    border-bottom: 2px solid var(--border); letter-spacing: -0.015em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  h2 .sec-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 8px;
+    background: var(--primary); color: #fff; font-size: 14px; font-weight: 700; flex-shrink: 0;
+  }
+  h3 { font-size: 16px; margin: 18px 0 10px; color: #1e293b; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 22px 24px; box-shadow: var(--shadow);
+    margin-bottom: 18px;
+  }
+  .callout {
+    border-radius: 10px; padding: 16px 18px; margin: 14px 0;
+    border: 1px solid var(--border); border-left-width: 4px;
+  }
+  .callout.info { background: var(--primary-soft); border-color: var(--primary-border); border-left-color: var(--primary); }
+  .callout.success { background: var(--green-soft); border-color: var(--green-border); border-left-color: var(--green); }
+  .callout.warn { background: var(--amber-soft); border-color: var(--amber-border); border-left-color: var(--amber); }
+  .callout.danger { background: var(--red-soft); border-color: var(--red-border); border-left-color: var(--red); }
+  .callout.purple { background: var(--purple-soft); border-color: var(--purple-border); border-left-color: var(--purple); }
+  .callout strong.title { display: block; margin-bottom: 4px; font-size: 14.8px; }
+
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+
+  .pill {
+    display: inline-block; padding: 2px 9px; border-radius: 999px;
+    font-size: 11.5px; font-weight: 700; white-space: nowrap;
+  }
+  .pill.p0 { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+  .pill.p1 { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+  .pill.p2 { background: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; }
+  .pill.t1 { background: #dcfce7; color: #166534; }
+  .pill.t2 { background: #dbeafe; color: #1e40af; }
+  .pill.t3 { background: #f3e8ff; color: #6b21a8; }
+  .pill.zero { background: #059669; color: #fff; }
+
+  /* Coverage matrix bars */
+  .cov-row { display: grid; grid-template-columns: 230px 1fr 110px; align-items: center; gap: 12px; margin: 9px 0; font-size: 13.5px; }
+  .cov-track { background: #e2e8f0; height: 14px; border-radius: 99px; overflow: hidden; display: flex; }
+  .cov-have { background: #10b981; height: 100%; }
+  .cov-gap { background: #f59e0b; height: 100%; }
+
+  /* Gap cards */
+  .filter-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; align-items: center; }
+  .filter-bar input[type="search"] {
+    flex: 1; min-width: 220px; padding: 9px 13px; border-radius: 8px;
+    border: 1px solid var(--border); font-size: 14px; background: var(--surface);
+  }
+  .fbtn {
+    padding: 7px 12px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--surface); font-size: 12.8px; font-weight: 600; cursor: pointer; color: var(--text-muted);
+  }
+  .fbtn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+  .gap-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 20px; margin-bottom: 14px;
+    box-shadow: var(--shadow); border-left: 4px solid var(--primary);
+    transition: border-color .15s;
+  }
+  .gap-card.p0 { border-left-color: var(--red); }
+  .gap-card.p1 { border-left-color: var(--amber); }
+  .gap-card.p2 { border-left-color: var(--purple); }
+  .gap-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+  .gap-title { font-size: 15.8px; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 9px; }
+  .gap-title input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--primary); cursor: pointer; flex-shrink: 0; }
+  .gap-badges { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .gap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-top: 10px; font-size: 13.6px; }
+  .gap-box { background: var(--surface-2); border-radius: 8px; padding: 10px 13px; }
+  .gap-box .gb-lbl { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; font-weight: 800; color: var(--text-subtle); margin-bottom: 4px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13.6px; background: var(--surface); }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { background: var(--surface-2); font-weight: 700; color: #334155; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
+  tr:last-child td { border-bottom: none; }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; margin: 12px 0; }
+
+  .sticky-tally {
+    position: sticky; bottom: 16px; z-index: 20;
+    background: #0f172a; color: #fff; border-radius: 12px;
+    padding: 14px 20px; box-shadow: 0 10px 30px rgba(15,23,42,.28);
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px;
+    margin-top: 24px;
+  }
+  .sticky-tally .t-stat { font-size: 14px; }
+  .sticky-tally strong { color: #34d399; }
+  .sticky-tally button {
+    background: #2563eb; color: #fff; border: none; border-radius: 8px;
+    padding: 8px 14px; font-size: 13px; font-weight: 700; cursor: pointer;
+  }
+  .sticky-tally button.ghost { background: #334155; }
+  .roadmap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .phase-box {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 18px; border-top: 4px solid var(--primary);
+  }
+  .phase-box.p1 { border-top-color: #2563eb; }
+  .phase-box.p2 { border-top-color: #7c3aed; }
+  .phase-box.p3 { border-top-color: #dc2626; }
+  .phase-box.p4 { border-top-color: #059669; }
+  .phase-box .ptag { font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--text-subtle); }
+  .phase-box h4 { margin: 4px 0 8px; font-size: 15.5px; }
+  .small { font-size: 12.8px; }
+  .muted { color: var(--text-muted); }
+  .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-subtle); }
+  @media print { .sidebar, .sticky-tally { display: none; } .layout { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">Dataverse &amp; MDA Gap Audit</div>
+    <div class="sub">Đánh giá độ phủ 42 MCP Tools</div>
+
+    <div class="nav-group">Tổng quan</div>
+    <a href="#verdict">1. Kết luận &amp; Có nên "Merge"?</a>
+    <a href="#coverage">2. Bản đồ độ phủ hiện tại <span class="b">~76%</span></a>
+
+    <div class="nav-group">18 Lỗ hổng theo 6 Trụ cột</div>
+    <a href="#catalog">3. Danh mục tương tác (18 mục) <span class="b">Tick chọn</span></a>
+    <a href="#mda-deep">4. Soi sâu riêng cho MDA</a>
+
+    <div class="nav-group">Tích hợp vào bộ 14 Tools</div>
+    <a href="#merge-strategy">5. Merge Kiến trúc vs Tách Code</a>
+    <a href="#fit-14">6. 18 mục cắm vào 14 Tools ra sao?</a>
+    <a href="#roadmap">7. Lộ trình 4 Phase đề xuất</a>
+  </aside>
+
+  <main class="main">
+    <header class="hero">
+      <div class="eyebrow">DATAVERSE &amp; MODEL-DRIVEN APP GAP ANALYSIS · FOR ANH P</div>
+      <h1>42 MCP Tools hiện tại còn thiếu gì cho Dataverse &amp; MDA?</h1>
+      <p>Đối chiếu trực tiếp năng lực thực tế trong source code 42 tools hiện có với toàn bộ vòng đời phát triển, cấu hình, bảo mật, vận hành và ALM của <strong>Dataverse &amp; Model-Driven Apps (MDA)</strong> — kèm câu trả lời dứt khoát: <strong>có nên "merge" các tính năng thiếu này vào kế hoạch gộp 42 → 14 tools không?</strong></p>
+      <div class="meta-bar">
+        <span>🎯 Phạm vi: <strong>Dataverse · MDA · ALM/Solution · Security · Automation · Multi-Env</strong></span>
+        <span>🔍 Xác minh trực tiếp trên source code C# của 42 tools (không đề xuất trùng cái đã có!)</span>
+        <span>🧩 Tin vui: <strong>17/18 năng lực thiếu cắm gọn vào 14 tools — KHÔNG thêm tool mới!</strong></span>
+      </div>
+    </header>
+
+    <div class="kpi-grid">
+      <div class="kpi blue">
+        <div class="label">Độ phủ hiện tại (42 tools)</div>
+        <div class="val">~76%</div>
+        <div class="sub">Rất mạnh về Schema/Form/View/Ribbon/Data; yếu về ALM &amp; Admin MDA</div>
+      </div>
+      <div class="kpi red">
+        <div class="label">Thiếu mức P0 (Giá trị cực cao)</div>
+        <div class="val">11 mục</div>
+        <div class="sub">Solution/Publisher, Dependencies, Active Layer, App/Form Roles, Field Security, Flow JSON, Env Diff...</div>
+      </div>
+      <div class="kpi amber">
+        <div class="label">Thiếu mức P1 (Nên có cho MDA)</div>
+        <div class="val">6 mục</div>
+        <div class="sub">Custom Pages/Dialogs, View/Chart Lifecycle, Teams/BU, Plugin Step, Bulk Delete/Merge, Org Settings &amp; i18n</div>
+      </div>
+      <div class="kpi purple">
+        <div class="label">Thiếu mức P2 (Chuyên biệt)</div>
+        <div class="val">1 mục</div>
+        <div class="sub">Duplicate Rules, Email/Word Document Templates &amp; Queues/SLA</div>
+      </div>
+      <div class="kpi green">
+        <div class="label">Số MCP Tools cần thêm</div>
+        <div class="val">0 (hoặc +1)</div>
+        <div class="sub">17/18 mục gắn vào 14 tools hiện có; chỉ <code>env_diff</code> có thể cân nhắc tool #15</div>
+      </div>
+    </div>
+
+    <!-- SECTION 1: VERDICT -->
+    <section id="verdict">
+      <h2><span class="sec-num">1</span> Kết luận nhanh &amp; Trả lời câu hỏi: Có nên "Merge" vào kế hoạch gộp tool không?</h2>
+      <div class="card">
+        <p>Bộ 42 MCP tools hiện tại của anh P đã ở đẳng cấp <strong>rất cao và hiếm thấy</strong> (nhất là <code>manage_column</code> có Power Fx/XAML/Autonumber, <code>manage_form</code> có operations + PCF + backup/undo, <code>manage_ribbon</code> + <code>manage_command</code>, <code>manage_app</code> có SiteMap operations, <code>manage_report</code> local RDL dataset, và Multi-Env <code>--env</code>). Tuy nhiên, để AI làm chủ <strong>95%+ công việc của một Dataverse / MDA Senior Developer</strong> mà không phải quay ra mở <em>make.powerapps.com</em> bấm tay, vẫn còn <strong>18 khoảng trống thực sự</strong> (đặc biệt là <strong>11 mục P0</strong>).</p>
+
+        <div class="callout success">
+          <strong class="title">Câu trả lời dứt khoát cho anh P: "MERGE KIẾN TRÚC NGAY — TÁCH THỜI ĐIỂM CODE!"</strong>
+          <ul style="margin:6px 0 0;padding-left:20px;">
+            <li><strong>1. CÓ NÊN "MERGE" VÀO BẢN THIẾT KẾ GỘP 42 → 14 TOOLS (chỗ cắm &amp; tên domain)? → <span style="color:var(--green);">CÓ, RẤT NÊN!</span></strong><br>
+              Nhờ kiểm tra 18 lỗ hổng ngay bây giờ, ta xác nhận <strong>kiến trúc 14 Domain Tools hoàn toàn gánh được toàn bộ 18 tính năng tương lai</strong> mà không cần đổi tên tool hay đập đi xây lại về sau! Chỉ cần giữ chỗ (<em>reserve</em>) đúng vài <code>resource</code>/<code>action</code> trong thiết kế (xem Mục 6).</li>
+            <li><strong>2. CÓ NÊN CODE 18 TÍNH NĂNG MỚI NÀY CHUNG VỚI ĐỢT GỘP PHASE 1 &amp; PHASE 2 KHÔNG? → <span style="color:var(--red);">KHÔNG NÊN!</span></strong><br>
+              Lý do: Phase 1 (19→6) và Phase 2 (23→8) cần giữ kỷ luật vàng <strong>"Zero-Rewrite · 100% Parity · Test cũ pass 100%"</strong> để giao hàng nhanh, sạch, không trộn lẫn rủi ro. Nếu trộn code tính năng mới vào lúc đang refactor 42 tools, độ phức tạp tăng gấp 4 lần và khó nghiệm thu.</li>
+            <li><strong>3. Cách đi tối ưu nhất:</strong> Hoàn tất <strong>Phase 1 → Phase 2</strong> (ra bộ 14 tools siêu gọn, giảm 82% token) → sau đó cắm lần lượt <strong>Phase 3 (các mục P0 anh P tick chọn)</strong> và <strong>Phase 4 (P1/P2)</strong> thẳng vào đúng 14 tools đó — <strong>số lượng tool đứng yên ở 14</strong>!</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: COVERAGE MAP -->
+    <section id="coverage">
+      <h2><span class="sec-num">2</span> Bản đồ độ phủ hiện tại của 42 Tools trên Hệ sinh thái Dataverse / MDA</h2>
+      <div class="card">
+        <p class="small muted" style="margin-top:0;">Màu <strong style="color:#059669;">Xanh lá</strong> = Đã có mạnh trong 42 tools hiện tại &nbsp;|&nbsp; Màu <strong style="color:#d97706;">Cam</strong> = Khoảng trống thực tế còn thiếu (đã đối chiếu source code C#).</p>
+
+        <div class="cov-row"><strong>1. Data Query &amp; CRUD / Bulk / File</strong><div class="cov-track"><div class="cov-have" style="width:88%"></div><div class="cov-gap" style="width:12%"></div></div><span class="num"><strong>88%</strong> (Thiếu ít)</span></div>
+        <div class="cov-row"><strong>2. Data Model (Table/Col/Rel/Choice)</strong><div class="cov-track"><div class="cov-have" style="width:85%"></div><div class="cov-gap" style="width:15%"></div></div><span class="num"><strong>85%</strong> (Thiếu ít)</span></div>
+        <div class="cov-row"><strong>3. MDA UI (Form/View/Chart/App/Cmd)</strong><div class="cov-track"><div class="cov-have" style="width:78%"></div><div class="cov-gap" style="width:22%"></div></div><span class="num"><strong>78%</strong> (Thiếu vừa)</span></div>
+        <div class="cov-row"><strong>4. Code &amp; Assets (WR/Report/CustomAPI)</strong><div class="cov-track"><div class="cov-have" style="width:82%"></div><div class="cov-gap" style="width:18%"></div></div><span class="num"><strong>82%</strong> (Thiếu ít)</span></div>
+        <div class="cov-row"><strong>5. Diagnostics (Audit/Trace/Jobs)</strong><div class="cov-track"><div class="cov-have" style="width:80%"></div><div class="cov-gap" style="width:20%"></div></div><span class="num"><strong>80%</strong> (Thiếu vừa)</span></div>
+        <div class="cov-row"><strong>6. Automation Lifecycle (Flow/WF/Plugin)</strong><div class="cov-track"><div class="cov-have" style="width:60%"></div><div class="cov-gap" style="width:40%"></div></div><span class="num"><strong style="color:var(--amber)">60%</strong> (Mới chỉ đọc)</span></div>
+        <div class="cov-row"><strong>7. Security &amp; Access (Role/FSP/Team/POA)</strong><div class="cov-track"><div class="cov-have" style="width:55%"></div><div class="cov-gap" style="width:45%"></div></div><span class="num"><strong style="color:var(--amber)">55%</strong> (Thiếu nhiều)</span></div>
+        <div class="cov-row"><strong>8. Solution / ALM / Layers / Multi-Env</strong><div class="cov-track"><div class="cov-have" style="width:35%"></div><div class="cov-gap" style="width:65%"></div></div><span class="num"><strong style="color:var(--red)">35%</strong> (Lỗ hổng lớn!)</span></div>
+
+        <div class="callout warn" style="margin-bottom:0;">
+          <strong class="title">Nhận xét tổng quát của kiến trúc sư Dataverse:</strong>
+          Anh P đã làm cực kỳ sâu các phần <strong>khó nhất</strong> (FormXML, LayoutXML, RibbonDiffXml, XAML Decompiler cho Workflow/Business Rule, Formula Power Fx, Block Upload File/Image, SSRS RDL). Lỗ hổng lớn nhất hiện nay lại nằm ở nhóm <strong>quản trị &amp; hoàn thiện vòng đời MDA + ALM</strong> (Solution/Publisher, Dependency Check, Remove Active Layer, App/Form Security Roles, Field Security Profile, Connection References, Toggle Flow/Workflow/Plugin Step, và Multi-Env Diff) — toàn những thứ <em>tốn ít công code hơn Ribbon/FormXML rất nhiều</em> nhưng mang lại <strong>giá trị thực chiến cực lớn</strong>!
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: INTERACTIVE 18 GAPS -->
+    <section id="catalog">
+      <h2><span class="sec-num">3</span> Danh mục 18 Lỗ hổng Dataverse &amp; MDA (Tương tác · Anh P tick chọn)</h2>
+      <div class="card">
+        <div class="filter-bar">
+          <input type="search" id="gapSearch" placeholder="Tìm nhanh: solution, active layer, form role, flow, security, delete, diff..." />
+          <button class="fbtn active" data-prio="all">Tất cả (18)</button>
+          <button class="fbtn" data-prio="P0">🔥 P0 · Rất nên làm (11)</button>
+          <button class="fbtn" data-prio="P1">⭐ P1 · Nên có (6)</button>
+          <button class="fbtn" data-prio="P2">🧩 P2 · Mở rộng (1)</button>
+        </div>
+        <div class="filter-bar" style="margin-top:-6px;">
+          <button class="fbtn active" data-pillar="all">Mọi trụ cột</button>
+          <button class="fbtn" data-pillar="MDA">1. MDA UI &amp; App</button>
+          <button class="fbtn" data-pillar="ALM">2. Solution &amp; ALM</button>
+          <button class="fbtn" data-pillar="SEC">3. Security &amp; Access</button>
+          <button class="fbtn" data-pillar="AUTO">4. Automation &amp; Plugin</button>
+          <button class="fbtn" data-pillar="DATA">5. Schema &amp; Data</button>
+          <button class="fbtn" data-pillar="ENT">6. Multi-Env &amp; Enterprise</button>
+        </div>
+
+        <div id="gapList"></div>
+
+        <div class="sticky-tally">
+          <div class="t-stat">
+            Anh P đang chọn: <strong id="selCount">11 / 18</strong> tính năng &nbsp;|&nbsp;
+            Gồm <strong id="selP0">11 P0</strong>, <strong id="selP1">0 P1</strong>, <strong id="selP2">0 P2</strong> &nbsp;|&nbsp;
+            Số MCP Tools mới phải thêm: <strong id="selNewTools">0 tools (giữ nguyên 14 tools!)</strong>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="ghost" id="btnP0Only">Chọn mặc định (11 P0)</button>
+            <button class="ghost" id="btnP0P1">Chọn P0 + P1 (17)</button>
+            <button id="btnCopyPlan">📋 Copy danh sách đã chọn</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: MDA DEEP DIVE -->
+    <section id="mda-deep">
+      <h2><span class="sec-num">4</span> Soi sâu: Quy trình tạo 1 Model-Driven App hoàn chỉnh đang bị "khựng" ở đâu?</h2>
+      <div class="card">
+        <p>Thử đặt bài toán thực tế: <em>"Anh P giao AI dựng mới hoàn chỉnh một ứng dụng MDA quản lý Dự án (Project Management) từ con số 0 cho 2 nhóm user Sales và Manager, rồi chuẩn bị gói đóng solution lên UAT."</em> Hãy xem AI chạy trơn đến bước nào và <strong>khựng lại ở bước nào</strong> với 42 tools hiện tại:</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Bước trong quy trình MDA thực tế</th><th>Trạng thái hiện tại (42 tools)</th><th>Cần bổ sung mục nào?</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1. Tạo Publisher &amp; Unmanaged Solution mới</td><td><span class="pill p0">❌ KHỰNG</span> — Không có tool tạo Publisher/Solution; phải mở portal tạo tay trước</td><td><strong>#5</strong> Solution &amp; Publisher</td></tr>
+              <tr><td>2. Tạo Table, Column, Formula, Autonumber, Relationship, Choice</td><td><span class="pill t1">✅ MẠNH</span> — Nhưng thiếu bật <code>ChangeTracking</code>/<code>Notes</code>/<code>Activities</code>, Composite Key &amp; <code>delete</code> khi tạo nhầm</td><td><strong>#14</strong> Schema Completeness</td></tr>
+              <tr><td>3. Tạo/chỉnh Main Form, Quick Create, Quick View, Card Form</td><td><span class="pill p1">⚠️ THIẾU 1 PHẦN</span> — Chỉ tạo mới được QuickCreate (7) &amp; Dashboard (0); chưa tạo/clone Main/QuickView/Card</td><td><strong>#2</strong> Form Lifecycle</td></tr>
+              <tr><td>4. Phân quyền Form theo Role (Manager thấy Form A, Sales thấy Form B) &amp; đặt Form Order</td><td><span class="pill p0">❌ KHỰNG</span> — <code>manage_form</code> chưa có <code>set_roles</code> &amp; <code>set_order</code></td><td><strong>#2</strong> Form Roles &amp; Order</td></tr>
+              <tr><td>5. Tạo System Views, Quick Find, Charts, Web Resources, Classic Ribbon / Command Bar</td><td><span class="pill t1">✅ RẤT MẠNH</span> — Đã đủ 95% (chỉ thiếu delete/deactivate view &amp; chart)</td><td><strong>#4</strong> View/Chart Lifecycle</td></tr>
+              <tr><td>6. Tạo MDA App, thêm Components, dựng SiteMap Navigation</td><td><span class="pill t1">✅ RẤT MẠNH</span> — <code>manage_app</code> làm rất tốt</td><td>—</td></tr>
+              <tr><td>7. Gán Security Roles cho MDA App &amp; bật App Settings (New Look, In-App Notifications, Async Save...)</td><td><span class="pill p0">❌ KHỰNG</span> — App tạo xong user bình thường không mở được, không chỉnh được App Settings</td><td><strong>#1</strong> App Roles &amp; Settings</td></tr>
+              <tr><td>8. Gắn Custom Page / Dialog hiện đại vào App &amp; Command Bar</td><td><span class="pill p1">⚠️ CHƯA CÓ</span> — Chưa inspect được Custom Pages / quản lý Dialog</td><td><strong>#3</strong> Custom Pages &amp; Dialogs</td></tr>
+              <tr><td>9. Bật Column Security cho cột nhạy cảm (Lương/Giá vốn) &amp; gán quyền</td><td><span class="pill p0">❌ KHỰNG</span> — Bật <code>is_secured=true</code> được nhưng không tạo/gán được Field Security Profile</td><td><strong>#9</strong> Field Security Profile</td></tr>
+              <tr><td>10. Kiểm tra Connection References, bật Cloud Flow / Workflow, bật Plugin Trace Log khi test</td><td><span class="pill p0">❌ KHỰNG</span> — Không bật/tắt được Flow/Workflow, không kiểm tra unbound Connection Ref, không bật được Trace Log</td><td><strong>#8, #12, #17</strong></td></tr>
+              <tr><td>11. Trước khi deploy UAT: kiểm tra Missing Dependencies, xóa Active Layer, so sánh Dev vs UAT</td><td><span class="pill p0">❌ KHỰNG</span> — Mới detect được Active Layer chứ chưa xóa được; chưa có Dependency Check &amp; Env Diff</td><td><strong>#6, #7, #16</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: MERGE STRATEGY -->
+    <section id="merge-strategy">
+      <h2><span class="sec-num">5</span> Có cần "Merge" các đề xuất này vào file gộp 42 → 14 Tools không?</h2>
+      <div class="card">
+        <div class="grid-2">
+          <div class="callout success" style="margin:0;">
+            <strong class="title">✅ NHỮNG GÌ NÊN "MERGE" NGAY VÀO TÀI LIỆU GỘP 42 → 14</strong>
+            <ol style="margin:6px 0 0;padding-left:18px;">
+              <li><strong>Xác nhận kiến trúc 14 tools không bị lỗi thời:</strong> Cả 17/18 lỗ hổng trên đều rơi gọn vào đúng tên 14 tools đã đặt (<code>manage_ui</code>, <code>manage_admin</code>, <code>manage_schema</code>, <code>manage_logic</code>, <code>manage_data</code>, <code>manage_assets</code>, <code>inspect_metadata</code>, <code>inspect_automation</code>, <code>inspect_diagnostics</code>).</li>
+              <li><strong>Đảm bảo tham số top-level đủ tổng quát:</strong> Ví dụ <code>manage_admin</code> dùng tham số <code>target</code> (thay vì đặt cứng <code>role_id</code>) nên sau này cắm thêm <code>solution</code>, <code>publisher</code>, <code>connection_reference</code>, <code>field_security</code>, <code>team</code>, <code>org_setting</code> cực kỳ tự nhiên!</li>
+              <li><strong>Giữ bảng quy hoạch resource dự phòng (Reserved Slots)</strong> trong tài liệu triển khai để AI tương lai biết chính xác tính năng nào cắm vào tool nào, tránh tạo tool lẻ tẻ.</li>
+            </ol>
+          </div>
+          <div class="callout danger" style="margin:0;">
+            <strong class="title">⛔ NHỮNG GÌ KHÔNG NÊN "MERGE" VÀO CHUNG PHASE 1 &amp; PHASE 2 CODE</strong>
+            <ol style="margin:6px 0 0;padding-left:18px;">
+              <li><strong>KHÔNG code 18 tính năng mới cùng lúc gộp 42 → 14:</strong> Phase 1 &amp; 2 là bài toán <em>refactoring thuần túy</em> (bọc facade quanh 42 handler đã battle-tested). Trộn code mới vào sẽ phá tính kiểm soát, khó test regression và kéo dài thời gian ra bản 14 tools.</li>
+              <li><strong>KHÔNG nhồi trước mô tả các resource chưa tồn tại vào <code>[Description]</code>:</strong> Chỉ khi code xong resource nào (ở Phase 3/4) mới thêm dòng mô tả resource đó vào tool router — tránh AI gọi nhầm tính năng chưa code và tránh lãng phí token.</li>
+              <li><strong>Tách gọn thành Phase 3 (P0) &amp; Phase 4 (P1/P2)</strong> sau khi 14 tools đã pass 100% unit test &amp; chạy thực tế mượt mà.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: FIT INTO 14 TOOLS -->
+    <section id="fit-14">
+      <h2><span class="sec-num">6</span> Bản đồ cắm 18 tính năng mới vào đúng 14 Domain Tools (0 Tool mới!)</h2>
+      <div class="card">
+        <p>Đây là minh chứng rõ nhất cho thấy thiết kế <strong>14 Domain Tools</strong> rất bền vững: dù anh P xây thêm <strong>18 nhóm tính năng lớn</strong> (tương đương ~25–30 tool theo cách cũ, đẩy tổng số từ 42 lên ~70 tools!), bộ MCP mới <strong>vẫn giữ đúng 14 tools</strong> (hoặc 15 nếu tách riêng <code>compare_environments</code>):</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Domain Tool (trong bộ 14)</th><th>Đã chứa từ 42 tools</th><th>Bổ sung từ 18 lỗ hổng (Phase 3 &amp; 4)</th><th>Tầng mở rộng</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>inspect_metadata</code> <span class="small muted">(RO)</span></td>
+                <td class="small"><code>tables</code>, <code>solution_components</code>, <code>custom_controls</code></td>
+                <td class="small"><code>solutions</code> (#5), <code>publishers</code> (#5), <code>dependencies</code> (#6), <code>component_layers</code> (#7), <code>custom_pages</code> (#3), <code>env_diff</code> (#16*)</td>
+                <td><span class="pill t2">Tầng 2 · Resource</span></td>
+              </tr>
+              <tr>
+                <td><code>inspect_automation</code> <span class="small muted">(RO)</span></td>
+                <td class="small"><code>plugins</code>, <code>workflows</code>, <code>flows</code>, <code>bpfs</code>, <code>business_rules</code>, <code>messages</code></td>
+                <td class="small">Nâng cấp <code>flows</code> đọc <code>clientdata</code> (#12), thêm <code>service_endpoints</code> (#13)</td>
+                <td><span class="pill t1">Tầng 1</span> + <span class="pill t2">Tầng 2</span></td>
+              </tr>
+              <tr>
+                <td><code>inspect_diagnostics</code> <span class="small muted">(RO)</span></td>
+                <td class="small"><code>audit</code>, <code>plugin_traces</code>, <code>system_jobs</code></td>
+                <td class="small"><code>record_access</code> (#10 — Why can't User X see Record Y?)</td>
+                <td><span class="pill t2">Tầng 2 · Resource</span></td>
+              </tr>
+              <tr>
+                <td><code>manage_ui</code> <span class="small muted">(RW)</span></td>
+                <td class="small"><code>form</code>, <code>view</code>, <code>chart</code>, <code>app</code></td>
+                <td class="small"><code>app</code> (+roles/settings #1); <code>form</code> (+create Main/QV/Card, roles, order, state, delete #2); <code>view</code>/<code>chart</code> (+state/delete/share #4); thêm <code>custom_page</code>, <code>dialog</code> (#3)</td>
+                <td><span class="pill t1">Tầng 1</span> + <span class="pill t2">Tầng 2</span></td>
+              </tr>
+              <tr>
+                <td><code>manage_admin</code> <span class="small muted">(RW)</span></td>
+                <td class="small"><code>role</code>, <code>env_var</code>, <code>publish</code></td>
+                <td class="small"><code>solution</code> (+create/delete/remove_component/remove_active_layer #5,#7), <code>publisher</code> (#5), <code>connection_reference</code> (#8), <code>field_security</code> (#9), <code>team</code> / <code>business_unit</code> / <code>user</code> (#11), <code>org_setting</code> (#17), <code>duplicate_rule</code> / <code>queue</code> (#18)</td>
+                <td><span class="pill t2">Tầng 2 · Resource</span></td>
+              </tr>
+              <tr>
+                <td><code>manage_schema</code> <span class="small muted">(RW)</span></td>
+                <td class="small"><code>table</code>, <code>column</code>, <code>relationship</code>, <code>choice</code></td>
+                <td class="small"><code>table</code>/<code>column</code> (+<code>delete</code>, <code>ChangeTracking</code>, <code>HasNotes</code>/<code>HasActivities</code> #14); thêm <code>key</code> (Composite Alternate Key #14) &amp; <code>translations</code> (#17)</td>
+                <td><span class="pill t1">Tầng 1</span> + <span class="pill t2">Tầng 2</span></td>
+              </tr>
+              <tr>
+                <td><code>manage_logic</code> <span class="small muted">(RW)</span></td>
+                <td class="small"><code>custom_api</code>, <code>function</code></td>
+                <td class="small"><code>workflow</code> / <code>flow</code> / <code>business_rule</code> / <code>bpf</code> (activate/deactivate #12), <code>plugin_step</code> / <code>service_endpoint</code> (#13)</td>
+                <td><span class="pill t2">Tầng 2 · Resource</span></td>
+              </tr>
+              <tr>
+                <td><code>manage_data</code> <span class="small muted">(RW)</span></td>
+                <td class="small"><code>record</code>, <code>bulk</code>, <code>file</code>, <code>deleted</code>, <code>demo</code></td>
+                <td class="small"><code>record</code> (+<code>share</code>/<code>unshare</code> #10, <code>merge</code>, <code>recalculate_rollup</code> #15); <code>bulk</code> (+<code>delete</code> BulkDeleteRequest #15)</td>
+                <td><span class="pill t1">Tầng 1 · Action</span></td>
+              </tr>
+              <tr>
+                <td><code>manage_assets</code> <span class="small muted">(RW)</span></td>
+                <td class="small"><code>webresource</code>, <code>report</code></td>
+                <td class="small"><code>email_template</code>, <code>document_template</code> (#18)</td>
+                <td><span class="pill t2">Tầng 2 · Resource</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="small muted">*Lưu ý riêng cho mục #16 (<code>env_diff</code>): có thể đặt làm <code>inspect_metadata(resource="env_diff")</code> để giữ đúng 14 tools, <strong>hoặc</strong> tách thành tool #15 <code>compare_environments</code> (Read-Only) nếu anh P muốn biến nó thành tính năng flagship quảng bá cho DevKit MCP đa môi trường (vẫn nằm gọn dưới trần Hard Cap 16 tools).</p>
+      </div>
+    </section>
+
+    <!-- SECTION 7: ROADMAP -->
+    <section id="roadmap">
+      <h2><span class="sec-num">7</span> Lộ trình 4 Phase đề xuất cho anh P</h2>
+      <div class="roadmap-grid">
+        <div class="phase-box p1">
+          <div class="ptag">Phase 1 · Gộp Read-Only</div>
+          <h4>19 RO → 6 RO (Tổng 29)</h4>
+          <p class="small muted">Refactor thuần túy, 0% thay đổi logic, giảm ngay ~18K tokens/turn. Dựng sẵn <code>McpPayload</code> và bộ test guard.</p>
+        </div>
+        <div class="phase-box p2">
+          <div class="ptag">Phase 2 · Gộp Mutating</div>
+          <h4>23 RW → 8 RW (Tổng 14)</h4>
+          <p class="small muted">Hoàn tất bộ <strong>14 Domain Tools</strong> (giảm ~82% tokens). Bảo toàn 100% logic 42 handlers &amp; unit tests cũ.</p>
+        </div>
+        <div class="phase-box p3">
+          <div class="ptag">Phase 3 · Lấp 11 Lỗ hổng P0</div>
+          <h4>Giữ nguyên 14 Tools!</h4>
+          <p class="small muted">Solution/Publisher, Dependencies, Remove Active Layer, App Roles/Settings, Form Roles/Types, Field Security, Record Access, Flow <code>clientdata</code> + Toggle, Connection Ref, Schema Delete/ChangeTracking/Key, Multi-Env Diff.</p>
+        </div>
+        <div class="phase-box p4">
+          <div class="ptag">Phase 4 · Hoàn thiện P1 &amp; P2</div>
+          <h4>Giữ nguyên 14 (hoặc 15) Tools!</h4>
+          <p class="small muted">Custom Pages/Dialogs, View/Chart State/Delete/Share, Plugin Step/Webhook, Teams/BU/Users, Bulk Delete/Merge/Rollup, Translations &amp; Org Settings, Templates &amp; Duplicate Rules.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      Phân tích độc lập dựa trên source code thực tế của 42 MCP tools trong <code>DynamicsCrm.DevKit.Cli/Mcp/Tools/</code>.
+      Tài liệu liên quan: <code>mcp-tool-consolidation-proposal.html</code> (đề xuất gộp 42 → 14 tools).
+    </div>
+  </main>
+</div>
+
+<script>
+const GAPS = [
+  // Pillar 1: MDA
+  {
+    id: 1, prio: "P0", pillar: "MDA", pillarName: "MDA UI & App",
+    title: "MDA App Security Roles & App Settings (appmoduleroles / appsetting)",
+    checked: true, tier: "T1", targetTool: "manage_ui", route: 'resource="app", action="get_roles|set_roles|get_settings|set_setting"',
+    why: "manage_app tạo App & SiteMap rất tốt nhưng KHÔNG gán được Security Role cho App (App vừa tạo user không thấy!) và không bật/tắt được App Settings (New Look, In-App Notifications, Async Save, Offline, Copilot).",
+    apis: "Associate/Disassociate appmoduleroles; query/upsert appsetting + settingdefinition; trả App URL đầy đủ."
+  },
+  {
+    id: 2, prio: "P0", pillar: "MDA", pillarName: "MDA UI & App",
+    title: "Form Security Roles, Form Order, State/Delete & Tạo Main / QuickView / Card Form",
+    checked: true, tier: "T1", targetTool: "manage_ui", route: 'resource="form", action="create(2|6|7|11)|set_roles|set_order|set_state|delete"',
+    why: "manage_form hiện chỉ tạo được QuickCreate (7) & Dashboard (0); chưa gán được Security Role hiển thị cho Form (DisplayConditions / Fallback), chưa đổi thứ tự Form Order, chưa activate/deactivate/delete form.",
+    apis: "systemform.formxml DisplayConditions (Role), formactivationstate, SetState/Delete (kèm Dependency Check + backup)."
+  },
+  {
+    id: 3, prio: "P1", pillar: "MDA", pillarName: "MDA UI & App",
+    title: "Custom Pages & MDA Dialogs (canvasapp type=2 / Side-pane / Modal)",
+    checked: false, tier: "T2", targetTool: "inspect_metadata + manage_ui", route: 'inspect_metadata(resource="custom_pages") & manage_ui(resource="custom_page|dialog")',
+    why: "Custom Page là chuẩn thay thế HTML Web Resource trong MDA hiện đại (nhúng SiteMap hoặc gọi từ Command Bar). Hiện chưa inspect được danh sách Custom Pages, liên kết AppComponent hay cấu hình Dialog.",
+    apis: "Query canvasapp (canvasapptype=2), appmodulecomponent (ComponentType=300), hỗ trợ gắn vào SiteMap/App."
+  },
+  {
+    id: 4, prio: "P1", pillar: "MDA", pillarName: "MDA UI & App",
+    title: "View & Chart Lifecycle đầy đủ (Activate/Deactivate, Delete, Share Personal View)",
+    checked: false, tier: "T1", targetTool: "manage_ui", route: 'resource="view|chart", action="set_state|delete|share"',
+    why: "manage_view chưa deactivate/delete được view thừa và chưa share được Personal View (userquery) cho User/Team; manage_chart chưa có action delete.",
+    apis: "SetState savedquery/userquery, Delete (kèm backup), GrantAccessRequest / RevokeAccessRequest cho userquery."
+  },
+
+  // Pillar 2: Solution & ALM
+  {
+    id: 5, prio: "P0", pillar: "ALM", pillarName: "Solution & ALM",
+    title: "Solution & Publisher Lifecycle (List/Create/Update/Delete Solution, Publisher, Remove Component)",
+    checked: true, tier: "T2", targetTool: "inspect_metadata + manage_admin", route: 'inspect_metadata(resource="solutions|publishers") & manage_admin(resource="solution|publisher")',
+    why: "Hiện tại chỉ có get_solution_components đòi biết sẵn tên 1 solution; KHÔNG liệt kê được toàn bộ solutions/publishers, không tạo được Publisher/Solution mới, không nâng version hay gỡ component bất kỳ khỏi solution.",
+    apis: "Query solution/publisher; Create/Update/Delete; RemoveSolutionComponentRequest; AddSolutionComponentRequest (mọi component type)."
+  },
+  {
+    id: 6, prio: "P0", pillar: "ALM", pillarName: "Solution & ALM",
+    title: "Dependency Graph Inspector (RetrieveDependenciesForDelete / Dependent Components)",
+    checked: true, tier: "T2", targetTool: "inspect_metadata", route: 'resource="dependencies", options={component_type, object_id, mode:"for_delete|dependent|required"}',
+    why: "Cực kỳ thiết yếu trước khi xóa bất kỳ Table/Column/View/Form/Role/WebResource nào hoặc khi debug lỗi Missing Dependencies lúc import solution. Hiện AI hoàn toàn mù đồ thị phụ thuộc.",
+    apis: "RetrieveDependenciesForDeleteRequest, RetrieveDependentComponentsRequest, RetrieveRequiredComponentsRequest."
+  },
+  {
+    id: 7, prio: "P0", pillar: "ALM", pillarName: "Solution & ALM",
+    title: "Solution Layer Stack Inspector & Remove Active (Unmanaged) Layer",
+    checked: true, tier: "T2", targetTool: "inspect_metadata + manage_admin", route: 'inspect_metadata(resource="component_layers") & manage_admin(resource="solution", action="remove_active_layer")',
+    why: "get_solution_components mới chỉ phát hiện ActiveLayer=Yes, CHƯA xem được chi tiết các layer đang chồng nhau và CHƯA gỡ được Active Layer — thao tác cứu hộ kinh điển khi Managed Solution bị đè trên UAT/Prod!",
+    apis: "Query msdyn_componentlayer (order, solutionname, changes JSON); RemoveActiveCustomizationsRequest (SysAdmin + DryRun gate)."
+  },
+  {
+    id: 8, prio: "P0", pillar: "ALM", pillarName: "Solution & ALM",
+    title: "Connection References Manager (Tìm Unbound, Bind Connection, Xem Flows phụ thuộc)",
+    checked: true, tier: "T2", targetTool: "manage_admin", route: 'resource="connection_reference", action="list|detail|bind|unbind|usages"',
+    why: "Sau mỗi lần import solution sang môi trường mới, Cloud Flow chết hàng loạt vì Connection Reference chưa gắn connectionid. Hiện chưa có tool inspect unbound connection references hoặc bind connection.",
+    apis: "Query connectionreference (connectorid, connectionid, statecode), cross-check workflow.clientdata tham chiếu."
+  },
+
+  // Pillar 3: Security & Access
+  {
+    id: 9, prio: "P0", pillar: "SEC", pillarName: "Security & Access",
+    title: "Column / Field Security Profiles (fieldsecurityprofile & fieldpermission)",
+    checked: true, tier: "T2", targetTool: "manage_admin", route: 'resource="field_security", action="list|detail|create|update|set_permissions|assign|unassign"',
+    why: "manage_column cho bật is_secured=true, nhưng nếu không tạo/cấp quyền trong Field Security Profile thì mọi user non-admin đều bị khóa trắng cột đó trên Form MDA!",
+    apis: "CRUD fieldsecurityprofile, fieldpermission (canread/cancreate/canupdate), systemuserprofiles / teamprofiles."
+  },
+  {
+    id: 10, prio: "P0", pillar: "SEC", pillarName: "Security & Access",
+    title: "Record Effective Access Debugger & Record Sharing (POA / Grant / Revoke)",
+    checked: true, tier: "T2", targetTool: "inspect_diagnostics + manage_data", route: 'inspect_diagnostics(resource="record_access") & manage_data(resource="record", action="share|unshare|list_shares")',
+    why: "manage_role chỉ xem privilege ở mức Entity. Khi user hỏi 'Tại sao User A không thấy/không sửa được Account X?', cần check quyền thực tế trên record cụ thể (Owner, BU, Team, Share/POA).",
+    apis: "RetrievePrincipalAccessRequest, RetrieveSharedPrincipalsAndAccessRequest, GrantAccessRequest, ModifyAccessRequest, RevokeAccessRequest."
+  },
+  {
+    id: 11, prio: "P1", pillar: "SEC", pillarName: "Security & Access",
+    title: "Business Units, Teams, Team Memberships & Application Users (S2S)",
+    checked: false, tier: "T2", targetTool: "manage_admin", route: 'resource="team|business_unit|user", action="list|detail|create|update|add_members|remove_members"',
+    why: "manage_role gán được role cho team nhưng chưa quản lý được cấu trúc Business Unit, Owner/AAD Group Team, thành viên trong Team hay kiểm tra Application User (S2S) & license/disabled user.",
+    apis: "CRUD businessunit/team, AddMembersTeamRequest, RemoveMembersTeamRequest, query systemuser (applicationid, isdisabled, businessunitid)."
+  },
+
+  // Pillar 4: Automation & Plugin
+  {
+    id: 12, prio: "P0", pillar: "AUTO", pillarName: "Automation & Plugin",
+    title: "Cloud Flow Definition Parser (clientdata) & Bật/Tắt Flow, Classic Workflow, Business Rule, BPF",
+    checked: true, tier: "T1", targetTool: "inspect_automation + manage_logic", route: 'inspect_automation(resource="flows", options={include_definition:true}) & manage_logic(resource="flow|workflow|business_rule|bpf", action="activate|deactivate")',
+    why: "get_flows hiện CHƯA đọc workflow.clientdata (không thấy trigger, actions, điều kiện, connectors của Cloud Flow!). Và cả 4 loại automation đều chưa có lệnh activate/deactivate an toàn.",
+    apis: "Parse JSON workflow.clientdata (trigger, actions, connectionReferences, envVars); SetStateRequest / Update statecode+statuscode an toàn."
+  },
+  {
+    id: 13, prio: "P1", pillar: "AUTO", pillarName: "Automation & Plugin",
+    title: "Plugin Step Controls (Enable/Disable, Filtering Attributes, Rank) & Webhooks / Service Endpoints",
+    checked: false, tier: "T2", targetTool: "inspect_automation + manage_logic", route: 'inspect_automation(resource="service_endpoints") & manage_logic(resource="plugin_step|service_endpoint", action="enable|disable|update")',
+    why: "get_plugins hiện chỉ đọc. Khi debug sự cố hoặc migration dữ liệu, dev cực hay cần tạm tắt/bật 1 plugin step, thêm/sửa filteringattributes, hoặc inspect cấu hình Webhook / Azure Service Bus.",
+    apis: "SetState sdkmessageprocessingstep, Update filteringattributes/rank/configuration, query serviceendpoint."
+  },
+
+  // Pillar 5: Schema & Data
+  {
+    id: 14, prio: "P0", pillar: "DATA", pillarName: "Schema & Data",
+    title: "Schema Completeness: Delete Table/Column, Composite Alternate Keys & Table Flags (ChangeTracking, Notes, Activities)",
+    checked: true, tier: "T1", targetTool: "manage_schema", route: 'resource="table|column", action="delete" (+ChangeTracking/Notes/Activities); resource="key" (multi-column)',
+    why: "Xác minh từ source: ManageTableTool chưa có cờ is_change_tracking_enabled (dù Search & Mobile Offline bắt buộc bật nó!), hardcode HasActivities=false; ManageColumnTool chỉ tạo được Alternate Key 1 cột; cả hai chưa có action delete (kèm Dependency Check).",
+    apis: "DeleteEntityRequest, DeleteAttributeRequest (pre-check dependencies), CreateEntityKeyRequest/DeleteEntityKeyRequest (multi-column), EntityMetadata.ChangeTrackingEnabled/HasNotes/HasActivities/HasFeedback."
+  },
+  {
+    id: 15, prio: "P1", pillar: "DATA", pillarName: "Schema & Data",
+    title: "Data Ops nâng cao: Bulk Delete Job, Merge Records & Recalculate Rollup Field",
+    checked: false, tier: "T1", targetTool: "manage_data", route: 'resource="bulk", action="delete" | resource="record", action="merge|recalculate_rollup"',
+    why: "upsert_records gắn importsequencenumber để dễ rollback nhưng chưa có lệnh BulkDelete theo điều kiện; rất cần CalculateRollupField để tính lại ngay cột Rollup khi test, và MergeRequest gộp bản ghi trùng.",
+    apis: "BulkDeleteRequest (async job trả jobId để theo dõi qua inspect_diagnostics), MergeRequest, CalculateRollupFieldRequest."
+  },
+
+  // Pillar 6: Multi-Env & Enterprise
+  {
+    id: 16, prio: "P0", pillar: "ENT", pillarName: "Multi-Env & Enterprise",
+    title: "Multi-Environment Drift / Diff Detector (So sánh Dev vs UAT vs Prod ngay trên Server)",
+    checked: true, tier: "T3", targetTool: "inspect_metadata (hoặc tool #15 compare_environments)", route: 'inspect_metadata(resource="env_diff", options={source_env, target_env, scope:"solutions|env_vars|table|roles|plugins"})',
+    why: "Tận dụng vũ khí độc quyền đa môi trường (--env) của DevKit MCP! Thay vì AI gọi 20 tool lẻ ở 2 env rồi tự diff (tốn chục nghìn token), C# server diff trực tiếp và trả về bảng sai lệch gọn nhẹ trong 1 call!",
+    apis: "Resolve 2 ConnectionBundle song song từ IMcpConnectionResolver, diff Metadata/Solutions/EnvVars/PluginSteps/Roles."
+  },
+  {
+    id: 17, prio: "P1", pillar: "ENT", pillarName: "Multi-Env & Enterprise",
+    title: "Org Settings (Bật/tắt Plugin Trace Log, Org Audit, Max Upload Size) & Localized Labels (Đa ngôn ngữ)",
+    checked: false, tier: "T2", targetTool: "manage_admin + manage_schema", route: 'manage_admin(resource="org_setting") & manage_schema(resource="translations")',
+    why: "Cực kỳ thực tế: khi debug plugin, Trace Log mặc định tắt (Off) — cần bật nhanh Exception/All ngay từ MCP! Ngoài ra các dự án MDA đa ngôn ngữ (VI/EN/JP) cần đọc/cập nhật nhãn theo LCID.",
+    apis: "Update organization (plugintracelogsetting, isauditenabled, maxuploadfilesize); RetrieveLocLabelsRequest / SetLocLabelsRequest."
+  },
+  {
+    id: 18, prio: "P2", pillar: "ENT", pillarName: "Multi-Env & Enterprise",
+    title: "Duplicate Detection Rules, Email/Word Document Templates & Queues/SLA",
+    checked: false, tier: "T2", targetTool: "manage_assets + manage_admin", route: 'manage_assets(resource="email_template|document_template") & manage_admin(resource="duplicate_rule|queue")',
+    why: "Hoàn thiện hệ sinh thái Dynamics 365 Sales/CS: quản lý Duplicate Detection Rules (đi cặp với cờ is_duplicate_detection_enabled đã có), tải/cập nhật Email & Word Templates, và kiểm tra Queue/SLA.",
+    apis: "duplicaterule + PublishDuplicateRuleRequest; template & documenttemplate (base64 docx/xlsx); queue & sla."
+  }
+];
+
+let prioFilter = "all";
+let pillarFilter = "all";
+const listEl = document.getElementById("gapList");
+const searchEl = document.getElementById("gapSearch");
+
+function renderGaps() {
+  const q = (searchEl.value || "").trim().toLowerCase();
+  const visible = GAPS.filter(g => {
+    if (prioFilter !== "all" && g.prio !== prioFilter) return false;
+    if (pillarFilter !== "all" && g.pillar !== pillarFilter) return false;
+    if (!q) return true;
+    return (g.title + " " + g.why + " " + g.apis + " " + g.targetTool + " " + g.route).toLowerCase().includes(q);
+  });
+
+  listEl.innerHTML = visible.map(g => {
+    const prioCls = g.prio.toLowerCase();
+    const tierBadge = g.tier === "T1"
+      ? '<span class="pill t1">Tầng 1 · Thêm Action (0 tool mới)</span>'
+      : g.tier === "T2"
+        ? '<span class="pill t2">Tầng 2 · Thêm Resource (0 tool mới)</span>'
+        : '<span class="pill t3">Tầng 2 hoặc Tool #15 (Flagship)</span>';
+    return `
+      <div class="gap-card ${prioCls}">
+        <div class="gap-head">
+          <label class="gap-title">
+            <input type="checkbox" data-id="${g.id}" ${g.checked ? "checked" : ""} />
+            <span>#${g.id}. ${g.title}</span>
+          </label>
+          <div class="gap-badges">
+            <span class="pill ${prioCls}">${g.prio}</span>
+            <span class="pill" style="background:#f1f5f9;color:#334155;">${g.pillarName}</span>
+            ${tierBadge}
+          </div>
+        </div>
+        <div class="gap-grid">
+          <div class="gap-box">
+            <div class="gb-lbl">Tại sao thiếu &amp; Giá trị thực chiến</div>
+            <div>${g.why}</div>
+          </div>
+          <div class="gap-box">
+            <div class="gb-lbl">Vị trí cắm vào bộ 14 Tools</div>
+            <div><strong><code>${g.targetTool}</code></strong></div>
+            <div class="small muted" style="margin-top:4px;"><code>${g.route}</code></div>
+          </div>
+          <div class="gap-box">
+            <div class="gb-lbl">Dataverse SDK / API nền</div>
+            <div class="small">${g.apis}</div>
+          </div>
+        </div>
+      </div>`;
+  }).join("") || '<p class="muted">Không có mục nào khớp bộ lọc hiện tại.</p>';
+
+  listEl.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener("change", () => {
+      const item = GAPS.find(x => x.id === Number(cb.dataset.id));
+      if (item) item.checked = cb.checked;
+      updateTally();
+    });
+  });
+  updateTally();
+}
+
+function updateTally() {
+  const sel = GAPS.filter(g => g.checked);
+  const p0 = sel.filter(g => g.prio === "P0").length;
+  const p1 = sel.filter(g => g.prio === "P1").length;
+  const p2 = sel.filter(g => g.prio === "P2").length;
+  const hasDiff = sel.some(g => g.id === 16);
+  document.getElementById("selCount").textContent = `${sel.length} / ${GAPS.length}`;
+  document.getElementById("selP0").textContent = `${p0} P0`;
+  document.getElementById("selP1").textContent = `${p1} P1`;
+  document.getElementById("selP2").textContent = `${p2} P2`;
+  document.getElementById("selNewTools").textContent = hasDiff
+    ? "0 tools (hoặc +1 nếu tách compare_environments thành #15)"
+    : "0 tools (giữ nguyên đúng 14 tools!)";
+}
+
+document.querySelectorAll("[data-prio]").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll("[data-prio]").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  prioFilter = b.dataset.prio;
+  renderGaps();
+}));
+document.querySelectorAll("[data-pillar]").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll("[data-pillar]").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  pillarFilter = b.dataset.pillar;
+  renderGaps();
+}));
+searchEl.addEventListener("input", renderGaps);
+
+document.getElementById("btnP0Only").addEventListener("click", () => {
+  GAPS.forEach(g => g.checked = (g.prio === "P0"));
+  renderGaps();
+});
+document.getElementById("btnP0P1").addEventListener("click", () => {
+  GAPS.forEach(g => g.checked = (g.prio === "P0" || g.prio === "P1"));
+  renderGaps();
+});
+document.getElementById("btnCopyPlan").addEventListener("click", () => {
+  const sel = GAPS.filter(g => g.checked);
+  const text = `Danh sách bổ sung Dataverse/MDA đã chọn (${sel.length} mục):\n` +
+    sel.map(g => `- [${g.prio}] #${g.id} ${g.title} -> ${g.targetTool} (${g.route})`).join("\n");
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById("btnCopyPlan");
+      const old = btn.textContent;
+      btn.textContent = "✅ Đã copy!";
+      setTimeout(() => btn.textContent = old, 1800);
+    });
+  } else {
+    alert(text);
+  }
+});
+
+renderGaps();
+</script>
+</body>
+</html>

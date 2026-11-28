@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Đề xuất Gộp 42 MCP Tools → 14 Domain Tools | DynamicsCrm.DevKit</title>
+<style>
+  :root {
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --surface-2: #f1f5f9;
+    --border: #e2e8f0;
+    --text: #0f172a;
+    --text-muted: #475569;
+    --text-subtle: #64748b;
+    --primary: #2563eb;
+    --primary-soft: #eff6ff;
+    --primary-border: #bfdbfe;
+    --green: #059669;
+    --green-soft: #ecfdf5;
+    --green-border: #a7f3d0;
+    --amber: #d97706;
+    --amber-soft: #fffbeb;
+    --amber-border: #fde68a;
+    --red: #dc2626;
+    --red-soft: #fef2f2;
+    --red-border: #fecaca;
+    --purple: #7c3aed;
+    --purple-soft: #f5f3ff;
+    --purple-border: #ddd6fe;
+    --cyan: #0891b2;
+    --cyan-soft: #ecfeff;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(15, 23, 42, .06), 0 4px 16px rgba(15, 23, 42, .04);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.62;
+    font-size: 15px;
+  }
+  a { color: var(--primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code {
+    font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
+    background: #eef2ff;
+    color: #1e3a8a;
+    padding: 2px 6px;
+    border-radius: 5px;
+    font-size: 0.88em;
+  }
+  pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 16px 18px;
+    border-radius: 10px;
+    overflow-x: auto;
+    font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.55;
+    margin: 12px 0;
+  }
+  pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+  .layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); min-height: 100vh; }
+  .sidebar {
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    background: #0f172a; color: #cbd5e1; padding: 24px 18px;
+    border-right: 1px solid #1e293b;
+  }
+  .sidebar .brand {
+    font-size: 15px; font-weight: 700; color: #ffffff;
+    letter-spacing: -0.01em; margin-bottom: 4px;
+  }
+  .sidebar .sub { font-size: 12px; color: #94a3b8; margin-bottom: 20px; }
+  .sidebar .nav-group { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #64748b; margin: 18px 0 8px 10px; font-weight: 700; }
+  .sidebar a {
+    display: block; padding: 8px 10px; border-radius: 8px;
+    color: #cbd5e1; font-size: 13.5px; margin-bottom: 2px;
+    transition: background .15s, color .15s;
+  }
+  .sidebar a:hover, .sidebar a.active { background: #1e293b; color: #ffffff; text-decoration: none; }
+  .sidebar .badge-mini {
+    float: right; font-size: 11px; padding: 1px 6px; border-radius: 99px;
+    background: #1e293b; color: #93c5fd; font-weight: 600;
+  }
+  .main { padding: 32px 44px 72px; max-width: 1220px; }
+  @media (max-width: 980px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; }
+    .main { padding: 20px 18px 48px; }
+  }
+  .hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 60%, #1d4ed8 100%);
+    color: #ffffff;
+    border-radius: 16px;
+    padding: 32px 36px;
+    box-shadow: var(--shadow);
+    margin-bottom: 28px;
+  }
+  .hero .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22);
+    padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600;
+    letter-spacing: .03em; margin-bottom: 14px;
+  }
+  .hero h1 { margin: 0 0 10px; font-size: 28px; line-height: 1.25; letter-spacing: -0.02em; }
+  .hero p { margin: 0; color: #dbeafe; font-size: 15.5px; max-width: 820px; }
+  .meta-bar {
+    display: flex; flex-wrap: wrap; gap: 18px; margin-top: 18px;
+    font-size: 13px; color: #bfdbfe; border-top: 1px solid rgba(255,255,255,.16); padding-top: 14px;
+  }
+  .kpi-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 16px; margin-bottom: 28px;
+  }
+  .kpi {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow);
+  }
+  .kpi .label { font-size: 12.5px; color: var(--text-subtle); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+  .kpi .val { font-size: 26px; font-weight: 800; margin: 6px 0 4px; letter-spacing: -0.02em; }
+  .kpi .sub { font-size: 13px; color: var(--text-muted); }
+  .kpi.green .val { color: var(--green); }
+  .kpi.blue .val { color: var(--primary); }
+  .kpi.purple .val { color: var(--purple); }
+  .kpi.amber .val { color: var(--amber); }
+
+  section { margin-bottom: 36px; scroll-margin-top: 20px; }
+  h2 {
+    font-size: 21px; margin: 0 0 14px; padding-bottom: 10px;
+    border-bottom: 2px solid var(--border); letter-spacing: -0.015em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  h2 .sec-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 8px;
+    background: var(--primary); color: #fff; font-size: 14px; font-weight: 700; flex-shrink: 0;
+  }
+  h3 { font-size: 16.5px; margin: 20px 0 10px; color: #1e293b; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 22px 24px; box-shadow: var(--shadow);
+    margin-bottom: 18px;
+  }
+  .callout {
+    border-radius: 10px; padding: 16px 18px; margin: 16px 0;
+    border: 1px solid var(--border); border-left-width: 4px;
+  }
+  .callout.info { background: var(--primary-soft); border-color: var(--primary-border); border-left-color: var(--primary); }
+  .callout.success { background: var(--green-soft); border-color: var(--green-border); border-left-color: var(--green); }
+  .callout.warn { background: var(--amber-soft); border-color: var(--amber-border); border-left-color: var(--amber); }
+  .callout.danger { background: var(--red-soft); border-color: var(--red-border); border-left-color: var(--red); }
+  .callout.purple { background: var(--purple-soft); border-color: var(--purple-border); border-left-color: var(--purple); }
+  .callout strong.title { display: block; margin-bottom: 4px; font-size: 14.5px; }
+
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 18px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+
+  table {
+    width: 100%; border-collapse: collapse; font-size: 13.8px;
+    background: var(--surface); border-radius: 10px; overflow: hidden;
+  }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th {
+    background: var(--surface-2); font-weight: 700; color: #334155;
+    font-size: 12.5px; text-transform: uppercase; letter-spacing: .03em;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8fafc; }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; margin: 12px 0; }
+
+  .pill {
+    display: inline-block; padding: 2px 9px; border-radius: 999px;
+    font-size: 11.5px; font-weight: 700; white-space: nowrap;
+  }
+  .pill.ro { background: var(--green-soft); color: var(--green); border: 1px solid var(--green-border); }
+  .pill.rw { background: var(--amber-soft); color: var(--amber); border: 1px solid var(--amber-border); }
+  .pill.dest { background: var(--red-soft); color: var(--red); border: 1px solid var(--red-border); }
+  .pill.p1 { background: #dbeafe; color: #1d4ed8; }
+  .pill.p2 { background: #ede9fe; color: #6d28d9; }
+  .pill.rec { background: var(--green); color: #fff; }
+  .pill.tier1 { background: #dcfce7; color: #166534; }
+  .pill.tier2 { background: #dbeafe; color: #1e40af; }
+  .pill.tier3 { background: #fee2e2; color: #991b1b; }
+
+  /* Bar charts */
+  .bar-row { display: grid; grid-template-columns: 205px 1fr 125px; align-items: center; gap: 12px; margin: 8px 0; font-size: 13px; }
+  .bar-track { background: #e2e8f0; height: 14px; border-radius: 99px; overflow: hidden; display: flex; }
+  .bar-seg-desc { background: #3b82f6; height: 100%; }
+  .bar-seg-in { background: #f59e0b; height: 100%; }
+  .bar-seg-out { background: #ef4444; height: 100%; }
+  .bar-seg-meta { background: #94a3b8; height: 100%; }
+  .bar-seg-after { background: #10b981; height: 100%; }
+  .legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: 12.5px; color: var(--text-muted); margin: 10px 0 14px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+  /* Interactive controls */
+  .tabs { display: flex; gap: 8px; border-bottom: 2px solid var(--border); margin-bottom: 18px; flex-wrap: wrap; }
+  .tab-btn {
+    border: none; background: transparent; padding: 10px 16px;
+    font-size: 14px; font-weight: 700; color: var(--text-muted);
+    cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px;
+    border-radius: 8px 8px 0 0;
+  }
+  .tab-btn:hover { background: var(--surface-2); color: var(--text); }
+  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: var(--primary-soft); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .filter-bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; align-items: center; }
+  .filter-bar input[type="search"] {
+    flex: 1; min-width: 220px; padding: 9px 13px; border-radius: 8px;
+    border: 1px solid var(--border); font-size: 14px; background: var(--surface);
+  }
+  .filter-btn {
+    padding: 8px 13px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--surface); font-size: 13px; font-weight: 600; cursor: pointer; color: var(--text-muted);
+  }
+  .filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+  details {
+    border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px;
+    margin-bottom: 12px; background: var(--surface);
+  }
+  details[open] { box-shadow: var(--shadow); }
+  summary {
+    cursor: pointer; font-weight: 700; font-size: 14.8px; list-style: none;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary .chevron { color: var(--text-subtle); font-size: 12px; transition: transform .2s; }
+  details[open] summary .chevron { transform: rotate(90deg); }
+  .tool-meta-inline { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+
+  .arch-box {
+    display: grid; grid-template-columns: 1fr; gap: 12px;
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px;
+  }
+  .arch-layer {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px;
+  }
+  .arch-layer .layer-title { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--primary); margin-bottom: 6px; }
+  .arch-arrow { text-align: center; font-weight: 800; color: var(--text-subtle); font-size: 16px; line-height: 1; }
+
+  .decision-card {
+    border: 2px solid var(--primary-border); background: #fff;
+    border-radius: 12px; padding: 18px 20px; margin-bottom: 14px;
+  }
+  .decision-card h4 { margin: 0 0 8px; font-size: 15.5px; color: #1e3a8a; }
+  .check-row { display: flex; align-items: flex-start; gap: 10px; margin: 8px 0; font-size: 14px; }
+  .check-row input { margin-top: 4px; width: 16px; height: 16px; accent-color: var(--primary); }
+  .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .muted { color: var(--text-muted); }
+  .small { font-size: 12.8px; }
+  .footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-subtle); }
+  @media print {
+    .sidebar { display: none; }
+    .layout { grid-template-columns: 1fr; }
+    details { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">DynamicsCrm.DevKit MCP</div>
+    <div class="sub">Đề xuất Tái cấu trúc 42 → 14 Tools</div>
+
+    <div class="nav-group">Tổng quan</div>
+    <a href="#exec">1. Tóm tắt & Kết luận nhanh</a>
+    <a href="#baseline">2. Đo đạc thực tế 42 Tools <span class="badge-mini">215 KB</span></a>
+    <a href="#ai-ergonomics">3. AI có hiểu & call dễ hơn?</a>
+
+    <div class="nav-group">Kiến trúc 2 Phase</div>
+    <a href="#architecture">4. Kiến trúc Router + Handler</a>
+    <a href="#phase1">5. Phase 1: Read-Only <span class="badge-mini">19 → 6</span></a>
+    <a href="#phase2">6. Phase 2: Mutating/Mixed <span class="badge-mini">23 → 8</span></a>
+    <a href="#mapping">7. Bảng Mapping đầy đủ 42 → 14</a>
+
+    <div class="nav-group">Tương lai & Triển khai</div>
+    <a href="#future">8. Mở rộng Tool #43, #44...</a>
+    <a href="#sdk-findings">9. Bẫy MCP SDK 2.x & Ảnh hưởng</a>
+    <a href="#approval">10. Điểm cần anh P duyệt</a>
+  </aside>
+
+  <main class="main">
+    <header class="hero">
+      <div class="eyebrow">ARCHITECTURE PROPOSAL · FOR APPROVAL (ANH P)</div>
+      <h1>Tái cấu trúc 42 MCP Tools thành 14 Domain Tools (Lộ trình 2 Phase)</h1>
+      <p>Phân tích toàn bộ source code <code>DynamicsCrm.DevKit.Cli/Mcp/</code> bằng chính bộ serializer của MCP SDK 2.x, giữ nguyên 100% logic &amp; bảo mật của 42 tools hiện tại, cắt giảm tới <strong>~82% lượng token <code>tools/list</code></strong> và xây khung chống phình tool cho các tính năng #43, #44... trong tương lai.</p>
+      <div class="meta-bar">
+        <span>📦 Component: <strong>DynamicsCrm.DevKit.Cli/Mcp</strong> (.NET 10.0)</span>
+        <span>📊 Nguồn dữ liệu: <strong>Đo trực tiếp từ 42 class C# &amp; MCP SDK 2.x</strong></span>
+        <span>🗺️ Tài liệu code đi kèm: <code>mcp-tool-consolidation-implementation.md</code></span>
+      </div>
+    </header>
+
+    <div class="kpi-grid">
+      <div class="kpi blue">
+        <div class="label">Số lượng MCP Tools</div>
+        <div class="val">42 → 14</div>
+        <div class="sub">Giảm <strong>66.7%</strong> (Phase 1: 19→6, Phase 2: 23→8)</div>
+      </div>
+      <div class="kpi green">
+        <div class="label">Payload <code>tools/list</code> (Full)</div>
+        <div class="val">215 KB → ~38 KB</div>
+        <div class="sub">Giảm <strong>~82.2%</strong> (~54K–61K → ~9.6K–11K token/turn)</div>
+      </div>
+      <div class="kpi green">
+        <div class="label">Client bỏ <code>outputSchema</code></div>
+        <div class="val">135 KB → ~37 KB</div>
+        <div class="sub">Vẫn giảm <strong>~72.5%</strong> (~34K–39K → ~9.3K–10.6K token)</div>
+      </div>
+      <div class="kpi purple">
+        <div class="label">Top-level Parameters</div>
+        <div class="val">441 → 92</div>
+        <div class="sub">Giảm <strong>79.1%</strong> tham số phẳng trên schema</div>
+      </div>
+      <div class="kpi amber">
+        <div class="label">Logic &amp; Test bảo toàn</div>
+        <div class="val">100%</div>
+        <div class="sub">Tái sử dụng 42 handler C# hiện có — không viết lại logic</div>
+      </div>
+    </div>
+
+    <!-- SECTION 1 -->
+    <section id="exec">
+      <h2><span class="sec-num">1</span> Tóm tắt điều hành &amp; Kết luận nhanh</h2>
+      <div class="card">
+        <p>Anh P đặt ra 3 câu hỏi cốt lõi: <strong>(1) Gộp 42 tools xuống ít hơn có giảm mạnh token không?</strong>, <strong>(2) AI có hiểu và call dễ hơn thật không?</strong>, và <strong>(3) Tương lai anh P thêm tool #43, #44, #45... thì làm sao để không bị phình tool trở lại?</strong></p>
+
+        <div class="callout success">
+          <strong class="title">Kết luận ngắn gọn (TL;DR)</strong>
+          <ul>
+            <li><strong>Giảm token RẤT LỚN — ngay mỗi lượt chat:</strong> Hiện tại 42 tools phát ra <strong>215,375 bytes (~53.8K–61.5K tokens)</strong> mỗi lần client nạp <code>tools/list</code>. Gộp về <strong>14 Domain Tools</strong> cắt xuống còn <strong>~38.4 KB (~9.6K–11.0K tokens)</strong> — tiết kiệm <strong>~44K–50K tokens/turn</strong> (hoặc <strong>~24.5K–28K tokens/turn</strong> với các MCP client tự bỏ <code>outputSchema</code>).</li>
+            <li><strong>AI hiểu và call DỄ HƠN — với điều kiện KHÔNG gộp quá mức:</strong> Vùng tối ưu (<em>sweet spot</em>) cho LLM function calling là <strong>10–15 domain tools</strong>. Gộp về 14 tools giúp loại bỏ hoàn toàn sự nhầm lẫn giữa các tool chồng lấn (<code>get_workflows</code> vs <code>get_flows</code> vs <code>get_business_process_flows</code> vs <code>get_business_rules</code>; <code>manage_ribbon</code> vs <code>manage_command</code>; <code>manage_record</code> vs <code>upsert_records</code> vs <code>manage_deleted_records</code>), nhưng <strong>không</strong> rơi vào bẫy "God Tool" (2–4 tools) làm AI phải đoán mò tham số.</li>
+            <li><strong>Triển khai 2 Phase cực an toàn, giữ 100% logic:</strong> Tất cả 42 class tool hiện tại đã tách sẵn lớp entry MCP (<code>InvokeAsync</code>) khỏi lớp nghiệp vụ (<code>get_*</code> / <code>manage_*</code>). Ta chỉ thêm lớp <strong>Facade Router</strong> gọi lại 42 handler cũ → <strong>0% viết lại nghiệp vụ Dataverse</strong>, giữ nguyên <code>DryRun</code> fail-closed, <code>RoleGateHelper</code>, backup <code>.devkit/</code> và toàn bộ unit tests nghiệp vụ hiện có.</li>
+            <li><strong>Chống phình cho tương lai (#43, #44...):</strong> Áp dụng <strong>Ngân sách Tool (Soft Cap = 14, Hard Cap = 16)</strong> và <strong>Thang mở rộng 3 tầng</strong>: 99% tính năng mới trong tương lai (<code>manage_dialog</code>, <code>manage_solution</code>, <code>manage_team</code>, <code>manage_plugin_step</code>, <code>manage_email_template</code>...) chỉ thêm 1 <code>action</code> hoặc 1 <code>resource</code> vào 14 tools hiện có (~5–35 tokens) — <strong>KHÔNG thêm top-level tool mới</strong>.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2 -->
+    <section id="baseline">
+      <h2><span class="sec-num">2</span> Đo đạc thực tế 42 MCP Tools hiện tại (Từ MCP SDK 2.x)</h2>
+      <div class="card">
+        <p>Thay vì ước lượng cảm tính, chúng tôi đã chạy trực tiếp <code>AddMcpServer().WithToolsFromAssembly()</code> trên assembly <code>DynamicsCrm.DevKit.Cli.dll</code> để thu đúng payload JSON mà MCP server gửi cho client qua <code>tools/list</code> và <code>resources/list</code>.</p>
+
+        <div class="grid-2">
+          <div>
+            <h3>Cơ cấu 215,375 bytes của <code>tools/list</code></h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Thành phần trong JSON</th><th class="num">Bytes / Chars</th><th class="num">Tỉ trọng</th><th class="num">Ước tính Tokens</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong><code>outputSchema</code></strong> (từ <code>OutputSchemaType</code>)</td><td class="num"><strong>80,180</strong></td><td class="num"><strong>37.2%</strong></td><td class="num">~20,045 – 22,909</td></tr>
+                  <tr><td><strong><code>inputSchema</code></strong> (441 parameters)</td><td class="num"><strong>80,055</strong></td><td class="num"><strong>37.2%</strong></td><td class="num">~20,014 – 22,873</td></tr>
+                  <tr><td><strong><code>description</code></strong> (42 tool descriptions)</td><td class="num"><strong>41,668</strong></td><td class="num"><strong>19.3%</strong></td><td class="num">~10,417 – 11,905</td></tr>
+                  <tr><td>Metadata JSON (<code>name</code>, <code>title</code>, <code>annotations</code>)</td><td class="num">13,472</td><td class="num">6.3%</td><td class="num">~3,368 – 3,849</td></tr>
+                  <tr style="background:#f1f5f9;font-weight:700;"><td>TỔNG 42 TOOLS</td><td class="num">215,375</td><td class="num">100.0%</td><td class="num">~53,844 – 61,536</td></tr>
+                  <tr><td class="muted">Riêng 14 MCP Resources (<code>resources/list</code>)</td><td class="num muted">4,703</td><td class="num muted">—</td><td class="num muted">~1,176 – 1,344</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div>
+            <h3>Phân tách theo 2 Phase</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Nhóm</th><th class="num">Số Tool</th><th class="num">Số Param</th><th class="num">Full Chars</th><th class="num">Bỏ OutputSchema</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="pill p1">Phase 1</span> Read-Only (<code>ReadOnly=true</code>)</td>
+                    <td class="num"><strong>19</strong></td>
+                    <td class="num">113</td>
+                    <td class="num">80,571</td>
+                    <td class="num">35,431</td>
+                  </tr>
+                  <tr>
+                    <td><span class="pill p2">Phase 2</span> Còn lại (<code>ReadOnly=false</code>)</td>
+                    <td class="num"><strong>23</strong></td>
+                    <td class="num">328</td>
+                    <td class="num">134,751</td>
+                    <td class="num">99,711</td>
+                  </tr>
+                  <tr style="background:#f1f5f9;font-weight:700;">
+                    <td>Tổng cộng</td>
+                    <td class="num">42</td>
+                    <td class="num">441</td>
+                    <td class="num">215,375*</td>
+                    <td class="num">135,195*</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="small muted">*Bao gồm 53 bytes vỏ mảng JSON <code>{"tools":[...]}</code>. Tỉ lệ quy đổi token tiêu chuẩn cho JSON kỹ thuật: <code>÷4.0</code> (bảo thủ) đến <code>÷3.5</code> (thực tế với BPE/cl100k cho JSON nhiều dấu ngoặc/underscore).</p>
+          </div>
+        </div>
+
+        <div class="callout danger">
+          <strong class="title">4 phát hiện "ngốn token âm thầm" lớn nhất trong source code hiện tại</strong>
+          <ol style="margin:6px 0 0;padding-left:20px;">
+            <li><strong>Cú sốc <code>outputSchema</code> (80,180 bytes = 37.2% tổng payload!):</strong> Chỉ riêng 3 tool Read-Only <code>get_workflows</code> (8,528B), <code>get_messages</code> (7,945B) và <code>get_business_rules</code> (6,572B) đã ngốn <strong>23,045 bytes</strong> vì DTO đệ quy <code>WorkflowStepNode</code> / <code>WorkflowExpressionNode</code> bị bung thành JSON Schema khổng lồ lặp lại 3 lần!</li>
+            <li><strong>Phình tham số phẳng ở các tool Schema/Command:</strong> <code>manage_column</code> có <strong>39 params</strong> (8,514B inputSchema), <code>manage_table</code> có <strong>30 params</strong> (5,774B — riêng cờ <code>is_*_enabled</code> đã 13 param), <code>manage_command</code> có <strong>28 params</strong> (4,466B), <code>manage_relationship</code> có <strong>23 params</strong> (2,813B).</li>
+            <li><strong>Lặp tham số <code>env</code> 40 lần:</strong> Chuỗi <code>McpToolInvocation.EnvDescription</code> (189 chars) lặp y hệt ở 40/42 tools → tốn <strong>~9,600 bytes (~2,400 tokens)</strong> chỉ cho 1 tham số phụ!</li>
+            <li><strong>Lặp chéo <code>WHEN TO USE</code> &amp; <code>RELATED TOOLS</code>:</strong> 42 tools chĩa link qua lại lẫn nhau tốn <strong>41,668 bytes</strong> description; nhiều thông tin chi tiết đã có sẵn trong 14 MCP Resources (<code>docs://</code>, <code>schema://</code>) nhưng vẫn bị lặp lại trên tool schema.</li>
+          </ol>
+        </div>
+
+        <h3>Top 12 Tools ngốn token lớn nhất hiện tại</h3>
+        <div class="legend">
+          <span><i class="dot" style="background:#3b82f6"></i>description</span>
+          <span><i class="dot" style="background:#f59e0b"></i>inputSchema</span>
+          <span><i class="dot" style="background:#ef4444"></i>outputSchema</span>
+          <span><i class="dot" style="background:#94a3b8"></i>metadata/annotations</span>
+        </div>
+        <div id="top-bars"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 3 -->
+    <section id="ai-ergonomics">
+      <h2><span class="sec-num">3</span> Trả lời câu hỏi cốt lõi: Ít tool hơn — AI có hiểu &amp; call dễ hơn không?</h2>
+      <div class="card">
+        <p>Đây là điểm quan trọng nhất khi thiết kế MCP server hiện đại: <strong>Giảm số lượng tool chỉ làm AI thông minh hơn nếu ta dừng đúng "Điểm ngọt" (Sweet Spot: 10–15 Domain Tools)</strong>. Nếu gộp quá mạnh tay xuống 2–4 "God Tools", hiệu quả sẽ đảo ngược.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Phương án</th>
+                <th>Số Tools</th>
+                <th><code>tools/list</code> (Full / No-Out)</th>
+                <th>Độ chính xác AI chọn tool</th>
+                <th>Độ chính xác tạo tham số</th>
+                <th>UX duyệt quyền (Approval)</th>
+                <th>Đánh giá</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Hiện tại</strong> (Quá phân mảnh)</td>
+                <td>42 tools<br><span class="small muted">441 params</span></td>
+                <td>215 KB / 135 KB<br><span class="small muted">~54K / ~34K tok</span></td>
+                <td><span class="pill rw">Trung bình</span><br><span class="small muted">Dễ nhầm giữa 6 tool server logic, 2 tool button, 5 tool data</span></td>
+                <td>Khá (nhưng rối ở 39-param <code>manage_column</code>)</td>
+                <td>Tốt cho 19 RO; 23 RW lẫn lộn read/write</td>
+                <td>Tốn context, chậm, khó scale lên #50+</td>
+              </tr>
+              <tr style="background:#ecfdf5;">
+                <td><strong>ĐỀ XUẤT: 14 Domain Tools</strong> <span class="pill rec">Khuyến nghị</span></td>
+                <td><strong>14 tools</strong><br><span class="small">92 params</span></td>
+                <td><strong>~38 KB / ~37 KB</strong><br><span class="small"><strong>~9.6K / ~9.3K tok (-82%)</strong></span></td>
+                <td><span class="pill ro">CAO NHẤT</span><br><span class="small">Mỗi tool = 1 domain Dataverse rạch ròi, 0% trùng lặp</span></td>
+                <td><strong>Rất cao</strong><br><span class="small">Hybrid: top-level typed + <code>payload</code> + dual casing + self-healing error</span></td>
+                <td><strong>Xuất sắc</strong><br><span class="small">6 RO auto-approve 100%; 8 RW tách rõ Data/Schema/UI/Cmd/Admin/WebAPI</span></td>
+                <td><strong>Điểm cân bằng vàng</strong> giữa token, độ chính xác &amp; mở rộng</td>
+              </tr>
+              <tr>
+                <td><strong>Gộp mạnh hơn (12 tools)</strong></td>
+                <td>12 tools<br><span class="small muted">~78 params</span></td>
+                <td>~33 KB / ~32 KB<br><span class="small muted">~8.3K tok (-85%)</span></td>
+                <td>Khá tốt, nhưng loãng guardrail <code>ribbon</code> vs <code>command</code> khi nhét vào <code>manage_ui</code></td>
+                <td>Giảm nhẹ do <code>manage_ui</code> ôm tới 6 loại XML/JSON khác nhau</td>
+                <td>Tốt</td>
+                <td>Chỉ tiết kiệm thêm ~1.2K tok nhưng tăng độ rối ngữ nghĩa</td>
+              </tr>
+              <tr>
+                <td><strong>Quá gộp ("God Tools")</strong></td>
+                <td>3–4 tools<br><span class="small muted">e.g. read/write</span></td>
+                <td>~10–14 KB<br><span class="small muted">~3K tok</span></td>
+                <td><span class="pill dest">Kém thực tế</span><br><span class="small muted">AI phải đọc docs nhiều vòng mới biết gọi gì</span></td>
+                <td><span class="pill dest">Rất kém</span><br><span class="small muted">Hay bịa key trong JSON blob untyped → retry nhiều vòng tốn tổng token hơn!</span></td>
+                <td><span class="pill dest">Mất kiểm soát</span><br><span class="small muted">Không phân biệt sửa Data vs sửa Role vs PublishAll</span></td>
+                <td><strong>Anti-pattern</strong> — tuyệt đối tránh</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="grid-2" style="margin-top:16px;">
+          <div class="callout info" style="margin:0;">
+            <strong class="title">5 lý do AI hiểu &amp; gọi DỄ HƠN với 14 Domain Tools</strong>
+            <ul style="margin:6px 0 0;padding-left:18px;">
+              <li><strong>Giảm áp lực phân loại (Tool Selection):</strong> Khi user hỏi <em>"Kiểm tra xem có logic nào chạy khi update trường Credit Limit trên Account không?"</em>, trước đây AI phải cân nhắc giữa 6 tool riêng (<code>get_plugins</code>, <code>get_workflows</code>, <code>get_business_rules</code>, <code>get_flows</code>, <code>get_business_process_flows</code>, <code>get_messages</code>). Nay chỉ có <strong>1 địa chỉ duy nhất: <code>inspect_automation</code></strong>.</li>
+              <li><strong>Chống "Context Rot":</strong> Cắt ~44K tokens rác khỏi đầu mỗi lượt hội thoại giúp LLM tập trung attention vào bài toán thực sự của user thay vì bị loãng bởi 441 định nghĩa tham số không liên quan.</li>
+              <li><strong>Nhất quán đặt tên tham số:</strong> Toàn bộ 14 tools dùng chung 1 ngôn ngữ: <code>resource</code>, <code>action</code>, <code>entity_name</code>, <code>id</code>/<code>name</code>, <code>solution_name</code>, <code>options</code>/<code>payload</code>, <code>env</code>. AI học 1 lần, gọi đúng mọi tool!</li>
+              <li><strong>Giữ nguyên ranh giới kinh điển của Dataverse:</strong> <code>manage_commanding</code> giữ nguyên luật vàng <em>"Mặc định classic <code>ribbon</code>, chỉ dùng modern <code>command</code> khi user nói rõ Power Fx/appaction"</em>. <code>execute_webapi</code> giữ nguyên vai trò "cổng thoát hiểm có chặn".</li>
+              <li><strong>Auto-approve tuyệt đối cho toàn bộ Phase 1:</strong> Cả 6 tool Phase 1 đều <code>ReadOnly=true, Destructive=false, Idempotent=true</code> → các client như Antigravity / Claude Code / Copilot / Codex cho phép chạy tự động không hỏi xác nhận.</li>
+            </ul>
+          </div>
+
+          <div class="callout warn" style="margin:0;">
+            <strong class="title">4 rủi ro khi dùng <code>payload</code> JSON &amp; Cơ chế phòng vệ 4 lớp</strong>
+            <p class="small" style="margin:4px 0 8px;">Khi gom 39 param của <code>manage_column</code> hay 30 param của <code>manage_table</code> vào <code>payload</code> (<code>JsonObject</code>), rủi ro duy nhất là AI gõ nhầm tên key bên trong <code>payload</code>. Ta triệt tiêu rủi ro này bằng <strong>4 lớp bảo vệ bắt buộc</strong>:</p>
+            <ol style="margin:0;padding-left:18px;">
+              <li><strong>Lớp 1 — Hybrid Schema (Top-level Typed + Payload):</strong> 5–7 tham số dùng ở 80% lệnh gọi (<code>resource</code>, <code>action</code>, <code>entity_name</code>, <code>id</code>/<code>name</code>, <code>solution_name</code>, <code>env</code>) vẫn nằm <strong>trực tiếp ở top-level có kiểu rõ ràng</strong>. Các lệnh <code>list</code>, <code>detail</code>, <code>delete</code>, <code>read</code>, <code>info</code> hầu như <em>không cần đụng <code>payload</code></em>.</li>
+              <li><strong>Lớp 2 — Chấp nhận song song <code>snake_case</code> &amp; <code>camelCase</code>:</strong> Helper <code>McpPayload</code> đọc cả <code>max_length</code> lẫn <code>maxLength</code>, <code>display_name</code> lẫn <code>displayName</code> → triệt tiêu ~80% lỗi sai tên key thường gặp của LLM.</li>
+              <li><strong>Lớp 3 — Strict Unknown-Key Validator (Self-Healing Error):</strong> Nếu AI truyền 1 key lạ vào <code>payload</code>, router lập tức từ chối và trả về <code>[Error] Unknown payload key 'foo' for manage_schema(column)</code> kèm <strong>đúng danh sách key hợp lệ</strong> + đường dẫn <code>docs://</code>. AI tự sửa đúng ngay ở lượt kế tiếp, không bao giờ âm thầm bỏ qua tham số!</li>
+              <li><strong>Lớp 4 — Progressive Disclosure qua <code>docs://</code> + <code>read_instruction</code>:</strong> Toàn bộ bảng thuộc tính chi tiết (39 field của column, 10 operations của ribbon, FormXML operations...) nằm gọn trong 10 file hướng dẫn <code>docs://</code>; AI chỉ nạp đúng 1 hướng dẫn khi cần ghi phức tạp thay vì trả thuế 38K token ở mọi lượt hội thoại.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4 -->
+    <section id="architecture">
+      <h2><span class="sec-num">4</span> Kiến trúc tổng thể: Facade Router + Giữ nguyên 42 Handler C#</h2>
+      <div class="card">
+        <p>Qua khảo sát source code, <strong>100% các tool hiện tại đều đã tách sẵn 2 tầng</strong>: hàm <code>InvokeAsync(...)</code> (nhận kết nối <code>env</code> từ <code>McpToolInvocation</code>) và hàm nghiệp vụ <code>public CallToolResult manage_xxx(...)</code> / <code>get_xxx(...)</code> (được các unit test gọi trực tiếp). Nhờ vậy, ta áp dụng mẫu <strong>Zero-Rewrite Facade Pattern</strong>:</p>
+
+        <div class="arch-box">
+          <div class="arch-layer">
+            <div class="layer-title">Tầng 1 · MCP Surface (14 Class có [McpServerToolType] trong DynamicsCrm.DevKit.Cli.Mcp.Tools)</div>
+            <div><strong>Phase 1 (6 Read-Only):</strong> <code>get_context</code> · <code>read_instruction</code> · <code>query_data</code> · <code>inspect_metadata</code> · <code>inspect_automation</code> · <code>inspect_diagnostics</code></div>
+            <div style="margin-top:4px;"><strong>Phase 2 (8 Mutating/Mixed):</strong> <code>manage_data</code> · <code>manage_schema</code> · <code>manage_ui</code> · <code>manage_commanding</code> · <code>manage_logic</code> · <code>manage_assets</code> · <code>manage_admin</code> · <code>execute_webapi</code></div>
+            <div class="small muted" style="margin-top:6px;">• Tham số optional dùng nullable (<code>string? = null</code>) tránh bug MCP SDK 2.x #830 &nbsp;|&nbsp; • Router đa hình dùng <code>OutputSchemaType = typeof(JsonObject)</code> (32 bytes!)</div>
+          </div>
+          <div class="arch-arrow">▼</div>
+          <div class="arch-layer">
+            <div class="layer-title">Tầng 2 · Shared Routing Infrastructure (Mcp/Tools/Routing/McpPayload.cs + McpToolInvocation.cs)</div>
+            <div>• Resolve kết nối đa môi trường qua <code>IMcpConnectionResolver</code> (<code>ConnectionBundle</code> đã chứa đủ <code>Client</code>, <code>OrgService</code>, <code>OrgServiceAsync</code>, <code>Metadata</code>, <code>WebApi</code>, <code>Options</code>, <code>Context</code>)</div>
+            <div>• <code>McpPayload</code>: chuẩn hóa <code>snake_case</code>/<code>camelCase</code>, ép kiểu an toàn, kiểm tra <code>ValidateAllowedKeys(...)</code> tự động trả gợi ý sửa lỗi</div>
+          </div>
+          <div class="arch-arrow">▼</div>
+          <div class="arch-layer">
+            <div class="layer-title">Tầng 3 · 42 Handler Nghiệp Vụ Hiện Có (Bỏ [McpServerToolType] / [McpServerTool], GIỮ NGUYÊN 100% CODE!)</div>
+            <div><code>GetTablesTool.get_tables(...)</code>, <code>GetPluginsTool.get_plugins(...)</code>, <code>ManageColumnTool.manage_column(...)</code>, <code>ManageFormTool.manage_form(...)</code>, <code>ManageRibbonTool.manage_ribbon(...)</code>, ...</div>
+            <div class="small muted" style="margin-top:6px;">• Bảo toàn nguyên vẹn: <code>McpExecutionContext</code> (DryRun fail-closed) · <code>RoleGateHelper</code> · <code>DisplayNameFirstResolver</code> · đường dẫn backup <code>.devkit/manage_*/</code> · DTO <code>StructuredContent</code> · xử lý riêng cho Antigravity trong <code>McpToolResults</code> · toàn bộ unit test nghiệp vụ cũ!</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: PHASE 1 -->
+    <section id="phase1">
+      <h2><span class="sec-num">5</span> Phase 1: Gộp 19 Read-Only Tools → 6 Read-Only Tools</h2>
+      <div class="card">
+        <div class="callout info" style="margin-top:0;">
+          <strong class="title">Mục tiêu &amp; Tác động độc lập của Phase 1</strong>
+          Phase 1 chỉ chạm đúng <strong>19 tool có <code>ReadOnly = true</code></strong> (không đụng 23 tool ghi/mutation). Sau khi hoàn tất Phase 1:
+          <ul style="margin:6px 0 0;padding-left:20px;">
+            <li>Tổng số tool toàn server giảm ngay từ <strong>42 → 29 tools</strong> (6 RO mới + 23 RW cũ giữ nguyên).</li>
+            <li>Riêng khối Read-Only giảm từ <strong>80,571 bytes → ~14,092 bytes (-82.5%, tiết kiệm ~16.6K–19.0K tokens/turn)</strong>.</li>
+            <li>Rủi ro regression lên dữ liệu/metadata Dataverse = <strong>0%</strong> (100% chỉ đọc). Có thể build CLI, test live kỹ lưỡng trên thực tế rồi mới bước sang Phase 2.</li>
+          </ul>
+        </div>
+
+        <details open>
+          <summary>
+            <span>1. <code>get_context</code> — Ngữ cảnh kết nối, định danh &amp; phân tích URL <span class="muted small">(3 → 1)</span></span>
+            <span class="tool-meta-inline"><span class="pill ro">ReadOnly</span><span class="pill p1">5,252B → ~1,512B</span></span>
+          </summary>
+          <div style="margin-top:12px;">
+            <p><strong>Gộp từ:</strong> <code>whoami</code> (2,386B), <code>connection_list</code> (1,463B), <code>parse_record_url</code> (1,403B).</p>
+            <p><strong>Tham số (3):</strong> <code>action</code> (<code>"whoami"</code> [mặc định] | <code>"connections"</code> | <code>"parse_url"</code>), <code>input</code> (URL/GUID cho <code>parse_url</code>), <code>env</code> (cho <code>whoami</code> / <code>parse_url</code>; <code>connections</code> chạy offline không cần xác thực Dataverse).</p>
+            <p class="small muted"><strong>Điểm tinh tế:</strong> Mặc định <code>action="whoami"</code> giúp gọi <code>get_context({})</code> vẫn kiểm tra ngay kết nối &amp; phiên bản runtime DevKit như <code>whoami({})</code> trước đây. (Xem Mục 10 nếu anh P muốn giữ riêng <code>whoami</code>).</p>
+<pre><code>// Ví dụ gọi:
+get_context()                                                     // = whoami (startup env)
+get_context({ action: "connections" })                            // = connection_list (offline)
+get_context({ action: "parse_url", input: "https://.../main.aspx?etn=account&id=..." })</code></pre>
+          </div>
+        </details>
+
+        <details open>
+          <summary>
+            <span>2. <code>read_instruction</code> — Đọc tài liệu hướng dẫn <code>docs://</code> &amp; <code>schema://</code> <span class="muted small">(1 → 1 · Giữ nguyên)</span></span>
+            <span class="tool-meta-inline"><span class="pill ro">ReadOnly</span><span class="pill p1">2,278B → ~1,982B</span></span>
+          </summary>
+          <div style="margin-top:12px;">
+            <p><strong>Vai trò chiến lược:</strong> Là trụ cột <em>Progressive Disclosure</em> của toàn bộ kiến trúc mới (dành cho các MCP client không hỗ trợ <code>resources/read</code>). Giữ nguyên làm tool 1 tham số duy nhất (<code>name</code>) để AI tra cứu nhanh danh mục 14 tài nguyên mà không tốn token trong <code>tools/list</code>.</p>
+            <p class="small muted"><strong>Sửa lỗi tiện tay:</strong> Cập nhật <code>CatalogEntries</code> theo tên tool mới và sửa chuỗi gợi ý lỗi ở dòng 66 từ <em>"13 available resources (9 docs://)"</em> thành đúng số động <em>14 (10 docs://, 4 schema://)</em>.</p>
+          </div>
+        </details>
+
+        <details open>
+          <summary>
+            <span>3. <code>query_data</code> — Truy vấn dữ liệu Dataverse (FetchXML / SQL / Relevance Search) <span class="muted small">(3 → 1)</span></span>
+            <span class="tool-meta-inline"><span class="pill ro">ReadOnly</span><span class="pill p1">8,127B → ~2,412B</span></span>
+          </summary>
+          <div style="margin-top:12px;">
+            <p><strong>Gộp từ:</strong> <code>execute_fetchxml</code> (1,644B), <code>execute_sql</code> (1,979B), <code>search_records</code> (4,504B).</p>
+            <p><strong>Tham số (8 — 100% typed, không cần JSON bag):</strong> <code>mode</code> (<code>"fetchxml"</code> | <code>"sql"</code> | <code>"search"</code> | <code>"search_status"</code>), <code>query</code> (FetchXML / SQL SELECT / từ khóa search), <code>max_records</code> (null → giữ default từng mode: 5000 cho fetchxml/sql, 50 cho search), <code>get_all</code>, <code>entities</code> (search), <code>filter</code> (search OData), <code>detail_level</code> (search: <code>compact</code>|<code>full</code>), <code>env</code>.</p>
+            <p class="small muted"><strong>Resources liên kết:</strong> <code>docs://data_operations_guide</code>, <code>docs://instructions_for_sql</code>, <code>schema://fetchxml</code>.</p>
+<pre><code>query_data({ mode: "fetchxml", query: "&lt;fetch&gt;&lt;entity name='account'&gt;&lt;attribute name='name'/&gt;&lt;/entity&gt;&lt;/fetch&gt;", max_records: 20 })
+query_data({ mode: "sql", query: "SELECT TOP 10 name, accountnumber FROM account" })
+query_data({ mode: "search", query: "Contoso", entities: "Account,Contact", max_records: 20 })
+query_data({ mode: "search_status" })</code></pre>
+          </div>
+        </details>
+
+        <details open>
+          <summary>
+            <span>4. <code>inspect_metadata</code> — Tra cứu Metadata bảng, Solution Components &amp; PCF Controls <span class="muted small">(3 → 1)</span></span>
+            <span class="tool-meta-inline"><span class="pill ro">ReadOnly</span><span class="pill p1">13,135B → ~2,562B</span></span>
+          </summary>
+          <div style="margin-top:12px;">
+            <p><strong>Gộp từ:</strong> <code>get_tables</code> (7,229B), <code>get_solution_components</code> (3,041B), <code>get_custom_controls</code> (2,865B).</p>
+            <p><strong>Tham số (7):</strong> <code>resource</code> (<code>"tables"</code> [mặc định] | <code>"solution_components"</code> | <code>"custom_controls"</code>), <code>name</code> (entity_name / solution_name / PCF name), <code>filter</code> (keyword hoặc attribute filter cho <code>tables</code>), <code>detail_level</code> (<code>compact</code>|<code>standard</code>|<code>full</code>), <code>max_records</code>, <code>options</code> (JSON object chuyên biệt), <code>env</code>.</p>
+            <p><strong><code>options</code> theo resource:</strong></p>
+            <ul class="small">
+              <li><code>tables</code>: <code>{ custom_only, include_intersect, names }</code></li>
+              <li><code>solution_components</code>: <code>{ include_active_layers, active_layers_only }</code></li>
+              <li><code>custom_controls</code>: <code>{ name_match ("contains"|"prefix"|"exact"), kind ("field"|"dataset"), data_type }</code></li>
+            </ul>
+            <p class="small muted"><strong>Mở rộng tương lai:</strong> Sẵn sàng đón <code>solutions</code>, <code>publishers</code>, <code>business_units</code>, <code>connection_references</code>, <code>canvas_apps</code> mà không thêm tool.</p>
+          </div>
+        </details>
+
+        <details open>
+          <summary>
+            <span>5. <code>inspect_automation</code> — Toàn bộ Server Logic &amp; Quy trình tự động <span class="muted small">(6 → 1 · TIẾT KIỆM LỚN NHẤT!)</span></span>
+            <span class="tool-meta-inline"><span class="pill ro">ReadOnly</span><span class="pill p1">42,873B → ~3,062B (-92.9%!)</span></span>
+          </summary>
+          <div style="margin-top:12px;">
+            <p><strong>Gộp từ:</strong> <code>get_plugins</code> (6,843B), <code>get_workflows</code> (10,665B), <code>get_flows</code> (3,443B), <code>get_business_process_flows</code> (3,551B), <code>get_business_rules</code> (8,555B), <code>get_messages</code> (9,816B). Cả 6 hiện đã dùng chung 1 tài liệu <code>docs://server_logic_guide</code>!</p>
+            <p><strong>Tham số (8):</strong> <code>resource</code> (<code>"plugins"</code> | <code>"workflows"</code> | <code>"flows"</code> | <code>"bpfs"</code> | <code>"business_rules"</code> | <code>"messages"</code>), <code>entity_name</code>, <code>id</code> (GUID detail cho workflow/flow/bpf/rule/assembly), <code>name</code> (assembly_name / name_filter / bpf_name / message_name), <code>status</code>, <code>max_records</code>, <code>options</code> (JSON object), <code>env</code>.</p>
+            <p><strong><code>options</code> theo resource:</strong></p>
+            <ul class="small">
+              <li><code>plugins</code>: <code>{ message_name, type_name, stage, mode, active_only, include_images, include_config, download, assembly_id, package_id, package_name }</code> (hỗ trợ tải DLL/<code>.nupkg</code> qua <code>McpServer</code> như cũ)</li>
+              <li><code>workflows</code>: <code>{ mode ("background"|"realtime"), trigger_field }</code></li>
+              <li><code>flows</code>: <code>{ action ("list"|"runs"), owner_filter, status_filter, minutes_ago }</code></li>
+              <li><code>bpfs</code>: <code>{ include_stages }</code></li>
+              <li><code>messages</code>: <code>{ include_custom_actions }</code></li>
+            </ul>
+            <p class="small muted"><strong>Ghi chú:</strong> Chỉ riêng tool này cắt hơn <strong>39.8 KB (~10,000 tokens)</strong> nhờ loại bỏ 3 bản copy khổng lồ của <code>outputSchema</code> cây <code>WorkflowStepNode</code>!</p>
+          </div>
+        </details>
+
+        <details open>
+          <summary>
+            <span>6. <code>inspect_diagnostics</code> — Audit History, Plugin Trace Logs &amp; System Jobs <span class="muted small">(3 → 1)</span></span>
+            <span class="tool-meta-inline"><span class="pill ro">ReadOnly</span><span class="pill p1">8,906B → ~2,562B</span></span>
+          </summary>
+          <div style="margin-top:12px;">
+            <p><strong>Gộp từ:</strong> <code>get_audit_history</code> (2,813B), <code>get_plugin_trace_logs</code> (2,555B), <code>get_system_jobs</code> (3,538B).</p>
+            <p><strong>Tham số (8):</strong> <code>resource</code> (<code>"audit"</code> | <code>"plugin_traces"</code> | <code>"system_jobs"</code>), <code>record_id</code> (GUID → detail), <code>entity_name</code>, <code>minutes_ago</code>, <code>max_records</code>, <code>correlation_id</code>, <code>options</code> (JSON object), <code>env</code>.</p>
+            <p><strong><code>options</code> theo resource:</strong></p>
+            <ul class="small">
+              <li><code>audit</code>: <code>{ user_filter, operation, attribute_name, from_date, to_date }</code></li>
+              <li><code>plugin_traces</code>: <code>{ type_name, message_name, mode }</code></li>
+              <li><code>system_jobs</code>: <code>{ status, operation_type, name_filter }</code></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- SECTION 6: PHASE 2 -->
+    <section id="phase2">
+      <h2><span class="sec-num">6</span> Phase 2: Gộp 23 Tools còn lại → 8 Domain Management Tools</h2>
+      <div class="card">
+        <div class="callout purple" style="margin-top:0;">
+          <strong class="title">Nguyên tắc thiết kế Phase 2</strong>
+          Phase 2 gộp toàn bộ <strong>23 tool có <code>ReadOnly = false</code></strong> còn lại theo ranh giới domain kinh điển của Dataverse. Sau Phase 2:
+          <ul style="margin:6px 0 0;padding-left:20px;">
+            <li>Khối 23 tool ghi giảm từ <strong>134,751 bytes → ~24,306 bytes (-82.0%, tiết kiệm thêm ~27.6K–31.6K tokens/turn)</strong>.</li>
+            <li>Tổng tham số phẳng giảm từ <strong>328 → 57</strong> (-82.6%).</li>
+            <li><strong>Bảo toàn 100% lớp an toàn:</strong> <code>McpExecutionContext.AssertMutationAllowed</code> (DryRun fail-closed), <code>RoleGateHelper.EnsureSystemAdministrator</code>, auto-backup <code>.devkit/manage_*/</code>, và cơ chế chặn/điều hướng ở <code>execute_webapi</code> đều giữ nguyên tuyệt đối.</li>
+          </ul>
+        </div>
+
+        <details open>
+          <summary>
+            <span>7. <code>manage_data</code> — Dữ liệu bản ghi, Bulk Upsert, File/Image, Thùng rác &amp; Demo Data <span class="muted small">(5 → 1)</span></span>
+            <span class="tool-meta-inline"><span class="pill dest">Destructive</span><span class="pill p2">22,665B → ~3,162B</span></span>
+          </summary>
+          <div style="margin-top:12px;">
+            <p><strong>Gộp từ:</strong> <code>manage_record</code> (5,110B), <code>upsert_records</code> (5,178B), <code>manage_record_file</code> (3,804B), <code>manage_deleted_records</code> (5,000B), <code>generate_demo_data</code> (3,573B).</p>
+            <p><strong>Tham số (7):</strong> <code>resource</code> (<code>"record"</code> | <code>"bulk"</code> | <code>"file"</code> | <code>"deleted"</code> | <code>"demo"</code>), <code>action</code>, <code>entity_name</code>, <code>record_id</code>, <code>solution_name</code>, <code>payload</code> (JSON object), <code>env</code>.</p>
+            <ul class="small">
+              <li><code>record</code>: <code>create</code>, <code>read</code>, <code>update</code>, <code>delete</code>, <code>associate</code>, <code>disassociate</code>, <code>add_to_solution</code>, <code>remove_from_solution</code>, <code>list_solutions</code>, <code>add_solution_component</code> — payload: <code>fields_json</code>, <code>columns</code>, <code>related_entity_name</code>, <code>related_record_id</code>, <code>relationship_name</code>, <code>component_type</code>.</li>
+              <li><code>bulk</code>: <code>upsert</code> (mặc định) — payload: <code>records_json</code> (inline JSON / <code>.json</code> / <code>.csv</code>), <code>max_parallelism</code>, <code>bypass_custom_logic</code>, <code>key_fields</code>.</li>
+              <li><code>file</code>: <code>info</code>, <code>upload</code>, <code>download</code>, <code>delete</code> — payload: <code>column_name</code>, <code>file_path</code>, <code>content_base64</code>, <code>file_name</code>, <code>full_size</code>.</li>
+              <li><code>deleted</code>: <code>list</code>, <code>detail</code>, <code>restore</code>, <code>status</code>, <code>turn</code> — payload: <code>record_ids</code>, <code>name_filter</code>, <code>max_records</code>, <code>turn</code>, <code>retention_days</code>, <code>name_prefix</code>.</li>
+              <li><code>demo</code>: <code>generate</code> (mặc định) — payload: <code>from_date</code>, <code>to_date</code>, <code>count</code>, <code>fields</code>, <code>seed</code>, <code>field_overrides</code>.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details open>
+          <summary>
+            <span>8. <code>manage_schema</code> — Bảng, Cột (Formula/Autonumber/Key), Quan hệ &amp; Global Choice <span class="muted small">(4 → 1 · 104 params → 7!)</span></span>
+            <span class="tool-meta-inline"><span class="pill dest">Destructive</span><span class="pill p2">31,340B → ~3,162B (-89.9%!)</span></span>
+          </summary>
+          <div style="margin-top:12px;">
+            <p><strong>Gộp từ:</strong> <code>manage_table</code> (8,828B / 30 params), <code>manage_column</code> (12,052B / 39 params), <code>manage_relationship</code> (5,487B / 23 params), <code>manage_choice</code> (4,973B / 12 params).</p>
+            <p><strong>Tham số (7):</strong> <code>resource</code> (<code>"table"</code> | <code>"column"</code> | <code>"relationship"</code> | <code>"choice"</code>), <code>action</code>, <code>entity_name</code>, <code>name</code> (logical_name / relationship_name / optionset_name), <code>solution_name</code>, <code>payload</code> (JSON object), <code>env</code>.</p>
+            <ul class="small">
+              <li><code>table</code>: <code>upsert</code> (hoặc <code>create</code>/<code>update</code> — auto-detect như <code>ManageTableTool</code>) — payload chứa các thuộc tính bảng (<code>display_name</code>, <code>display_collection_name</code>, <code>ownership_type</code>, <code>table_type</code>, 13 cờ <code>is_*_enabled</code>...).</li>
+              <li><code>column</code>: <code>upsert</code> (hoặc <code>create</code>/<code>update</code>) — payload chứa các thuộc tính cột theo đúng kiểu dữ liệu (<code>attribute_type</code>, <code>display_name</code>, <code>max_length</code>, <code>options</code>, <code>lookup_target</code>, <code>formula_definition</code>, <code>formula_expression</code>, <code>raw_formula_definition</code>, <code>auto_number_format</code>, <code>is_alternate_key</code>...).</li>
+              <li><code>relationship</code>: <code>create_1n</code>, <code>create_nn</code>, <code>update</code>, <code>delete</code>, <code>add_target</code>, <code>remove_target</code> — payload: <code>referenced_entity</code>, <code>referencing_entity</code>, <code>entity1</code>, <code>entity2</code>, <code>cascade_*</code>, <code>menu_*</code>, <code>is_hierarchical</code>...</li>
+              <li><code>choice</code>: <code>list</code>, <code>detail</code>, <code>create</code>, <code>update</code> — payload: <code>display_name</code>, <code>filter</code>, <code>description</code>, <code>options</code>, <code>add_options</code>, <code>update_options</code>, <code>remove_options</code>, <code>option_colors</code>.</li>
+            </ul>
+            <p class="small muted"><strong>Docs liên kết:</strong> <code>docs://schema_tools_guide</code> (cập nhật bảng thuộc tính payload cho đủ 4 resource).</p>
+          </div>
+        </details>
+
+        <details open>
+          <summary>
+            <span>9. <code>manage_ui</code> — Form &amp; Dashboard, View, Chart và Model-Driven App / SiteMap <span class="muted small">(4 → 1)</span></span>
+            <span class="tool-meta-inline"><span class="pill dest">Destructive</span><span class="pill p2">26,406B → ~3,262B</span></span>
+          </summary>
+          <div style="margin-top:12px;">
+            <p><strong>Gộp từ:</strong> <code>manage_form</code> (5,897B), <code>manage_view</code> (6,896B), <code>manage_chart</code> (6,515B), <code>manage_app</code> (7,098B).</p>
+            <p><strong>Tham số (8):</strong> <code>resource</code> (<code>"form"</code> | <code>"view"</code> | <code>"chart"</code> | <code>"app"</code>), <code>action</code>, <code>entity_name</code>, <code>id</code> (form_id / view_id / chart_id / app GUID), <code>name</code> (form_name / view_name / chart_name / app name), <code>solution_name</code>, <code>payload</code> (JSON object), <code>env</code>.</p>
+            <ul class="small">
+              <li><code>form</code>: <code>list</code>, <code>detail</code>, <code>navigation_list</code>, <code>create</code>, <code>update</code>, <code>rename</code>, <code>undo</code> — payload: <code>form_type</code>, <code>include_formxml</code>, <code>formxml</code>, <code>operations</code>.</li>
+              <li><code>view</code>: <code>list</code>, <code>detail</code>, <code>create</code>, <code>update</code>, <code>rename</code>, <code>set_default</code>, <code>undo</code> — payload: <code>is_personal_view</code>, <code>fetchxml</code>, <code>layoutxml</code>, <code>cell_updates_json</code>, <code>include_layoutjson</code>, <code>description</code>.</li>
+              <li><code>chart</code>: <code>list</code>, <code>detail</code>, <code>create</code>, <code>update</code>, <code>rename</code>, <code>set_default</code>, <code>undo</code> — payload: <code>chart_type</code>, <code>group_by_column</code>, <code>aggregate_column</code>, <code>aggregate_type</code>, <code>measures</code>, <code>filter</code>, <code>presentationdescription</code>, <code>description</code>, <code>validate</code>, <code>publish</code>, <code>confirmed</code>.</li>
+              <li><code>app</code>: <code>list</code>, <code>detail</code>, <code>create</code>, <code>update</code>, <code>update_navigation</code>, <code>add_components</code>, <code>remove_components</code>, <code>validate</code>, <code>undo</code> — payload: <code>app_name</code>, <code>display_name</code>, <code>unique_name</code>, <code>description</code>, <code>icon_webresource</code>, <code>operations</code>, <code>max_records</code>, <code>view_ids</code>, <code>form_ids</code>, <code>dashboard_ids</code>, <code>chart_ids</code>.</li>
+            </ul>
+            <p class="small muted"><strong>Docs liên kết:</strong> <code>docs://instructions_for_formxml</code>, <code>docs://instructions_for_views</code>, <code>docs://instructions_for_manage_app</code>, <code>schema://formxml</code>, <code>schema://layoutxml</code>, <code>schema://sitemapxml</code>.</p>
+          </div>
+        </details>
+
+        <details open>
+          <summary>
+            <span>10. <code>manage_commanding</code> — Classic RibbonDiffXml &amp; Modern Power Fx Command Bar <span class="muted small">(2 → 1)</span></span>
+            <span class="tool-meta-inline"><span class="pill dest">Destructive</span><span class="pill p2">14,855B → ~3,262B</span></span>
+          </summary>
+          <div style="margin-top:12px;">
+            <p><strong>Gộp từ:</strong> <code>manage_ribbon</code> (5,793B), <code>manage_command</code> (9,062B / 28 params).</p>
+            <p><strong>Tại sao tách riêng khỏi <code>manage_ui</code>?</strong> Hai tool này có <strong>guardrail đặc biệt quan trọng</strong> trong Dataverse: mặc định mọi yêu cầu tạo/sửa button chung chung phải đi qua <code>resource="ribbon"</code> (classic RibbonDiffXml); chỉ dùng <code>resource="command"</code> (modern <code>appaction</code>) khi user yêu cầu rõ ràng Power Fx / command designer. Tách riêng 1 domain tool giữ guardrail này sắc nét 100%.</p>
+            <p><strong>Tham số (7):</strong> <code>resource</code> (<code>"ribbon"</code> [khuyên dùng mặc định cho button] | <code>"command"</code>), <code>action</code>, <code>entity_name</code>, <code>id</code> (command_id), <code>solution_name</code>, <code>payload</code>, <code>env</code>.</p>
+            <p class="small muted"><strong>Docs liên kết:</strong> <code>docs://instructions_for_manage_ribbon</code>, <code>docs://instructions_for_manage_command</code>.</p>
+          </div>
+        </details>
+
+        <details open>
+          <summary>
+            <span>11. <code>manage_logic</code> — Custom API &amp; Power Fx Functions <span class="muted small">(2 → 1 · Cặp đối xứng với inspect_automation)</span></span>
+            <span class="tool-meta-inline"><span class="pill dest">Destructive</span><span class="pill p2">12,903B → ~2,862B</span></span>
+          </summary>
+          <div style="margin-top:12px;">
+            <p><strong>Gộp từ:</strong> <code>manage_custom_api</code> (7,764B / 18 params), <code>manage_function</code> (5,139B / 9 params).</p>
+            <p><strong>Lý do cực khớp:</strong> Power Fx Functions thực chất là Custom API gắn kèm <code>FxExpression</code>. Trong tương lai, mọi lệnh ghi cho server logic (bật/tắt workflow, bật/tắt flow, đăng ký/tắt plugin step, quản lý webhook) sẽ vào thẳng tool này!</p>
+            <p><strong>Tham số (7):</strong> <code>resource</code> (<code>"custom_api"</code> | <code>"function"</code>), <code>action</code>, <code>name</code> (api_name / function_name), <code>entity_name</code>, <code>solution_name</code>, <code>payload</code>, <code>env</code>.</p>
+          </div>
+        </details>
+
+        <details open>
+          <summary>
+            <span>12. <code>manage_assets</code> — Web Resources &amp; SSRS Reports / RDL Datasets <span class="muted small">(2 → 1)</span></span>
+            <span class="tool-meta-inline"><span class="pill dest">Destructive</span><span class="pill p2">10,036B → ~2,862B</span></span>
+          </summary>
+          <div style="margin-top:12px;">
+            <p><strong>Gộp từ:</strong> <code>manage_webresource</code> (4,775B / 12 params), <code>manage_report</code> (5,261B / 15 params).</p>
+            <p><strong>Lý do:</strong> Cả hai đều là <strong>file-backed developer artifacts</strong> có thao tác đọc/ghi file cục bộ trên workspace (<code>file_path</code>, <code>output_folder</code>, download về <code>.devkit/</code>, cập nhật nội dung nhị phân/UTF-8). Sẵn sàng mở rộng thêm <code>email_template</code>, <code>document_template</code>.</p>
+            <p><strong>Tham số (7):</strong> <code>resource</code> (<code>"webresource"</code> | <code>"report"</code>), <code>action</code>, <code>id</code> (web_resource_id / report_id), <code>name</code>, <code>solution_name</code>, <code>payload</code>, <code>env</code>.</p>
+            <p class="small muted"><strong>Docs liên kết:</strong> <code>docs://instructions_for_manage_report</code>, <code>docs://instructions_for_views</code>.</p>
+          </div>
+        </details>
+
+        <details open>
+          <summary>
+            <span>13. <code>manage_admin</code> — Security Roles, Environment Variables &amp; Publish Customizations <span class="muted small">(3 → 1)</span></span>
+            <span class="tool-meta-inline"><span class="pill dest">Destructive</span><span class="pill p2">13,663B → ~3,012B</span></span>
+          </summary>
+          <div style="margin-top:12px;">
+            <p><strong>Gộp từ:</strong> <code>manage_role</code> (6,194B), <code>manage_environment_variable</code> (4,178B), <code>publish_customizations</code> (3,291B).</p>
+            <p><strong>Lý do:</strong> Cả 3 thuộc khối <strong>Quản trị nền tảng, Phân quyền, Cấu hình &amp; ALM</strong> (Role &amp; Publish đều yêu cầu quyền System Administrator). Tương lai các tool như <code>manage_solution</code>, <code>manage_team</code>, <code>manage_business_unit</code>, <code>manage_connection_reference</code>, <code>manage_field_security</code> đều rơi tự nhiên vào <code>manage_admin</code>!</p>
+            <p><strong>Tham số (7):</strong> <code>resource</code> (<code>"role"</code> | <code>"env_var"</code> | <code>"publish"</code>), <code>action</code> (cho <code>publish</code> mặc định <code>"publish"</code>), <code>target</code> (role_id/role_name, variable_name, hoặc danh sách entities cho publish), <code>entity_name</code> (filter privilege cho role), <code>solution_name</code>, <code>payload</code>, <code>env</code>.</p>
+          </div>
+        </details>
+
+        <details open>
+          <summary>
+            <span>14. <code>execute_webapi</code> — Raw Dataverse Web API Escape Hatch <span class="muted small">(1 → 1 · Giữ nguyên)</span></span>
+            <span class="tool-meta-inline"><span class="pill dest">Destructive</span><span class="pill p2">2,883B → ~2,722B</span></span>
+          </summary>
+          <div style="margin-top:12px;">
+            <p><strong>Lý do giữ riêng:</strong> Đây là cổng dự phòng mức HTTP thô (GET <code>$metadata</code> hoặc endpoint chưa có tool chuyên biệt), đi kèm danh sách chặn/chuyển hướng cứng tại runtime (<em>blocklist/redirect</em>). Giữ riêng giúp LLM không bao giờ nhầm lẫn nó với các tool domain an toàn; chỉ cần cập nhật các thông báo redirect bên trong trỏ về 14 tên tool mới.</p>
+          </div>
+        </details>
+
+        <div class="callout info">
+          <strong class="title">Ghi chú kiến trúc: Tại sao KHÔNG tách <code>list</code>/<code>detail</code> của các tool <code>manage_*</code> sang Phase 1?</strong>
+          Trong 23 tool Phase 2, có 16 tool chứa cả lệnh đọc (<code>list</code>/<code>detail</code>) lẫn lệnh ghi (<code>create</code>/<code>update</code>/<code>delete</code>). Giữ <code>list</code>/<code>detail</code> đi cùng tool domain của chúng ở Phase 2 giúp:
+          (1) AI thực hiện trọn vòng lặp <em>list → detail → update → undo</em> trong <strong>cùng 1 tool</strong>, không bị phân mảnh;
+          (2) Không tạo 2 đường dẫn trùng lặp (duplicate routes) gây nhầm lẫn;
+          (3) Phase 1 bám đúng 100% ranh giới 19 tool <code>ReadOnly=true</code> hiện tại. Nếu sau này anh P muốn auto-approve cả lệnh đọc Form/View/Role, ta có thể xem xét như Phase 3 tùy chọn.
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 7: INTERACTIVE MAPPING -->
+    <section id="mapping">
+      <h2><span class="sec-num">7</span> Bảng Mapping đầy đủ 42 Tools cũ → 14 Tools mới</h2>
+      <div class="card">
+        <div class="filter-bar">
+          <input type="search" id="mapSearch" placeholder="Tìm theo tên tool cũ, tool mới, resource, hoặc chức năng..." />
+          <button class="filter-btn active" data-filter="all">Tất cả (42)</button>
+          <button class="filter-btn" data-filter="p1">Phase 1 · Read-Only (19 → 6)</button>
+          <button class="filter-btn" data-filter="p2">Phase 2 · Mutating (23 → 8)</button>
+        </div>
+        <div class="table-wrap">
+          <table id="mappingTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Phase</th>
+                <th>Tool cũ (42)</th>
+                <th class="num">Size cũ</th>
+                <th>→ Tool mới (14)</th>
+                <th>Route gọi mới (<code>resource</code> / <code>mode</code> / <code>action</code>)</th>
+              </tr>
+            </thead>
+            <tbody id="mappingBody"></tbody>
+          </table>
+        </div>
+        <div class="small muted" id="mappingCount"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 8: FUTURE PROOFING -->
+    <section id="future">
+      <h2><span class="sec-num">8</span> Chiến lược tương lai: Khi anh P thêm Tool #43, #44, #45... thì làm sao?</h2>
+      <div class="card">
+        <p>Nếu không đặt luật kiến trúc ngay từ bây giờ, sau 6 tháng phát triển thêm tính năng mới, 14 tools sẽ nhanh chóng phình lại thành 25–30 tools. Giải pháp là áp dụng <strong>Kỷ luật Ngân sách Tool (Tool Budget)</strong> kết hợp <strong>Thang mở rộng 3 tầng</strong>:</p>
+
+        <div class="grid-3">
+          <div class="card" style="margin:0;border-top:4px solid var(--green);">
+            <span class="pill tier1">Tầng 1 · Ưu tiên số 1 (~85%)</span>
+            <h3>Thêm <code>action</code> mới</h3>
+            <p class="small">Khi tính năng mới thao tác trên đối tượng đã có (ví dụ: thêm <code>delete</code> cho <code>table</code>/<code>column</code>, thêm <code>export</code> cho <code>app</code>, thêm <code>clone</code> cho <code>view</code>).</p>
+            <p class="small"><strong>Chi phí token thêm vào <code>tools/list</code>:</strong> <strong>~5–10 tokens</strong>. Số tool mới: <strong>0</strong>.</p>
+          </div>
+          <div class="card" style="margin:0;border-top:4px solid var(--primary);">
+            <span class="pill tier2">Tầng 2 · Chuẩn mở rộng (~14%)</span>
+            <h3>Thêm <code>resource</code> mới</h3>
+            <p class="small">Khi thêm hẳn 1 loại thành phần Dataverse mới (ví dụ: Dialog, Solution, Team, Webhook, Email Template, Plugin Step...).</p>
+            <p class="small"><strong>Chi phí token thêm vào <code>tools/list</code>:</strong> <strong>~25–35 tokens</strong> (thêm 1 tên resource vào description; chi tiết đưa vào <code>docs://</code>). Số tool mới: <strong>0</strong>.</p>
+          </div>
+          <div class="card" style="margin:0;border-top:4px solid var(--red);">
+            <span class="pill tier3">Tầng 3 · Ngoại lệ (&lt;1%)</span>
+            <h3>Tạo Top-level Tool mới</h3>
+            <p class="small">Chỉ được phép khi thỏa <strong>CẢ 3 điều kiện</strong>: (1) Ranh giới bảo mật/loại hình hoàn toàn mới (vd: Power Pages hoặc local codegen); (2) Không khớp bất kỳ domain nào trong 14 tools; (3) Tần suất gọi &gt;10% phiên và <strong>anh P phê duyệt</strong>.</p>
+            <p class="small"><strong>Trần cứng (Hard Cap):</strong> <strong>≤ 16 tools</strong> (có unit test khóa cứng!).</p>
+          </div>
+        </div>
+
+        <h3>Mô phỏng thực tế: 12 tính năng tương lai (#43 → #54) sẽ vào đâu?</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>STT</th><th>Tính năng mới anh P có thể thêm</th><th>Tầng</th><th>Gắn vào Tool hiện có</th><th>Route cụ thể</th><th>Thêm Tool mới?</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>#43</td><td>Quản lý Dialog / Custom Page</td><td><span class="pill tier2">Tầng 2</span></td><td><code>manage_ui</code></td><td><code>resource="dialog"</code> / <code>"custom_page"</code></td><td><strong>Không (0)</strong></td></tr>
+              <tr><td>#44</td><td>Quản lý Solution (create, delete, clone, patch, pack/unpack)</td><td><span class="pill tier2">Tầng 2</span></td><td><code>manage_admin</code></td><td><code>resource="solution"</code></td><td><strong>Không (0)</strong></td></tr>
+              <tr><td>#45</td><td>Quản lý Connection Reference</td><td><span class="pill tier2">Tầng 2</span></td><td><code>manage_admin</code></td><td><code>resource="connection_reference"</code></td><td><strong>Không (0)</strong></td></tr>
+              <tr><td>#46</td><td>Quản lý Team, Business Unit, Field Security Profile</td><td><span class="pill tier2">Tầng 2</span></td><td><code>manage_admin</code></td><td><code>resource="team"</code> / <code>"business_unit"</code> / <code>"field_security"</code></td><td><strong>Không (0)</strong></td></tr>
+              <tr><td>#47</td><td>Bật/tắt Classic Workflow hoặc Cloud Flow</td><td><span class="pill tier2">Tầng 2</span></td><td><code>manage_logic</code></td><td><code>resource="workflow"</code> / <code>"flow"</code>, <code>action="activate"|"deactivate"</code></td><td><strong>Không (0)</strong></td></tr>
+              <tr><td>#48</td><td>Quản lý Plugin Step / Webhook / Service Endpoint</td><td><span class="pill tier2">Tầng 2</span></td><td><code>manage_logic</code></td><td><code>resource="plugin_step"</code> / <code>"webhook"</code></td><td><strong>Không (0)</strong></td></tr>
+              <tr><td>#49</td><td>Tra cứu danh sách Solutions / Publishers / Canvas Apps</td><td><span class="pill tier2">Tầng 2</span></td><td><code>inspect_metadata</code></td><td><code>resource="solutions"</code> / <code>"publishers"</code> / <code>"canvas_apps"</code></td><td><strong>Không (0)</strong></td></tr>
+              <tr><td>#50</td><td>Tra cứu Webhooks / AI Prompts / Dataflows</td><td><span class="pill tier2">Tầng 2</span></td><td><code>inspect_automation</code></td><td><code>resource="webhooks"</code> / <code>"ai_prompts"</code></td><td><strong>Không (0)</strong></td></tr>
+              <tr><td>#51</td><td>Quản lý Email Template / Word / Document Template</td><td><span class="pill tier2">Tầng 2</span></td><td><code>manage_assets</code></td><td><code>resource="email_template"</code> / <code>"document_template"</code></td><td><strong>Không (0)</strong></td></tr>
+              <tr><td>#52</td><td>Bulk Delete / Export CSV-Excel</td><td><span class="pill tier1">Tầng 1</span></td><td><code>manage_data</code></td><td><code>resource="bulk"</code>, <code>action="delete"|"export"</code></td><td><strong>Không (0)</strong></td></tr>
+              <tr><td>#53</td><td>Xóa Table / Xóa Column / Quản lý Composite Alternate Key</td><td><span class="pill tier1">Tầng 1</span></td><td><code>manage_schema</code></td><td><code>resource="table"|"column"|"key"</code>, <code>action="delete"|"create"</code></td><td><strong>Không (0)</strong></td></tr>
+              <tr><td>#54</td><td>Tra cứu Data Import Jobs / Duplicate Detection Jobs</td><td><span class="pill tier2">Tầng 2</span></td><td><code>inspect_diagnostics</code></td><td><code>resource="import_jobs"</code> / <code>"duplicate_jobs"</code></td><td><strong>Không (0)</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <strong class="title">Quy trình 5 bước để code Tool #43 chỉ trong ~15 phút (và giữ nguyên 14 tools!)</strong>
+          <ol style="margin:6px 0 0;padding-left:20px;">
+            <li>Tạo class handler thuần túy (vd: <code>ManageDialogHandler : McpToolBase</code>) — <strong>KHÔNG</strong> gắn <code>[McpServerToolType]</code>.</li>
+            <li>Thêm 1 nhánh <code>case "dialog":</code> vào router tương ứng (<code>ManageUiTool</code>) + khai báo tập <code>AllowedKeys</code> cho <code>McpPayload</code>.</li>
+            <li>Thêm 1 dòng tóm tắt vào <code>[Description]</code> của router; đưa bảng tham số/ví dụ chi tiết vào tài nguyên <code>docs://</code> tương ứng.</li>
+            <li>Thêm quy tắc chặn/redirect trong <code>ExecuteWebApiTool.cs</code> (nếu có endpoint hệ thống cần bảo vệ).</li>
+            <li>Viết unit test cho handler + 1 test route trong router test. <strong>Unit test tự động <code>Assert.IsTrue(tools.Count &lt;= 16)</code></strong> sẽ bảo vệ kiến trúc mãi mãi!</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 9: SDK FINDINGS -->
+    <section id="sdk-findings">
+      <h2><span class="sec-num">9</span> Phát hiện kỹ thuật quan trọng từ MCP SDK 2.x &amp; Ảnh hưởng toàn Repo</h2>
+      <div class="card">
+        <div class="grid-2">
+          <div class="callout danger" style="margin:0;">
+            <strong class="title">2 "bẫy" MCP SDK 2.x đã kiểm chứng thực tế</strong>
+            <ol style="margin:6px 0 0;padding-left:18px;">
+              <li><strong>Bẫy <code>OutputSchemaType</code>:</strong> Khi kiểm thử trực tiếp trên SDK đang cài trong repo, nếu đặt <code>UseStructuredContent = true</code> mà <em>bỏ</em> <code>OutputSchemaType</code> trên hàm trả về <code>Task&lt;CallToolResult&gt;</code>, SDK sẽ sinh ra một <code>outputSchema</code> sai (schema của chính <code>CallToolResult</code>) làm client strict bị lỗi! <strong>Cách đúng đã kiểm chứng:</strong> Đặt <code>UseStructuredContent = true, OutputSchemaType = typeof(JsonObject)</code> → SDK phát đúng <code>"outputSchema":{"type":"object"}</code> (chỉ 32 bytes!) và tương thích 100% mọi DTO trả về.</li>
+              <li><strong>Bẫy <code>string param = ""</code> (issue <code>csharp-sdk#830</code>):</strong> MCP SDK 2.x coi tham số <code>string</code> non-nullable có default <code>""</code> là <code>required</code> trong JSON Schema! Mọi tham số tùy chọn trên 14 router mới <strong>bắt buộc khai báo nullable</strong>: <code>string? = null</code>, <code>int? = null</code>, <code>bool? = null</code>, <code>JsonObject? = null</code>.</li>
+            </ol>
+          </div>
+
+          <div class="callout info" style="margin:0;">
+            <strong class="title">Phạm vi file liên đới trong Repo (AI triển khai cần cập nhật)</strong>
+            <ul style="margin:6px 0 0;padding-left:18px;">
+              <li><strong>Hạ tầng MCP:</strong> <code>McpServerHost.cs</code> (<code>ToolResourceMap</code>, <code>BuildConnectionInstructions</code>), <code>McpToolInvocation.cs</code> (<code>EnvDescription</code>), <code>McpConnectionRegistry.cs</code>, <code>Commands/McpCommand.cs</code> (<code>--setup-guide</code>).</li>
+              <li><strong>Tool nội bộ &amp; Helper:</strong> <code>ReadInstructionTool.cs</code> (cập nhật <code>CatalogEntries</code> + sửa bug dòng 66 "13→14"), <code>ExecuteWebApiTool.cs</code> (cập nhật ~25 chuỗi redirect), <code>DisplayNameFirstResolver.cs</code>, <code>EntityParserHelper.cs</code>, <code>McpToolResults.cs</code>, <code>SolutionResolverHelper.cs</code>, <code>RoleBackupHelper.cs</code>, <code>ViewBackupHelper.cs</code>.</li>
+              <li><strong>10 file Embedded Instructions (<code>Mcp/Resources/Instructions/*.md</code>) &amp; <code>SchemaResources.cs</code>:</strong> Cập nhật ví dụ gọi tool và bổ sung bảng <code>payload</code> keys.</li>
+              <li><strong>Unit Tests:</strong> 3 file hạ tầng (<code>McpServerHostCoverageTests.cs</code>, <code>McpServerHostGapWave2CoverageTests.cs</code>, <code>McpToolEntryRoutingCoverageTests.cs</code>) + bộ test router mới. <strong>Toàn bộ test nghiệp vụ của 42 handler giữ nguyên 100%!</strong></li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>So sánh trực quan tổng dung lượng <code>tools/list</code> trước &amp; sau</h3>
+        <div style="margin-top:12px;">
+          <div class="bar-row">
+            <strong>Hiện tại (42 tools · Full)</strong>
+            <div class="bar-track">
+              <div class="bar-seg-desc" style="width:19.3%" title="description: 41,668B"></div>
+              <div class="bar-seg-in" style="width:37.2%" title="inputSchema: 80,055B"></div>
+              <div class="bar-seg-out" style="width:37.2%" title="outputSchema: 80,180B"></div>
+              <div class="bar-seg-meta" style="width:6.3%" title="meta: 13,472B"></div>
+            </div>
+            <span class="num"><strong>215.4 KB</strong> (~54K tok)</span>
+          </div>
+          <div class="bar-row">
+            <strong>Sau Phase 1 (29 tools · Full)</strong>
+            <div class="bar-track">
+              <div class="bar-seg-after" style="width:6.5%" title="6 Phase-1 RO tools: 14.1 KB"></div>
+              <div class="bar-seg-in" style="width:62.6%" title="23 Phase-2 RW tools chưa gộp: 134.8 KB"></div>
+            </div>
+            <span class="num"><strong>~148.8 KB</strong> (-30.9%)</span>
+          </div>
+          <div class="bar-row">
+            <strong>Sau Phase 2 (14 tools · Full)</strong>
+            <div class="bar-track">
+              <div class="bar-seg-after" style="width:17.8%" title="14 Domain tools: ~38.4 KB"></div>
+            </div>
+            <span class="num" style="color:var(--green);"><strong>~38.4 KB</strong> (-82.2%!)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 10: APPROVAL -->
+    <section id="approval">
+      <h2><span class="sec-num">10</span> Các điểm cần anh P phê duyệt trước khi giao AI coding</h2>
+      <div class="card">
+        <p>Tài liệu kỹ thuật triển khai chi tiết từng bước cho AI code đã được viết song song tại <code>DynamicsCrm.DevKit.Docs/Cli/mcp-tool-consolidation-implementation.md</code>. Anh P chỉ cần chốt 4 quyết định sau:</p>
+
+        <div class="decision-card">
+          <h4>Quyết định 1 · Số lượng Tool mục tiêu</h4>
+          <label class="check-row"><input type="radio" name="d1" checked /><span><strong>Phương án A — 14 Domain Tools (Khuyến nghị):</strong> 6 Phase 1 + 8 Phase 2 (giữ riêng <code>manage_commanding</code> cho guardrail classic ribbon vs modern command, tách gọn <code>manage_logic</code> &amp; <code>manage_assets</code>).</span></label>
+          <label class="check-row"><input type="radio" name="d1" /><span><strong>Phương án B — 13 Domain Tools:</strong> Gộp <code>manage_logic</code> + <code>manage_assets</code> thành 1 tool <code>manage_extensions</code> (4 resources: <code>custom_api</code>, <code>function</code>, <code>webresource</code>, <code>report</code>).</span></label>
+          <label class="check-row"><input type="radio" name="d1" /><span><strong>Phương án C — 12 Domain Tools:</strong> Gộp thêm <code>manage_commanding</code> vào <code>manage_ui</code> (tiết kiệm thêm ~1.2K token nhưng mật độ <code>manage_ui</code> cao hơn).</span></label>
+        </div>
+
+        <div class="decision-card">
+          <h4>Quyết định 2 · Tool <code>whoami</code> trong Phase 1</h4>
+          <label class="check-row"><input type="radio" name="d2" checked /><span><strong>Gộp vào <code>get_context</code> với <code>action="whoami"</code> là mặc định (Khuyến nghị):</strong> Gọi <code>get_context({})</code> chạy y hệt <code>whoami({})</code>; giữ gọn đúng 6 tool Phase 1.</span></label>
+          <label class="check-row"><input type="radio" name="d2" /><span><strong>Giữ <code>whoami</code> đứng riêng:</strong> Tổng Phase 1 thành 7 tools (tổng cả 2 phase = 15 tools) để giữ nguyên thói quen gõ <code>whoami</code> trong <code>--setup-guide</code>.</span></label>
+        </div>
+
+        <div class="decision-card">
+          <h4>Quyết định 3 · Thứ tự triển khai &amp; nghiệm thu</h4>
+          <label class="check-row"><input type="checkbox" checked /><span><strong>Làm gọn Phase 1 trước (19 → 6 RO)</strong> → Build CLI Release → Unit test pass 100% → Kiểm thử live thực tế với AI → OK mới triển khai tiếp <strong>Phase 2 (23 → 8 RW)</strong>.</span></label>
+        </div>
+
+        <div class="decision-card">
+          <h4>Quyết định 4 · Kỷ luật mở rộng cho tương lai (Tools #43, #44...)</h4>
+          <label class="check-row"><input type="checkbox" checked /><span>Áp dụng <strong>Soft Cap = 14, Hard Cap = 16</strong> (có unit test khóa trần <code>Assert.IsTrue(tools.Count &lt;= 16)</code>) và bắt buộc tuân thủ Thang mở rộng 3 tầng (Action → Resource → Ngoại lệ cần anh P duyệt).</span></label>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      Phân tích trực tiếp từ source code <code>DynamicsCrm.DevKit.Cli/Mcp/</code> (.NET 10.0 · 42 tools · 14 resources · 215,375 bytes <code>tools/list</code> đo bằng MCP SDK 2.x).
+      Tài liệu coding chi tiết đi kèm: <code>DynamicsCrm.DevKit.Docs/Cli/mcp-tool-consolidation-implementation.md</code>.
+    </div>
+  </main>
+</div>
+
+<script>
+const TOP_TOOLS = [
+  { name: "manage_column", p: 39, total: 12052, d: 1916, i: 8514, o: 1327, ro: false },
+  { name: "get_workflows", p: 8,  total: 10665, d: 700,  i: 1154, o: 8528, ro: true },
+  { name: "get_messages", p: 5,   total: 9816,  d: 740,  i: 841,  o: 7945, ro: true },
+  { name: "manage_command", p: 28,total: 9062,  d: 1897, i: 4466, o: 2281, ro: false },
+  { name: "manage_table", p: 30,  total: 8828,  d: 1330, i: 5774, o: 1422, ro: false },
+  { name: "get_business_rules", p: 5, total: 8555, d: 856, i: 791, o: 6572, ro: true },
+  { name: "manage_custom_api", p: 18, total: 7764, d: 1246, i: 3681, o: 2450, ro: false },
+  { name: "get_tables", p: 8,     total: 7229,  d: 1026, i: 1362, o: 4504, ro: true },
+  { name: "manage_app", p: 16,    total: 7098,  d: 1114, i: 3118, o: 2598, ro: false },
+  { name: "manage_view", p: 12,   total: 6896,  d: 1452, i: 2713, o: 2339, ro: false },
+  { name: "get_plugins", p: 15,   total: 6843,  d: 1278, i: 2262, o: 2983, ro: true },
+  { name: "manage_chart", p: 17,  total: 6515,  d: 1143, i: 3532, o: 1570, ro: false }
+];
+
+const maxTotal = TOP_TOOLS[0].total;
+const topBarsEl = document.getElementById("top-bars");
+TOP_TOOLS.forEach(t => {
+  const m = t.total - t.d - t.i - t.o;
+  const pct = x => (x / maxTotal * 100).toFixed(2) + "%";
+  const badge = t.ro ? '<span class="pill ro" style="margin-left:4px;font-size:10px">RO</span>' : '';
+  topBarsEl.innerHTML += `
+    <div class="bar-row">
+      <div><code>${t.name}</code>${badge}</div>
+      <div class="bar-track" title="Total ${t.total}B (Desc ${t.d}B, In ${t.i}B, Out ${t.o}B)">
+        <div class="bar-seg-desc" style="width:${pct(t.d)}"></div>
+        <div class="bar-seg-in" style="width:${pct(t.i)}"></div>
+        <div class="bar-seg-out" style="width:${pct(t.o)}"></div>
+        <div class="bar-seg-meta" style="width:${pct(m)}"></div>
+      </div>
+      <div class="num"><strong>${t.total.toLocaleString()}B</strong> <span class="muted small">(${t.p}p)</span></div>
+    </div>`;
+});
+
+const MAPPING = [
+  // Phase 1 (19 -> 6)
+  { p: "p1", old: "whoami", sz: 2386, nw: "get_context", route: 'action="whoami" (mặc định)' },
+  { p: "p1", old: "connection_list", sz: 1463, nw: "get_context", route: 'action="connections" (offline)' },
+  { p: "p1", old: "parse_record_url", sz: 1403, nw: "get_context", route: 'action="parse_url", input="..."' },
+  { p: "p1", old: "read_instruction", sz: 2278, nw: "read_instruction", route: 'name="" | "docs://..." | "schema://..."' },
+  { p: "p1", old: "execute_fetchxml", sz: 1644, nw: "query_data", route: 'mode="fetchxml", query="<fetch>..."' },
+  { p: "p1", old: "execute_sql", sz: 1979, nw: "query_data", route: 'mode="sql", query="SELECT ..."' },
+  { p: "p1", old: "search_records", sz: 4504, nw: "query_data", route: 'mode="search" | "search_status", query="..."' },
+  { p: "p1", old: "get_tables", sz: 7229, nw: "inspect_metadata", route: 'resource="tables" (mặc định), name, filter, detail_level' },
+  { p: "p1", old: "get_solution_components", sz: 3041, nw: "inspect_metadata", route: 'resource="solution_components", name, options' },
+  { p: "p1", old: "get_custom_controls", sz: 2865, nw: "inspect_metadata", route: 'resource="custom_controls", name, options' },
+  { p: "p1", old: "get_plugins", sz: 6843, nw: "inspect_automation", route: 'resource="plugins", entity_name, name, options' },
+  { p: "p1", old: "get_workflows", sz: 10665, nw: "inspect_automation", route: 'resource="workflows", entity_name, id, name, status, options' },
+  { p: "p1", old: "get_flows", sz: 3443, nw: "inspect_automation", route: 'resource="flows", id, name, status, options{action:"list"|"runs"}' },
+  { p: "p1", old: "get_business_process_flows", sz: 3551, nw: "inspect_automation", route: 'resource="bpfs", entity_name, id, name, status, options' },
+  { p: "p1", old: "get_business_rules", sz: 8555, nw: "inspect_automation", route: 'resource="business_rules", entity_name, id, status' },
+  { p: "p1", old: "get_messages", sz: 9816, nw: "inspect_automation", route: 'resource="messages", entity_name, name, options' },
+  { p: "p1", old: "get_audit_history", sz: 2813, nw: "inspect_diagnostics", route: 'resource="audit", entity_name, record_id, minutes_ago, options' },
+  { p: "p1", old: "get_plugin_trace_logs", sz: 2555, nw: "inspect_diagnostics", route: 'resource="plugin_traces", record_id, entity_name, correlation_id, options' },
+  { p: "p1", old: "get_system_jobs", sz: 3538, nw: "inspect_diagnostics", route: 'resource="system_jobs", record_id, entity_name, correlation_id, options' },
+
+  // Phase 2 (23 -> 8)
+  { p: "p2", old: "manage_record", sz: 5110, nw: "manage_data", route: 'resource="record", action="create|read|update|delete|associate|disassociate|..."' },
+  { p: "p2", old: "upsert_records", sz: 5178, nw: "manage_data", route: 'resource="bulk", action="upsert", entity_name, payload{records_json,...}' },
+  { p: "p2", old: "manage_record_file", sz: 3804, nw: "manage_data", route: 'resource="file", action="info|upload|download|delete", entity_name, record_id, payload' },
+  { p: "p2", old: "manage_deleted_records", sz: 5000, nw: "manage_data", route: 'resource="deleted", action="list|detail|restore|status|turn", entity_name, payload' },
+  { p: "p2", old: "generate_demo_data", sz: 3573, nw: "manage_data", route: 'resource="demo", action="generate", entity_name, payload{from_date,to_date,...}' },
+  { p: "p2", old: "manage_table", sz: 8828, nw: "manage_schema", route: 'resource="table", action="upsert|create|update", name, solution_name, payload' },
+  { p: "p2", old: "manage_column", sz: 12052, nw: "manage_schema", route: 'resource="column", action="upsert|create|update", entity_name, name, solution_name, payload' },
+  { p: "p2", old: "manage_relationship", sz: 5487, nw: "manage_schema", route: 'resource="relationship", action="create_1n|create_nn|update|delete|add_target|remove_target"' },
+  { p: "p2", old: "manage_choice", sz: 4973, nw: "manage_schema", route: 'resource="choice", action="list|detail|create|update", name, solution_name, payload' },
+  { p: "p2", old: "manage_form", sz: 5897, nw: "manage_ui", route: 'resource="form", action="list|detail|navigation_list|create|update|rename|undo"' },
+  { p: "p2", old: "manage_view", sz: 6896, nw: "manage_ui", route: 'resource="view", action="list|detail|create|update|rename|set_default|undo"' },
+  { p: "p2", old: "manage_chart", sz: 6515, nw: "manage_ui", route: 'resource="chart", action="list|detail|create|update|rename|set_default|undo"' },
+  { p: "p2", old: "manage_app", sz: 7098, nw: "manage_ui", route: 'resource="app", action="list|detail|create|update|update_navigation|add_components|..."' },
+  { p: "p2", old: "manage_ribbon", sz: 5793, nw: "manage_commanding", route: 'resource="ribbon", action="list|buttons|detail|update|undo", entity_name, payload' },
+  { p: "p2", old: "manage_command", sz: 9062, nw: "manage_commanding", route: 'resource="command", action="list|detail|create|update|delete|hide|show|add_flyout|..."' },
+  { p: "p2", old: "manage_custom_api", sz: 7764, nw: "manage_logic", route: 'resource="custom_api", action="list|detail|create|update|delete", name, payload' },
+  { p: "p2", old: "manage_function", sz: 5139, nw: "manage_logic", route: 'resource="function", action="list|detail|validate|invoke", name, payload' },
+  { p: "p2", old: "manage_webresource", sz: 4775, nw: "manage_assets", route: 'resource="webresource", action="list|detail|create|update|delete", id, name, payload' },
+  { p: "p2", old: "manage_report", sz: 5261, nw: "manage_assets", route: 'resource="report", action="list|detail|create|download|update|add_dataset|update_dataset"' },
+  { p: "p2", old: "manage_role", sz: 6194, nw: "manage_admin", route: 'resource="role", action="list|detail|user|assign|unassign|create|update|delete|copy|restore"' },
+  { p: "p2", old: "manage_environment_variable", sz: 4178, nw: "manage_admin", route: 'resource="env_var", action="list|detail|create|update|delete|clear", target, payload' },
+  { p: "p2", old: "publish_customizations", sz: 3291, nw: "manage_admin", route: 'resource="publish", action="publish", target(entities), payload' },
+  { p: "p2", old: "execute_webapi", sz: 2883, nw: "execute_webapi", route: 'Giữ nguyên (raw Web API escape hatch + cập nhật redirect hints)' }
+];
+
+let currentFilter = "all";
+const bodyEl = document.getElementById("mappingBody");
+const countEl = document.getElementById("mappingCount");
+const searchEl = document.getElementById("mapSearch");
+
+function renderMapping() {
+  const q = (searchEl.value || "").trim().toLowerCase();
+  const rows = MAPPING.filter(r => {
+    if (currentFilter !== "all" && r.p !== currentFilter) return false;
+    if (!q) return true;
+    return r.old.toLowerCase().includes(q) || r.nw.toLowerCase().includes(q) || r.route.toLowerCase().includes(q);
+  });
+  bodyEl.innerHTML = rows.map((r, idx) => `
+    <tr>
+      <td class="num muted">${idx + 1}</td>
+      <td>${r.p === "p1" ? '<span class="pill p1">Phase 1 · RO</span>' : '<span class="pill p2">Phase 2 · RW</span>'}</td>
+      <td><code>${r.old}</code></td>
+      <td class="num">${r.sz.toLocaleString()}B</td>
+      <td><strong><code>${r.nw}</code></strong></td>
+      <td class="small">${r.route}</td>
+    </tr>`).join("");
+  const sum = rows.reduce((a, b) => a + b.sz, 0);
+  countEl.textContent = `Hiển thị ${rows.length} / ${MAPPING.length} tools cũ · Tổng kích thước cũ: ${sum.toLocaleString()} bytes (~${Math.round(sum/4).toLocaleString()} tokens).`;
+}
+
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentFilter = btn.dataset.filter;
+    renderMapping();
+  });
+});
+searchEl.addEventListener("input", renderMapping);
+renderMapping();
+</script>
+</body>
+</html>
