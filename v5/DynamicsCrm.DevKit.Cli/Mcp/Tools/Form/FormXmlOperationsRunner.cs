@@ -72,6 +72,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             var tabSec   = new FormTabSectionOperations(_orgService, builder);
             var fieldEvt = new FormFieldEventOperations(_orgService, builder);
             var subgridOps = new FormSubgridOperations(_orgService);
+            FormWebResourceOperations webResources = null;
             FormCustomControlOperations customControls = null;
             FormNavigation navigation = null;
             var classIdMap  = new Dictionary<string, string>();
@@ -85,12 +86,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                         "Each operation must have an 'action' field.\n" +
                         "Important: operation.action is the operation family, not the verb. Use 'manage_action' for add/update/remove/move.\n" +
                         "Example: {\"action\":\"manage_subgrid\",\"manage_action\":\"add\",...}\n" +
-                        "Valid actions: manage_tab, manage_section, manage_fields, manage_subgrid, manage_library, manage_event, manage_navigation, manage_custom_control.\n" +
+                        "Valid actions: manage_tab, manage_section, manage_fields, manage_subgrid, manage_library, manage_event, manage_navigation, manage_custom_control, manage_webresource.\n" +
                         "Read docs://instructions_for_formxml for operation format and examples.");
 
                 var action       = actionProp.GetString()?.ToLowerInvariant();
                 var manageAction = NormalizeManageAction(FormXmlHelpers.GetStringProp(op, "manage_action"));
-                var removesControls = (action is "manage_tab" or "manage_section" or "manage_fields" or "manage_subgrid") &&
+                var removesControls = (action is "manage_tab" or "manage_section" or "manage_fields" or "manage_subgrid" or "manage_webresource") &&
                     (manageAction is "remove" or "remove_header") &&
                     formDoc.Root.Element("controlDescriptions") != null;
                 var previousIds = removesControls ? FormCustomControlOperations.InstanceIds(formDoc).ToHashSet() : null;
@@ -143,6 +144,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                                 $"Unknown manage_action '{manageAction}' for manage_subgrid. Valid: add, update, remove")
                         });
                         break;
+                    case "manage_webresource":
+                        webResources ??= new FormWebResourceOperations(_orgService);
+                        opSummaries.Add(webResources.Apply(formDoc, op, manageAction));
+                        break;
                     case "manage_library":
                         opSummaries.Add(manageAction switch
                         {
@@ -174,7 +179,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                             $"Unknown action '{action}'.\n" +
                             $"operation.action must be the operation family, not the verb. Use manage_action='{action}' only if the operation action is one of the valid families.\n" +
                             $"Example: {{\"action\":\"manage_subgrid\",\"manage_action\":\"{action}\",...}}\n" +
-                            $"Valid action families: manage_tab | manage_section | manage_fields | manage_subgrid | manage_library | manage_event | manage_navigation | manage_custom_control.\n" +
+                            $"Valid action families: manage_tab | manage_section | manage_fields | manage_subgrid | manage_library | manage_event | manage_navigation | manage_custom_control | manage_webresource.\n" +
                             $"Read docs://instructions_for_formxml for operation format and examples.");
                 }
                 if (previousIds != null)

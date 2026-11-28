@@ -64,6 +64,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Create a Quick Create form with action='create', form_type=7, form_name, and FormXML from the source form's detail result or a file\n" +
             "- Create a system dashboard with form_type=0, form_name, and formxml. Dashboard detail accepts form_id or a unique form_name match. Update and undo require form_id.\n" +
             "- Apply form operations via action=update (recommended: operations JSON) or raw formxml (advanced/undo)\n" +
+            "- Add, update, remove, or move HTML and image web resource controls in the form body with manage_webresource operations.\n" +
             "- Bind installed PCF controls to field or subgrid instances with manage_custom_control operations. Discover names and manifest parameters with get_custom_controls.\n" +
             "- Rename a form, or restore a form from a .formxml backup (undo) — the result's backupPath points to the pre-change backup; pass it as formxml to action='undo' to restore\n\n" +
             "RELATED TOOLS:\n" +

@@ -60,7 +60,7 @@ Call `manage_form` with tool-level `action='update'`. Inside the `operations` JS
 
 | Field | Meaning | Example |
 |-------|---------|---------|
-| `action` | Operation family | `"manage_subgrid"`, `"manage_fields"`, `"manage_tab"`, `"manage_section"`, `"manage_navigation"`, `"manage_custom_control"` |
+| `action` | Operation family | `"manage_subgrid"`, `"manage_webresource"`, `"manage_fields"`, `"manage_tab"`, `"manage_section"`, `"manage_navigation"`, `"manage_custom_control"` |
 | `manage_action` | Verb within that family | `"add"`, `"update"`, `"rename"`, `"move"`, `"remove"`, `"delete"` |
 
 Do not put verbs like `"add"` or `"remove"` in operation `action`.
@@ -332,6 +332,86 @@ When you disable the view picker or change the default view while the picker is 
   "control_id": "v4_invoice_invoiceline"
 }
 ```
+
+## manage_webresource Operation
+
+Pass these operation objects in the serialized `operations` JSON array of `manage_form(action="update")`. They place existing HTML or image web resources (PNG, JPG, GIF, ICO, SVG) in the body of an entity form. The operation resolves the unique name in Dataverse on add or replacement and writes `Url` and `WebResourceId`. The form is validated against `schema://formxml` before saving and publishing.
+
+### Add
+
+```json
+{
+  "action": "manage_webresource",
+  "manage_action": "add",
+  "tab": "General",
+  "section": "Preview",
+  "webresource_name": "abiz_/html/PreviewXtl.html",
+  "rowspan": 22,
+  "data": "mode=mapping&embedded=true",
+  "position": "last"
+}
+```
+
+`tab` and `section` accept a name or label. Supply the resource's unique name in `webresource_name`, `url`, or `webresource`. Pass `data` as plain text. XML serialization escapes characters such as `&`.
+
+| Optional property | Default or accepted values |
+|---|---|
+| `control_id` | Generated as `WebResource_<sanitized filename stem>`, with a numeric suffix when needed for uniqueness |
+| `label` | The resource's display name, or its filename |
+| `show_label` (alias `showlabel`) | `false` |
+| `rowspan`, `colspan` | Positive integers. Defaults are `10` rows and `1` column |
+| `visible`, `hide_on_phone` | `true`, `false` |
+| `data`, `preload` | An optional string and an optional boolean |
+| `pass_parameters`, `security`, `border`, `show_on_mobile_client` | `false` for each. `security: true` restricts cross-frame scripting |
+| `scrolling` | `auto` (default), `yes`, or `no` |
+| `position` | `first`, `last` (default), `before:<control_id>`, or `after:<control_id>`. An anchor must be in the destination section |
+
+Images can also use `alt_text`, `height` and `width` (nonnegative integers), and these FormXML values:
+
+- `size_type`: `StretchToFit`, `StretchMaintainAspectRatio`, `Original`, `Specific`
+- `horizontal_alignment`: `Left`, `Right`, `Center`, `NotSet`
+- `vertical_alignment`: `Top`, `Middle`, `Bottom`, `NotSet`
+
+### Update
+
+```json
+{
+  "action": "manage_webresource",
+  "manage_action": "update",
+  "control_id": "WebResource_PreviewXtl",
+  "data": "mode=detail&embedded=true",
+  "pass_parameters": true
+}
+```
+
+Only supplied properties are patched. With `control_id`, supply `webresource_name` to replace the resource and resolve its new ID. Without `control_id`, the name selects the existing resource when it appears exactly once in the body. The same rule for selection by name applies to remove and move. Use the layout and parameter properties from add to change the selected control's settings.
+
+### Remove
+
+```json
+{
+  "action": "manage_webresource",
+  "manage_action": "remove",
+  "webresource_name": "abiz_/html/PreviewXtl.html"
+}
+```
+
+`delete` is an alias for `remove`. Removing a control deletes its cell from the form. The Dataverse web resource can still be used elsewhere.
+
+### Move
+
+```json
+{
+  "action": "manage_webresource",
+  "manage_action": "move",
+  "control_id": "WebResource_PreviewXtl",
+  "target_tab": "Details",
+  "target_section": "Document Preview",
+  "position": "after:description"
+}
+```
+
+Supply `target_tab` and `target_section` by name or label to move across tabs. Omit `target_tab` to stay in the current tab. Omit both to reorder within the current section. If only `target_tab` is supplied, the destination tab must have a section with the source section's name. The control keeps its ID and settings.
 
 ## PCF custom controls on fields and subgrids
 

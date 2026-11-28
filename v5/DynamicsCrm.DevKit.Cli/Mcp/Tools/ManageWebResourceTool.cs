@@ -87,12 +87,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Naming: {prefix}_/path/filename.ext (e.g. 'v4_/entities/Account.form.js').\n\n" +
             "WHEN TO USE:\n" +
             "- Upload/update/inspect a web resource\n" +
-            "- Find library_name for build_form_xml add_event/add_library (run list first)\n" +
-            "- Combine with build_form_xml + manage_form to wire JS into a form\n" +
+            "- Find library_name for manage_form operations manage_event/manage_library (run list first)\n" +
+            "- Use manage_form to wire JS into a form or place an HTML or image web resource control in the form body\n" +
             "- Creating a JS web resource for view icons/tooltips → the function contract (rowData/{col}_Value, [imgName, tooltip] return) is in docs://instructions_for_views — read it first\n\n" +
             "RELATED TOOLS:\n" +
             "- get_solution_components → find solution names for create\n" +
-            "- manage_form → wire the JS library into a form\n" +
+            "- manage_form → wire JS libraries or place web resource controls on a form\n" +
             "- publish_customizations → publish other components (create/update auto-publish)")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             McpServer server,
