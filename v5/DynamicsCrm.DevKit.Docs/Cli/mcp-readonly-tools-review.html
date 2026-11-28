@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chiến lược gộp tool MCP theo hai phase · DynamicsCrm.DevKit</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172f33;
+      --muted: #496064;
+      --accent: #075e60;
+      --line: #cbd9d8;
+      --wash: #eef5f4;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #fafbf9; color: var(--ink); font: 16px/1.58 Inter, "Segoe UI", Arial, sans-serif; }
+    main { max-width: 68rem; margin: 0 auto; padding: 2.5rem clamp(1rem, 4vw, 3.75rem) 4rem; }
+    header { border-top: 4px solid var(--accent); padding-top: 1.15rem; }
+    h1, h2, h3, p, dl { margin: 0; }
+    h1, h2, h3 { text-wrap: balance; }
+    h1 { max-width: 16em; font: 600 clamp(2rem, 5vw, 3.8rem)/1.12 "Segoe UI", Arial, sans-serif; letter-spacing: -.04em; }
+    h2 { font-size: clamp(1.45rem, 3vw, 2.05rem); line-height: 1.22; letter-spacing: -.026em; }
+    h3 { margin: 1.15rem 0 .4rem; font-size: 1.08rem; line-height: 1.4; }
+    p + p, h2 + p { margin-top: .7rem; }
+    .context, .note { color: var(--muted); }
+    .context { margin-bottom: .9rem; font-size: .9rem; font-weight: 600; }
+    .intro { max-width: 51rem; margin-top: 1rem; font-size: 1.13rem; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; padding: 1.2rem 0; margin: 1.25rem 0 .5rem; border-block: 1px solid var(--line); }
+    .stats dt { font-size: .9rem; color: var(--muted); }
+    .stats dd { margin: .15rem 0 0; font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2; font-weight: 650; color: var(--accent); }
+    nav { display: flex; flex-wrap: wrap; gap: .3rem 1.2rem; margin: .8rem 0; }
+    a { color: var(--accent); text-underline-offset: .2em; }
+    a:focus-visible { outline: 3px solid #b7572a; outline-offset: 3px; }
+    section { margin-top: 2.85rem; scroll-margin-top: 1rem; }
+    code, pre { font-family: "Cascadia Mono", Consolas, monospace; font-size: .9em; }
+    code { overflow-wrap: anywhere; }
+    pre { border-left: 3px solid #71a6a4; margin: .4rem 0 0; padding: .85rem 1rem; background: var(--wash); white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.5; }
+    table { width: 100%; margin-top: .85rem; border-collapse: collapse; font-size: .95rem; }
+    caption { text-align: left; font-weight: 600; margin-bottom: .4rem; }
+    th, td { padding: .6rem .72rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+    thead th { background: var(--wash); color: #234e51; }
+    tbody th { font-weight: 500; }
+    .measure th:not(:first-child), .measure td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+    .map { margin-top: .4rem; table-layout: fixed; }
+    .map th, .map td { padding-block: .38rem; }
+    .group { border-top: 1px solid var(--line); margin-top: 1.2rem; }
+    .group h3 { color: var(--accent); }
+    .group p { font-size: .95rem; }
+    .example { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .example > div { min-width: 0; }
+    .note { font-size: .92rem; margin-top: .65rem; }
+    .review { background: var(--wash); border-left: 4px solid var(--accent); padding: 1.15rem 1.4rem; }
+    ul, ol { padding-left: 1.4rem; margin: .75rem 0 0; }
+    li + li { margin-top: .55rem; }
+    footer { margin-top: 2rem; border-top: 1px solid var(--line); padding-top: .8rem; font-size: .92rem; }
+    @media (max-width: 40rem) {
+      main { padding-top: 1.25rem; }
+      .stats { gap: .65rem; }
+      .stats dt { font-size: .8rem; }
+      .example { grid-template-columns: 1fr; gap: 0; }
+      th, td { padding: .45rem .35rem; }
+      .measure, .map { font-size: .86rem; }
+      .review { padding: .9rem 1rem; }
+      section { margin-top: 2rem; }
+      table[data-inventory] thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+      table[data-inventory], table[data-inventory] caption, table[data-inventory] tbody, table[data-inventory] tr,
+      table[data-inventory] tbody th, table[data-inventory] td { display: block; }
+      table[data-inventory] tbody tr { margin: .5rem 0 1rem; border-bottom: 1px solid var(--line); }
+      table[data-inventory] tbody th { background: var(--wash); font-weight: 600; }
+      table[data-inventory] td { border: 0; }
+      table[data-inventory] td code { display: inline-block; }
+    }
+    @media print {
+      body { background: white; color: #111; font-size: 10.5pt; }
+      main { max-width: none; padding: 0; }
+      nav { display: none; }
+      section { margin-top: 1.2rem; }
+      h2, h3, caption { break-after: avoid; }
+      tr, pre, .group, .review { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="context">DynamicsCrm.DevKit / CLI / MCP · Thiết kế chờ duyệt</p>
+    <h1>Gộp tool MCP theo hai phase</h1>
+    <p class="intro"><strong>Phase 1</strong> gộp 14 tên chỉ đọc thành 5 tool, thêm lối tra cột bên trong <code>inspect_customizations</code> và giữ <code>search_records</code> cho tìm kiếm theo từ khóa. <strong>Phase 2</strong> rà riêng 23 tool có khả năng ghi. Mốc 33 tool dưới đây là đích của Phase 1.</p>
+    <dl class="stats">
+      <div><dt>Tổng số tool</dt><dd>42 → 33</dd></div>
+      <div><dt>Tool chỉ đọc</dt><dd>19 → 10</dd></div>
+      <div><dt>Giảm sau Phase 1</dt><dd>21,4%</dd></div>
+    </dl>
+    <nav aria-label="Mục lục">
+      <a href="#columns">Bảng và cột</a>
+      <a href="#search">Tìm bản ghi</a>
+      <a href="#boundary">Read-only và dry-run</a>
+      <a href="#catalog">Phase 1</a>
+      <a href="#phase2">Phase 2</a>
+      <a href="#tokens">Token</a>
+      <a href="#clients">Migration</a>
+      <a href="#verification">Nghiệm thu</a>
+      <a href="#decision">Duyệt triển khai</a>
+    </nav>
+  </header>
+
+  <section id="columns">
+    <h2>Đọc cột ở đâu khi chỉ thấy <code>manage_column</code>?</h2>
+    <p>Hiện tại <code>get_tables()</code> liệt kê bảng. Khi truyền <code>entity_name</code>, cùng tool chuyển sang chế độ chi tiết và trả cột trong <code>table.attributes</code>. Vì thế catalog đã có chức năng đọc cột dù thiếu tên <code>get_columns</code>. Hai tool <code>manage_table</code> và <code>manage_column</code> phục vụ tạo hoặc cập nhật metadata ở hai cấp khác nhau.</p>
+    <table>
+      <caption>Chọn tool theo việc cần làm</caption>
+      <thead><tr><th scope="col">Nhu cầu</th><th scope="col">Hiện tại</th><th scope="col">Sau Phase 1</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Liệt kê bảng, đọc metadata của bảng và quan hệ</th><td><code>get_tables</code></td><td><code>inspect_customizations</code> với <code>topic="tables"</code></td></tr>
+        <tr><th scope="row">Liệt kê hoặc xem metadata cột của một bảng</th><td><code>get_tables</code> với <code>entity_name</code></td><td><code>inspect_customizations</code> với <code>topic="columns"</code> và <code>entity_name</code></td></tr>
+        <tr><th scope="row">Tạo hoặc cập nhật bảng</th><td><code>manage_table</code></td><td><code>manage_table</code></td></tr>
+        <tr><th scope="row">Tạo hoặc cập nhật cột</th><td><code>manage_column</code></td><td><code>manage_column</code></td></tr>
+      </tbody>
+    </table>
+    <h3>Thêm <code>topic="columns"</code> vào <code>inspect_customizations</code></h3>
+    <p>Nhánh mới giúp AI tìm được thao tác đọc cột ngay từ schema. Khi yêu cầu metadata đầy đủ để sao chép cột, phản hồi vẫn dùng <code>table.attributes</code> và lược các danh sách quan hệ, định nghĩa khóa của cả bảng. Lợi ích về kích thước phản hồi rõ nhất ở mức <code>full</code>. Mức <code>compact</code> hiện đã lược những danh sách này.</p>
+    <pre>{
+  "topic": "columns",
+  "entity_name": "account",
+  "filter": "address1_",
+  "detail_level": "full"
+}</pre>
+    <p class="note">Ví dụ trả các cột có tên logic bắt đầu bằng <code>address1_</code>. Bỏ <code>filter</code> để liệt kê các cột theo quy tắc của <code>get_tables</code>. <code>entity_name</code> bắt buộc, <code>detail_level</code> mặc định <code>compact</code> và <code>env</code> là tùy chọn. Nhánh dùng lại quy tắc lọc, gợi ý, phân giải bảng và kiểu dữ liệu từng cột. Lời gọi <code>topic="tables"</code> tiếp tục trả chi tiết bảng như trước. <a href="../../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetTablesTool.cs">Luồng đọc metadata</a> · <a href="../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageColumnTool.cs">Luồng tạo và cập nhật cột</a></p>
+  </section>
+
+  <section id="search">
+    <h2><code>search_records</code> nên tiếp tục đứng riêng</h2>
+    <table>
+      <thead><tr><th scope="col">Câu hỏi của AI</th><th scope="col">Lời gọi sau Phase 1</th><th scope="col">Kết quả cần đọc</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Bản ghi nào liên quan đến từ khóa “Contoso”?</th><td><code>search_records</code> với <code>{"search_term":"Contoso","top":5}</code></td><td>Kết quả từ chỉ mục Dataverse Search, có điểm phù hợp và phần khớp khi dịch vụ trả về.</td></tr>
+        <tr><th scope="row">Chỉ mục tìm kiếm đã sẵn sàng chưa?</th><td><code>search_records</code> với <code>{"action":"status"}</code></td><td>Trạng thái và thống kê dịch vụ. Caller có thể kiểm tra mà không cần từ khóa.</td></tr>
+        <tr><th scope="row">Lấy đúng các cột và điều kiện của truy vấn?</th><td><code>query_records</code> với <code>sql</code> hoặc <code>fetchxml</code></td><td>Dữ liệu theo truy vấn, với phân trang và giới hạn riêng của mỗi ngôn ngữ.</td></tr>
+      </tbody>
+    </table>
+    <p>Gộp cả search chỉ tiết kiệm thêm một tên. Riêng tool này hiện chiếm 427 token cho tên, mô tả và input schema, hoặc 1.038 token khi tính đầy đủ descriptor. Một phần hợp đồng này vẫn phải xuất hiện trong tool thay thế. Client trước đây được phép tìm từ khóa có thể nhận thêm quyền chạy SQL và FetchXML nếu allowlist vận hành theo tên tool.</p>
+    <p>Mức <code>compact</code> của search phục vụ tra cứu thường ngày. Với <code>full</code>, cả <code>search</code> lẫn <code>status</code> có thể lưu kết quả chi tiết đã xử lý vào <code>.devkit/search_records/</code> và trả <code>filePath</code>. Trong dry-run, hai chế độ vẫn đọc Dataverse, giữ chi tiết trong phản hồi và bỏ bước ghi file. <a href="../../DynamicsCrm.DevKit.Cli/Mcp/Tools/SearchRecordsTool.cs">Xử lý search, status và file kết quả</a></p>
+  </section>
+
+  <section id="boundary">
+    <h2>Phân biệt quyền đọc với chính sách <code>--dry-run</code></h2>
+    <table>
+      <thead><tr><th scope="col">Cần xem ở cấp nào?</th><th scope="col">Quyết định thiết kế</th><th scope="col">Ví dụ</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Tool công khai</th><td><code>ReadOnly=true</code> khi các nhánh đều đọc Dataverse. Chỉ cần có nhánh thay đổi Dataverse thì cả entry khai báo <code>ReadOnly=false</code>.</td><td><code>search_records</code> dùng HTTP POST cho truy vấn chỉ mục. <code>execute_webapi</code> hỗ trợ cả GET và các phương thức ghi.</td></tr>
+        <tr><th scope="row">Thao tác và môi trường</th><td>Catalog và annotation giữ nguyên khi bật dry-run. Policy của môi trường được chọn quyết định xử lý thao tác ở thời điểm gọi. Giữ quy tắc validation, preview và chặn ghi của từng worker.</td><td><code>execute_webapi</code> có thể đọc bằng GET. Đối với yêu cầu ghi hợp lệ trong dry-run, kiểm tra chặn trước transport và kết quả dry-run tương ứng.</td></tr>
+        <tr><th scope="row">File trong workspace</th><td>Ghi riêng tác động cục bộ trong hợp đồng và test từng nhánh.</td><td>Search <code>full</code> bỏ ghi file trong dry-run. Thao tác tải plugin vẫn có thể tạo DLL hoặc package tại <code>.devkit/get_plugins/</code>.</td></tr>
+      </tbody>
+    </table>
+    <p>Để AI chọn đúng, mỗi hướng dẫn cần nêu việc cần làm và tool thích hợp. Các thao tác <code>list</code> hoặc <code>detail</code> của một tool hỗn hợp có thể ở cạnh luồng chỉnh sửa tương ứng. Tách bản sao cho mọi thao tác đọc sẽ tăng số đường gọi và làm khó các client quản lý quyền theo tên. <a href="../../DynamicsCrm.DevKit.Cli.UnitTests/Cli/Mcp/CrossTool/DryRunGatewayContractTests.cs">Hợp đồng dry-run và danh sách 23 tool</a></p>
+  </section>
+
+  <section id="tokens">
+    <h2>Phần nào đang chiếm token?</h2>
+    <p><code>devkit mcp --tools</code> liệt kê tên và tiêu đề. Client MCP nhận thêm mô tả, kiểu đầu vào và schema kết quả qua <code>tools/list</code>. Bảng dưới đã được đo lại trên CLI cài đặt phiên bản <code>4.44.44.44</code>, build <code>28.11.2026 11:11:10</code>. Catalog có 42 tool và descriptor trùng với lần đo build ngày 27/11.</p>
+    <table class="measure">
+      <caption>Baseline offline · đơn vị token theo <code>o200k_base</code></caption>
+      <thead><tr><th scope="col">Nội dung serialize</th><th scope="col">Cả 42 tool</th><th scope="col">14 tool sẽ gộp</th></tr></thead>
+      <tbody>
+        <tr><th scope="row"><code>name</code>, <code>description</code>, <code>inputSchema</code></th><td><strong>26.504</strong></td><td>5.568</td></tr>
+        <tr><th scope="row">Descriptor đầy đủ, gồm cả <code>outputSchema</code></th><td><strong>47.894</strong></td><td>15.873</td></tr>
+      </tbody>
+    </table>
+    <table class="measure">
+      <caption>Chi phí của các tool hiện tại trong từng nhóm đề xuất</caption>
+      <thead><tr><th scope="col">Nhóm</th><th scope="col">Tên, mô tả, input</th><th scope="col">Descriptor đầy đủ</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Truy vấn bản ghi</th><td>597</td><td>818</td></tr>
+        <tr><th scope="row">Metadata và thành phần giải pháp</th><td>1.089</td><td>2.960</td></tr>
+        <tr><th scope="row">Plugin và SDK message</th><td>1.120</td><td>3.854</td></tr>
+        <tr><th scope="row">Quy trình và quy tắc</th><td>1.636</td><td>6.199</td></tr>
+        <tr><th scope="row">Nhật ký và lịch sử</th><td>1.142</td><td>2.058</td></tr>
+      </tbody>
+    </table>
+    <p class="note">Mỗi hàng được đếm với một object <code>{"tools":[…]}</code> riêng. Vì thế cộng năm hàng sẽ có chênh lệch nhỏ so với đếm cả 14 tool cùng lúc.</p>
+    <p>Nhóm automation chiếm nhiều token nhất trong năm nhóm. Bốn tool của nhóm lặp lại các trường như <code>env</code>, <code>status</code> và <code>max_records</code>. Gộp phần mô tả chung giúp thu nhỏ catalog. Mặc định của từng thao tác vẫn cần được ghi rõ.</p>
+    <p>14 tool chiếm khoảng 21% số token của phép đo đầu vào. Năm schema mới vẫn có chi phí. Mức tiết kiệm sẽ được công bố sau khi đo artifact đã sửa. Chi phí mỗi cuộc hội thoại còn phụ thuộc client nạp những tool nào và khi nào AI đọc thêm hướng dẫn.</p>
+    <h3>Cách tái lập phép đo</h3>
+    <ol>
+      <li>Dùng assembly CLI đã cài và MCP SDK <code>2.4.0</code>. Đăng ký tool như host bằng <code>WithToolsFromAssembly</code>, lấy <code>ToolCollection</code> và <code>ProtocolTool</code> ngay trong bộ nhớ. Bước này chạy offline.</li>
+      <li>Sắp tên theo ordinal. Đóng gói từng tập trong <code>{"tools":[…]}</code>. Đo một lượt với toàn bộ thuộc tính, một lượt chỉ lấy <code>name</code>, <code>description</code>, <code>inputSchema</code> theo thứ tự này.</li>
+      <li>Serialize JSON gọn bằng UTF-8, giữ nguyên Unicode và thứ tự thuộc tính. Đếm bằng <code>tiktoken 0.12.0</code> với <code>o200k_base</code>. Áp dụng cùng cách cho 42 tool và riêng 14 tool. Khi có bản mới, so sánh 42 với 33 và 14 với 5.</li>
+    </ol>
+  </section>
+
+  <section id="catalog">
+    <h2>Phase 1 · Catalog chỉ đọc</h2>
+    <p>Review cả 19 tool chỉ đọc. Bảng bên dưới chuyển 14 tên hiện có sang 5 tool. Trong 5 tool mới có 15 nhánh, gồm 14 nhánh tương thích và một nhánh đọc cột. Năm tool chỉ đọc tiếp tục mang tên riêng. Các tham số nghiệp vụ cũ vẫn ở cấp trên cùng của JSON. Bốn tool <code>inspect_*</code> dùng <code>topic</code> vì <code>action</code>, <code>operation</code> và <code>kind</code> đã có ý nghĩa trong các nhánh.</p>
+
+    <article class="group">
+      <h3><code>query_records</code> · Truy vấn bản ghi</h3>
+      <p>Chọn đúng một ngôn ngữ qua trường truy vấn. Hai nhánh dùng chung <code>max_records</code>, <code>get_all</code> và <code>env</code>. Tìm kiếm theo mức độ liên quan dùng <code>search_records</code>.</p>
+      <table class="map" aria-label="Chuyển đổi công cụ truy vấn"><thead><tr><th scope="col">Tên hiện tại</th><th scope="col">Đầu vào để chọn nhánh</th></tr></thead><tbody>
+        <tr><th scope="row"><code>execute_fetchxml</code></th><td><code>fetchxml</code> chứa tài liệu FetchXML</td></tr>
+        <tr><th scope="row"><code>execute_sql</code></th><td><code>sql</code> chứa câu lệnh SELECT</td></tr>
+      </tbody></table>
+    </article>
+    <article class="group">
+      <h3><code>inspect_customizations</code> · Metadata và thành phần giải pháp</h3>
+      <p>Tra metadata trước khi viết truy vấn, xem thành phần của solution hoặc tìm PCF tương thích trước khi gắn vào form. Ngoài ba tên được chuyển trong bảng, <a href="#columns"><code>topic="columns"</code> đọc riêng cột của một bảng</a>.</p>
+      <table class="map" aria-label="Chuyển đổi công cụ metadata"><thead><tr><th scope="col">Tên hiện tại</th><th scope="col">Giá trị <code>topic</code></th></tr></thead><tbody>
+        <tr><th scope="row"><code>get_tables</code></th><td><code>tables</code></td></tr>
+        <tr><th scope="row"><code>get_solution_components</code></th><td><code>solution_components</code></td></tr>
+        <tr><th scope="row"><code>get_custom_controls</code></th><td><code>custom_controls</code></td></tr>
+      </tbody></table>
+    </article>
+    <article class="group">
+      <h3><code>inspect_extensions</code> · Plugin và SDK message</h3>
+      <p>Tra đăng ký plugin và message. Nhánh plugin giữ chế độ tải assembly hoặc package về workspace khi caller yêu cầu <code>download=true</code>.</p>
+      <table class="map" aria-label="Chuyển đổi công cụ plugin và SDK"><thead><tr><th scope="col">Tên hiện tại</th><th scope="col">Giá trị <code>topic</code></th></tr></thead><tbody>
+        <tr><th scope="row"><code>get_plugins</code></th><td><code>plugins</code></td></tr>
+        <tr><th scope="row"><code>get_messages</code></th><td><code>messages</code></td></tr>
+      </tbody></table>
+    </article>
+    <article class="group">
+      <h3><code>inspect_automation</code> · Quy trình và quy tắc</h3>
+      <p>Đọc bốn loại automation. Cloud flow tiếp tục có <code>action</code> riêng để chuyển từ danh sách flow sang lịch sử chạy.</p>
+      <table class="map" aria-label="Chuyển đổi công cụ automation"><thead><tr><th scope="col">Tên hiện tại</th><th scope="col">Giá trị <code>topic</code></th></tr></thead><tbody>
+        <tr><th scope="row"><code>get_flows</code></th><td><code>flows</code></td></tr>
+        <tr><th scope="row"><code>get_workflows</code></th><td><code>workflows</code></td></tr>
+        <tr><th scope="row"><code>get_business_rules</code></th><td><code>business_rules</code></td></tr>
+        <tr><th scope="row"><code>get_business_process_flows</code></th><td><code>business_process_flows</code></td></tr>
+      </tbody></table>
+    </article>
+    <article class="group">
+      <h3><code>inspect_diagnostics</code> · Nhật ký và lịch sử</h3>
+      <p>Chọn nguồn bằng <code>topic</code> để đọc trace, tình trạng tác vụ nền hoặc lịch sử audit. Các bộ lọc theo thời gian và trạng thái có mặc định riêng theo nguồn.</p>
+      <table class="map" aria-label="Chuyển đổi công cụ chẩn đoán"><thead><tr><th scope="col">Tên hiện tại</th><th scope="col">Giá trị <code>topic</code></th></tr></thead><tbody>
+        <tr><th scope="row"><code>get_plugin_trace_logs</code></th><td><code>plugin_trace_logs</code></td></tr>
+        <tr><th scope="row"><code>get_system_jobs</code></th><td><code>system_jobs</code></td></tr>
+        <tr><th scope="row"><code>get_audit_history</code></th><td><code>audit_history</code></td></tr>
+      </tbody></table>
+    </article>
+    <h3>Ví dụ chuyển một lời gọi đang dùng</h3>
+    <div class="example">
+      <div><p class="note">Trước · <code>get_flows</code></p><pre>{
+  "action": "runs",
+  "flow_id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+  "max_records": 10
+}</pre></div>
+      <div><p class="note">Sau · <code>inspect_automation</code></p><pre>{
+  "topic": "flows",
+  "action": "runs",
+  "flow_id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+  "max_records": 10
+}</pre></div>
+    </div>
+    <p class="note">Với <code>execute_sql</code>, một script gửi <code>{"sql":"SELECT name FROM account","max_records":10}</code> chỉ cần đổi tên tool thành <code>query_records</code>. Payload và cách đọc <code>rows</code> giữ nguyên.</p>
+    <h3>Vì sao 5 tool tiếp tục có tên riêng?</h3>
+    <ul>
+      <li><code>search_records</code> tìm theo mức độ liên quan và kiểm tra trạng thái dịch vụ tìm kiếm. Gộp thêm chỉ giảm được một tên, đồng thời đưa cả hai chế độ vào schema truy vấn.</li>
+      <li><code>connection_list</code> đọc danh sách kết nối cùng chính sách từ cấu hình. <code>whoami</code> truy vấn danh tính ở môi trường đã chọn. Hai câu hỏi cần hai nguồn dữ liệu khác nhau.</li>
+      <li><code>parse_record_url</code> nhận URL bản ghi. <code>read_instruction</code> đọc hướng dẫn hoặc schema theo tên. Cả hai là lối vào ngắn, dễ tìm ngay từ tên tool.</li>
+    </ul>
+  </section>
+
+  <section id="phase2">
+    <h2>Phase 2 · Rà 23 tool có khả năng ghi</h2>
+    <p>Sau khi nghiệm thu Phase 1, xét các tool này theo nghiệp vụ, action, quyền client và tác động thực tế. Một tool hỗn hợp vẫn có thể thực hiện thao tác đọc hợp lệ. Ví dụ, <code>manage_record</code> cho đọc một bản ghi hoặc liệt kê solution chứa nó, đồng thời cho phép cập nhật và xóa.</p>
+    <table data-inventory="phase2">
+      <caption>Phạm vi review và hướng xử lý đề xuất</caption>
+      <thead><tr><th scope="col">Nghiệp vụ</th><th scope="col">Tool trong catalog</th><th scope="col">Hướng xử lý</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Schema · 4</th><td><code>manage_table</code>, <code>manage_column</code>, <code>manage_relationship</code>, <code>manage_choice</code></td><td>Giữ đường ghi riêng theo đối tượng. Nhánh đọc cột ở Phase 1 đã giải quyết việc tìm metadata. Tạo bảng, sửa công thức cột và xóa quan hệ có bộ tham số và quyền khác nhau.</td></tr>
+        <tr><th scope="row">Dữ liệu · 5</th><td><code>manage_record</code>, <code>upsert_records</code>, <code>manage_record_file</code>, <code>manage_deleted_records</code>, <code>generate_demo_data</code></td><td>Phân biệt CRUD đơn lẻ, ghi theo lô, file, khôi phục bản ghi và sinh dữ liệu. Giữ hợp đồng kết quả từng phần của thao tác theo lô.</td></tr>
+        <tr><th scope="row">Ứng dụng và giao diện · 7</th><td><code>manage_app</code>, <code>manage_form</code>, <code>manage_view</code>, <code>manage_chart</code>, <code>manage_ribbon</code>, <code>manage_command</code>, <code>manage_webresource</code></td><td>Ưu tiên so sánh view và chart ở bước thử nghiệm phía dưới. Giữ phân biệt classic ribbon và modern command để AI chọn đúng công nghệ.</td></tr>
+        <tr><th scope="row">Mở rộng nền tảng · 2</th><td><code>manage_custom_api</code>, <code>manage_function</code></td><td>Giữ hợp đồng định nghĩa Custom API và hợp đồng Power Fx riêng.</td></tr>
+        <tr><th scope="row">Tác vụ chuyên biệt · 5</th><td><code>manage_role</code>, <code>manage_environment_variable</code>, <code>manage_report</code>, <code>execute_webapi</code>, <code>publish_customizations</code></td><td>Giữ quyền cấp riêng cho bảo mật, cấu hình, báo cáo, HTTP tổng quát và publish. Review chỉ dẫn gọi đúng tool cho từng nghiệp vụ.</td></tr>
+      </tbody>
+    </table>
+    <h3>Thử nghiệm đầu tiên: view và chart</h3>
+    <p><code>manage_view</code> và <code>manage_chart</code> cùng có bảy action <code>list</code>, <code>detail</code>, <code>create</code>, <code>update</code>, <code>rename</code>, <code>set_default</code> và <code>undo</code>. Hai descriptor hiện chiếm <strong>1.866 token</strong> cho tên, mô tả, input schema và <strong>2.894 token</strong> cho descriptor đầy đủ. Đây là chi phí trước khi gộp.</p>
+    <p>Dựng và so sánh phương án giữ hai tool với một entry có kiểu trong môi trường offline. View dùng FetchXML và LayoutXML, còn chart có cấu hình dữ liệu và trình bày biểu đồ. <code>undo</code> của view dùng cặp file XML, còn chart khôi phục từ file <code>.chart.json</code>. Một allowlist trước đây chỉ cho sửa view có thể mở thêm quyền sửa chart khi gộp.</p>
+    <p>Chỉ đề nghị chuyển tên sau khi cả hai phép đo token giảm, các ca đọc/ghi/dry-run/undo/publish giữ đúng kết quả và chủ repo duyệt tác động quyền. Nếu giữ riêng thì tổng tiếp tục là <strong>33</strong>. Nếu duyệt gộp duy nhất cặp này sau Phase 1 thì còn <strong>32</strong>. <a href="../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageViewTool.cs">Hợp đồng view</a> · <a href="../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageChartTool.cs">Hợp đồng chart</a></p>
+  </section>
+
+  <section id="clients">
+    <h2>Client cần đổi gì?</h2>
+    <p>Đây là thay đổi tên công khai. Khi triển khai, catalog mới thay trực tiếp 14 tên trong bảng. Chủ client cần cập nhật prompt, script, danh sách tool cho phép và làm mới catalog đã cache. Các tham số vẫn có kiểu trong input schema để AI có thể thực hiện lượt gọi thông thường ngay sau khi khám phá tool.</p>
+    <h3>Quyền theo tên tool</h3>
+    <p>Client chỉ cho phép <code>get_plugin_trace_logs</code> sẽ mở quyền gọi thêm nhánh <code>system_jobs</code> và <code>audit_history</code> nếu cho phép toàn bộ <code>inspect_diagnostics</code>. Dùng bảng chuyển đổi ở trên để review từng nhóm trước khi cập nhật allowlist. Nếu client lọc được tham số, có thể giới hạn <code>topic</code> ở phạm vi đã duyệt. Quyền truy cập dữ liệu thực tế vẫn do Dataverse kiểm tra theo danh tính của kết nối.</p>
+    <h3>Những hành vi cần giữ ở từng nhánh</h3>
+    <ul>
+      <li><strong>Đầu ra.</strong> FetchXML trả <code>records</code> và <code>totalReturned</code>, SQL trả <code>rows</code> và <code>row_count</code>. Mỗi tool mới mô tả các kiểu kết quả tương ứng bằng <code>anyOf</code> dưới root <code>object</code>. Worker trả trực tiếp text, JSON có cấu trúc và cờ <code>IsError</code> cho client.</li>
+      <li><strong>Mặc định và giới hạn.</strong> Audit mặc định <code>minutes_ago=1440</code>, trace log nhận <code>0</code> và lấy 60 phút gần nhất ở chế độ danh sách. FetchXML hạ <code>max_records</code> vượt ngưỡng về 5.000, còn SQL trả lỗi khi vượt 50.000. Gán mặc định sau khi chọn nhánh.</li>
+      <li><strong>Môi trường và workspace.</strong> Mỗi lời gọi chọn <code>env</code> một lần. Tải plugin vẫn dùng MCP roots hoặc thư mục làm việc của server, ghi vào <code>.devkit/get_plugins/</code> và trả đường dẫn cùng checksum. Annotation chỉ đọc mô tả thao tác với Dataverse trong trường hợp này.</li>
+      <li><strong>Hướng dẫn cho AI.</strong> Đổi tên trong mô tả, thông báo gợi ý, resource và bài test gọi tool. Giữ URI <code>docs://</code> và <code>schema://</code> để client đọc trực tiếp hoặc qua <code>read_instruction</code>.</li>
+    </ul>
+  </section>
+
+  <section id="verification">
+    <h2>Nghiệm thu theo từng phase</h2>
+    <ol>
+      <li><strong>Catalog.</strong> SDK và CLI đã cài cùng công bố đúng 33 tên duy nhất. Có 10 tool read-only, 23 tool còn lại và 31 tool nhận <code>env</code>. Đối chiếu theo tên để bắt cả trường hợp thiếu tool và trùng đăng ký.</li>
+      <li><strong>Hợp đồng Phase 1.</strong> So sánh đủ 14 nhánh kế thừa. Test riêng nhánh thứ 15 <code>columns</code> với danh sách, lọc tiền tố, gợi ý khi không khớp, bảng trùng tên, metadata cột <code>full</code> và các collection quan hệ/khóa được lược bỏ. Kiểm tra <code>search_records</code> cho cả <code>search</code> và <code>status</code>, chế độ compact/full, bật và tắt dry-run. Đối chiếu cả file và dữ liệu inline.</li>
+      <li><strong>Token.</strong> Đếm lại trên CLI đã cài. Ghi cả số trước/sau, phần trăm giảm cho hai phép đo toàn catalog và chi phí của 5 descriptor thay thế. Cả hai tổng phải thấp hơn baseline.</li>
+      <li><strong>Artifact.</strong> Build CLI, chạy focused tests <code>net10.0</code>, đóng gói và cài bằng skill release CLI. Kiểm tra lại <code>devkit mcp --tools</code>, phiên bản, placeholder ngày build và diff. Nhóm kiểm thử MCP thực hiện lượt live theo quy ước repo.</li>
+      <li><strong>Quyết định Phase 2.</strong> Lấy artifact đã nghiệm thu ở Phase 1 làm baseline. Ghi số đo hai phương án cho view/chart, ma trận action, quyền mới của client, bằng chứng test file, lỗi, dry-run và publish. Trình kết quả để duyệt riêng trước khi đổi catalog ghi.</li>
+    </ol>
+    <p class="note">Đã thấy một test cũ chốt 41 tool, trong khi catalog và test discovery đã là 42. Khi triển khai, thay kỳ vọng bằng bộ tên đích và đối chiếu với SDK thật. <a href="../../DynamicsCrm.DevKit.Cli.UnitTests/Cli/Mcp/Infrastructure/McpMultiConnectionTests.cs">Test multi-connection</a> · <a href="../../DynamicsCrm.DevKit.Cli.UnitTests/Cli/Mcp/Infrastructure/McpServerHostCoverageTests.cs">Test discovery</a></p>
+  </section>
+
+  <section id="decision" class="review">
+    <h2>Nội dung cần duyệt</h2>
+    <p><strong>Phase 1.</strong> Duyệt năm tên mới, nhánh <code>columns</code> trong <code>inspect_customizations</code>, việc giữ <code>search_records</code> riêng, rút 14 tên cũ và các tiêu chí nghiệm thu. AI chỉ bắt đầu sửa mã MCP sau khi chủ repo duyệt phase này.</p>
+    <p><strong>Phase 2.</strong> Review đủ 23 tool theo bảng trên và trình kết quả so sánh view/chart. Chủ repo quyết định riêng việc triển khai hoặc giữ hai tên. Hai phase cùng dùng chính sách <code>--dry-run</code> hiện hành.</p>
+    <p><a href="mcp-readonly-tools-implementation.md">Mở hướng dẫn triển khai cho AI (.md)</a></p>
+  </section>
+  <footer>
+    Mã nguồn dùng để đối chiếu · <a href="../../DynamicsCrm.DevKit.Cli/Mcp/McpServerHost.cs">Đăng ký tool và resource</a> · <a href="../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ReadInstructionTool.cs">Đọc hướng dẫn</a> · <a href="../../DynamicsCrm.DevKit.Cli/Mcp/McpToolInvocation.cs">Chọn kết nối theo lời gọi</a>
+  </footer>
+</main>
+</body>
+</html>
