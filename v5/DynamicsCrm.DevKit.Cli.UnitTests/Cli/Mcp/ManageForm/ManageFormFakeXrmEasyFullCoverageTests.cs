@@ -32,7 +32,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.ManageForm;
 /// </summary>
 [TestClass]
 [DoNotParallelize]
-public sealed class ManageFormFakeXrmEasyFullCoverageTests
+public sealed partial class ManageFormFakeXrmEasyFullCoverageTests
 {
     private static readonly string OrigCwd = Environment.CurrentDirectory;
     private string _tempDir = null!;
