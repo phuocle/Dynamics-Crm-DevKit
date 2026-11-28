@@ -694,7 +694,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 
             existingLib.Remove();
 
-            if (!formLibraries.HasElements)
+            if (formLibraries.Element("Library") == null)
                 formLibraries.Remove();
 
             var summary = $"remove_library: \"{libraryName}\" removed";
@@ -814,34 +814,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             var libraryName = GetStringProp(op, "library_name", "library", "libraryName");
             var target = FormXmlHelpers.GetStringProp(op, "target") ?? "form";
 
-            XElement targetElement;
-            if (target.StartsWith("field:", StringComparison.OrdinalIgnoreCase))
-            {
-                targetElement = formDoc.Root;
-            }
-            else if (target.StartsWith("tab:", StringComparison.OrdinalIgnoreCase))
+            var attributeName = target.StartsWith("field:", StringComparison.OrdinalIgnoreCase)
+                ? target.Substring(6).Trim()
+                : null;
+            var targetElement = formDoc.Root;
+            if (target.StartsWith("tab:", StringComparison.OrdinalIgnoreCase))
             {
                 var tabName = target.Substring(4).Trim();
                 targetElement = FormXmlHelpers.FindTab(formDoc, tabName)
                     ?? throw new InvalidOperationException(
                         $"Tab '{tabName}' not found. Available tabs: {string.Join(", ", FormXmlHelpers.GetTabNames(formDoc))}");
             }
-            else
-            {
-                targetElement = formDoc.Root;
-            }
 
             var eventsElement = targetElement.Element("events");
-            if (eventsElement == null)
-                return $"remove_event: no events element found on {target} — nothing to remove";
+            var eventElement = eventsElement == null ? null : FormXmlHelpers.FindEvent(eventsElement, eventName, attributeName);
+            if (eventElement == null && attributeName != null)
+                eventElement = FindNestedFieldEvent(formDoc, eventName, attributeName);
 
-            string attributeName = null;
-            if (target.StartsWith("field:", StringComparison.OrdinalIgnoreCase))
-                attributeName = target.Substring(6).Trim();
-
-            var eventElement = FormXmlHelpers.FindEvent(eventsElement, eventName, attributeName);
             if (eventElement == null)
             {
+                if (eventsElement == null)
+                    return $"remove_event: no events element found on {target} — nothing to remove";
+
                 var targetDesc = target == "form" ? "form" : target;
                 return $"remove_event: event \"{eventName}\" not found on {targetDesc}";
             }
@@ -873,27 +867,51 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 
                 matchingHandler.Remove();
 
-                if (!handlersElement.HasElements)
+                if (handlersElement.Element("Handler") == null)
                 {
                     handlersElement.Remove();
-                    if (!eventElement.HasElements && eventElement.Attributes().All(a => a.Name == "name" || a.Name == "application" || a.Name == "active" || a.Name == "eventType" || a.Name == "attribute"))
-                        eventElement.Remove();
+                    RemoveEventElement(eventElement);
                 }
 
                 var targetDescription = target == "form" ? "form" : target;
                 return $"remove_event: handler \"{functionName}\" removed from \"{eventName}\" ({targetDescription})";
             }
 
-            eventElement.Remove();
-
-            if (!eventsElement.HasElements)
-                eventsElement.Remove();
+            RemoveEventElement(eventElement);
 
             var desc = target == "form" ? "form" : target;
             return $"remove_event: entire \"{eventName}\" event removed from {desc}";
         }
 
         // ── Internal Helpers ─────────────────────────────────────────────────────
+
+        private static void RemoveEventElement(XElement eventElement)
+        {
+            var eventsElement = eventElement.Parent;
+            eventElement.Remove();
+            if (eventsElement.Element("event") == null)
+                eventsElement.Remove();
+        }
+
+        private static XElement FindNestedFieldEvent(XDocument formDoc, string eventName, string attributeName)
+        {
+            var controls = formDoc.Descendants("control").Where(control =>
+                string.Equals(control.Attribute("datafieldname")?.Value, attributeName, StringComparison.OrdinalIgnoreCase));
+
+            foreach (var control in controls)
+            {
+                var cell = control.Parent?.Name == "cell" ? control.Parent : null;
+                foreach (var eventsElement in control.Elements("events").Concat(cell?.Elements("events") ?? []))
+                {
+                    var eventElement = FormXmlHelpers.FindEvent(eventsElement, eventName, attributeName)
+                        ?? FormXmlHelpers.FindEvent(eventsElement, eventName, null);
+                    if (eventElement != null)
+                        return eventElement;
+                }
+            }
+
+            return null;
+        }
 
         private static (bool added, string libraryUniqueId) EnsureLibrary(XDocument formDoc, string libraryName)
         {

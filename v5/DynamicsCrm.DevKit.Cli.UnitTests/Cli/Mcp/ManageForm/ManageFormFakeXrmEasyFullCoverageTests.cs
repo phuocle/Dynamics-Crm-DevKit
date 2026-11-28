@@ -1255,6 +1255,69 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
+    [DataRow("form", "form", "onload")]
+    [DataRow("tab", "tab:tab_general", "ontabstatechange")]
+    [DataRow("control", "field:name", "onchange")]
+    [DataRow("cell", "field:name", "onchange")]
+    public async Task Update_Operations_RemoveLastEventHandler_SavesSchemaValidFormXml(string scope, string target, string eventName)
+    {
+        var document = XDocument.Parse(ValidFormXml.Replace("<rows />", """
+            <rows><row><cell><control id="name" datafieldname="name" /></cell></row></rows>
+            """));
+        document.Descendants(scope).Single().Add(XElement.Parse($$"""
+            <events><!-- Event registrations --><event name="{{eventName}}"><Handlers>
+              <Handler functionName="Account.handleEvent" libraryName="new_/account.js"
+                handlerUniqueId="{0741E9D2-CD1C-4F87-A2C9-3CC3703886C3}" />
+            </Handlers></event></events>
+            """));
+        document.Root!.Add(XElement.Parse("""
+            <formLibraries><Library name="new_/account.js" libraryUniqueId="{82C3E1F6-9895-4A2E-9E71-47FB0F08910E}" /></formLibraries>
+            """));
+        var id = SeedForm("Event Form", formXml: document.ToString());
+
+        var result = await NewTool().manage_form(null!, "update", "account", form_id: id.ToString(), operations: $$"""
+            [{"action":"manage_event","manage_action":"remove","event_name":"{{eventName}}",
+              "function_name":"Account.handleEvent","library_name":"new_/account.js","target":"{{target}}"}]
+            """);
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var saved = ReadSavedFormXml(id);
+        Assert.IsNull(saved.Descendants(scope).Single().Element("events"));
+        Assert.AreEqual("new_/account.js", (string?)saved.Root!.Element("formLibraries")?.Element("Library")?.Attribute("name"));
+    }
+
+    [TestMethod]
+    public async Task Update_Operations_RemoveLastLibrary_SavesSchemaValidFormXml()
+    {
+        var document = XDocument.Parse(ValidFormXml);
+        document.Root!.Add(XElement.Parse("""
+            <formLibraries><!-- Registered scripts -->
+              <Library name="new_/account.js" libraryUniqueId="{82C3E1F6-9895-4A2E-9E71-47FB0F08910E}" />
+            </formLibraries>
+            """));
+        var id = SeedForm("Library Form", formXml: document.ToString());
+
+        var result = await NewTool().manage_form(null!, "update", "account", form_id: id.ToString(), operations: """
+            [{"action":"manage_library","manage_action":"remove","library_name":"new_/account.js"}]
+            """);
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        Assert.IsNull(ReadSavedFormXml(id).Root!.Element("formLibraries"));
+    }
+
+    private XDocument ReadSavedFormXml(Guid id)
+    {
+        Assert.AreEqual(1, _service.Updates);
+        var updated = _ctx.GetOrganizationService().Retrieve("systemform", id, new ColumnSet("formxml"));
+        var document = XDocument.Parse(updated.GetAttributeValue<string>("formxml"));
+        var getSchemaSet = typeof(ManageFormTool).GetMethod("GetSchemaSet", BindingFlags.NonPublic | BindingFlags.Static)!;
+        var schemas = (XmlSchemaSet)getSchemaSet.Invoke(null, null)!;
+        Assert.IsTrue(schemas.Count > 0);
+        document.Validate(schemas, null);
+        return document;
+    }
+
+    [TestMethod]
     public async Task Update_Operations_DryRun_NoMutationNoBackup()
     {
         var id = SeedForm("Dry Form");
