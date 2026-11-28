@@ -45,7 +45,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                 var cells = new System.Collections.Generic.List<XElement>();
                 foreach (var fieldEl in fields)
                 {
-                    var (fieldName, fieldLabel, disabled, fieldVisible, colspan, rowspan, fieldShowlabel, hideOnPhoneField) = FormFieldMetadata.ParseFieldSpec(fieldEl);
+                    var (fieldName, fieldLabel, disabled, fieldVisible, colspan, rowspan, fieldShowlabel, hideOnPhoneField, lockLevel) = FormFieldMetadata.ParseFieldSpec(fieldEl);
                     var attr = attrMap[fieldName];
                     fieldName = FormXmlHelpers.CorrectFieldName(fieldName, attr);
                     var classid = FormXmlHelpers.ResolveClassId(attr);
@@ -56,7 +56,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                         ?? fieldName;
 
                     var controlId = FormXmlHelpers.DeduplicateControlId(fieldName, existingControlIds);
-                    cells.Add(BuildCellElement(controlId, fieldName, resolvedLabel, classid, disabled, fieldVisible, colspan, rowspan, fieldShowlabel, hideOnPhoneField));
+                    cells.Add(BuildCellElement(controlId, fieldName, resolvedLabel, classid, disabled, fieldVisible, colspan, rowspan, fieldShowlabel, hideOnPhoneField, lockLevel));
                 }
 
                 var rows = FormXmlHelpers.BuildRows(cells, sectionColumns);
@@ -69,12 +69,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
         }
 
         public XElement BuildCellElement(string controlId, string fieldName, string label, string classid,
-            bool disabled, bool visible, int colspan, int rowspan, bool showlabel, bool hideOnPhone)
+            bool disabled, bool visible, int colspan, int rowspan, bool showlabel, bool hideOnPhone, int lockLevel)
         {
             var cell = new XElement("cell",
                 new XAttribute("id", FormXmlHelpers.NewGuid()),
                 new XAttribute("showlabel", showlabel ? "true" : "false"),
-                new XAttribute("locklevel", "0"));
+                new XAttribute("locklevel", lockLevel));
 
             if (!visible)
                 cell.Add(new XAttribute("visible", "false"));

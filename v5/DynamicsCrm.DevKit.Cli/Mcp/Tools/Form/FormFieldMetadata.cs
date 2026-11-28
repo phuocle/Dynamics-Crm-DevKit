@@ -133,11 +133,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
         }
 
         public static (string fieldName, string label, bool disabled, bool visible,
-            int colspan, int rowspan, bool showlabel, bool hideOnPhone) ParseFieldSpec(JsonElement fieldEl)
+            int colspan, int rowspan, bool showlabel, bool hideOnPhone, int lockLevel) ParseFieldSpec(JsonElement fieldEl)
         {
             if (fieldEl.ValueKind == JsonValueKind.String)
             {
-                return (fieldEl.GetString(), null, false, true, 1, 1, true, false);
+                return (fieldEl.GetString(), null, false, true, 1, 1, true, false, 0);
             }
 
             var fieldName = FormXmlHelpers.GetStringProp(fieldEl, "field")
@@ -147,11 +147,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             var visible = FormXmlHelpers.GetBoolProp(fieldEl, "visible", true);
             var colspan = FormXmlHelpers.GetIntProp(fieldEl, "colspan", 1);
             var rowspan = FormXmlHelpers.GetIntProp(fieldEl, "rowspan", 1);
-            var showlabel = FormXmlHelpers.GetBoolProp(fieldEl, "showlabel", true);
+            var showlabel = GetFieldShowLabel(fieldEl) ?? true;
             var hideOnPhone = FormXmlHelpers.GetBoolProp(fieldEl, "hide_on_phone", false);
+            var lockLevel = FormXmlHelpers.GetIntProp(fieldEl, "locklevel", 0);
 
-            return (fieldName, label, disabled, visible, colspan, rowspan, showlabel, hideOnPhone);
+            return (fieldName, label, disabled, visible, colspan, rowspan, showlabel, hideOnPhone, lockLevel);
         }
+
+        internal static bool? GetFieldShowLabel(JsonElement fieldEl)
+            => FormXmlHelpers.GetBoolProp(fieldEl, "showlabel", "show_label", "showLabel");
 
         public static void ValidateFieldsExist(string entityName,
             HashSet<string> referencedFields, Dictionary<string, AttributeMetadata> attrMap)

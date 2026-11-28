@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Xml.Linq;
 
 using DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.Infrastructure;
 using DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.Shared;
@@ -63,6 +64,117 @@ public sealed class FormXmlOperationsRunnerGapWave2CoverageTests
         "</tab>" +
         "</tabs>" +
         "</form>";
+
+    [TestMethod]
+    [DataRow("add", "showlabel")]
+    [DataRow("add", "show_label")]
+    [DataRow("add", "showLabel")]
+    [DataRow("update", "showlabel")]
+    [DataRow("update", "show_label")]
+    [DataRow("update", "showLabel")]
+    [DataRow("add_header", "showlabel")]
+    [DataRow("add_header", "show_label")]
+    [DataRow("add_header", "showLabel")]
+    [DataRow("update_header", "showlabel")]
+    [DataRow("update_header", "show_label")]
+    [DataRow("update_header", "showLabel")]
+    public void Run_FieldActions_WriteShowLabelAndLockLevel(string action, string showLabelKey)
+    {
+        var runner = new FormXmlOperationsRunner(_fake.Client);
+        var form = XDocument.Parse(BaseForm);
+        var bodyCell = form.Descendants("cell").Single();
+        bodyCell.SetAttributeValue("showlabel", "true");
+        if (action == "update_header")
+            form.Root!.Add(new XElement("header", new XElement("rows", new XElement("row", new XElement(bodyCell)))));
+
+        var (xml, _, _) = runner.Run(form.ToString(), "account", Ops($$"""
+            {"action":"manage_fields","manage_action":"{{action}}","tab":"general","section":"section1",
+             "fields":[{"field":"name","{{showLabelKey}}":false,"locklevel":1}]}
+            """));
+
+        var result = XDocument.Parse(xml);
+        var scope = result.Root!.Element(action.EndsWith("_header") ? "header" : "tabs");
+        var cell = scope!.Descendants("cell").Last(c => c.Element("control") != null);
+        Assert.AreEqual("false", cell.Attribute("showlabel")?.Value);
+        Assert.AreEqual("1", cell.Attribute("locklevel")?.Value);
+    }
+
+    [TestMethod]
+    [DataRow("update", "")]
+    [DataRow("update", ",\"visible\":false")]
+    [DataRow("update_header", "")]
+    public void Run_FieldUpdate_RejectsUnknownKeys(string action, string additionalProperties)
+    {
+        var runner = new FormXmlOperationsRunner(_fake.Client);
+        var error = Assert.ThrowsExactly<InvalidOperationException>(() => runner.Run(BaseForm, "account", Ops($$"""
+            {"action":"manage_fields","manage_action":"{{action}}","fields":[{"field":"name","show_lable":false{{additionalProperties}}}]}
+            """)));
+
+        StringAssert.Contains(error.Message, "field 'name'");
+        StringAssert.Contains(error.Message, "unsupported properties: show_lable");
+        StringAssert.Contains(error.Message, "Supported keys:");
+        StringAssert.Contains(error.Message, "show_label");
+    }
+
+    [TestMethod]
+    [DataRow("add", "2", "11", true)]
+    [DataRow("update", "2", "11", true)]
+    [DataRow("add", "\"111\"", "111", false)]
+    [DataRow("update", "\"11\"", "11", false)]
+    [DataRow("add", "3", "111", true)]
+    [DataRow("update", "\"1\"", "1", false)]
+    public void Run_SectionActions_WriteLayoutAttributes(string action, string inputColumns, string expectedColumns,
+        bool useSnakeCase)
+    {
+        var runner = new FormXmlOperationsRunner(_fake.Client);
+        var form = XDocument.Parse(BaseForm);
+        form.Descendants("section").Single().SetAttributeValue("showlabel", "true");
+        var sectionName = action == "add" ? "section2" : "section1";
+        var showLabel = useSnakeCase ? "show_label" : "showlabel";
+        var showBar = useSnakeCase ? "show_bar" : "showbar";
+        var labelPosition = useSnakeCase ? "cell_label_position" : "celllabelposition";
+        var labelWidth = useSnakeCase ? "label_width" : "labelwidth";
+        var (xml, _, _) = runner.Run(form.ToString(), "account", Ops($$"""
+            {"action":"manage_section","manage_action":"{{action}}","tab":"general","name":"{{sectionName}}",
+             "label":"Details","columns":{{inputColumns}},"{{showLabel}}":false,"{{showBar}}":true,
+             "{{labelPosition}}":"Top","{{labelWidth}}":140}
+            """));
+
+        var section = XDocument.Parse(xml).Descendants("section").Single(s => (string?)s.Attribute("name") == sectionName);
+        Assert.AreEqual(expectedColumns, section.Attribute("columns")?.Value);
+        Assert.AreEqual("false", section.Attribute("showlabel")?.Value);
+        Assert.AreEqual("true", section.Attribute("showbar")?.Value);
+        Assert.AreEqual("Top", section.Attribute("celllabelposition")?.Value);
+        Assert.AreEqual("140", section.Attribute("labelwidth")?.Value);
+    }
+
+    [TestMethod]
+    [DataRow("add")]
+    [DataRow("update")]
+    public void Run_SectionActions_RejectUnknownKeys(string action)
+    {
+        var runner = new FormXmlOperationsRunner(_fake.Client);
+        var error = Assert.ThrowsExactly<InvalidOperationException>(() => runner.Run(BaseForm, "account", Ops($$"""
+            {"action":"manage_section","manage_action":"{{action}}","tab":"general","name":"section1",
+             "label":"Details","column_count":2}
+            """)));
+
+        StringAssert.Contains(error.Message, "unsupported properties: column_count");
+        StringAssert.Contains(error.Message, "Supported keys:");
+        StringAssert.Contains(error.Message, "columns");
+    }
+
+    [TestMethod]
+    public void Run_AddFields_UsesEncodedSectionColumnCount()
+    {
+        var runner = new FormXmlOperationsRunner(_fake.Client);
+        var (xml, _, _) = runner.Run(BaseForm, "account", Ops(
+            """{"action":"manage_section","manage_action":"update","tab":"general","section":"section1","columns":2}""",
+            """{"action":"manage_fields","manage_action":"add","tab":"general","section":"section1","fields":["name"]}"""));
+
+        var addedRow = XDocument.Parse(xml).Descendants("row").Last();
+        Assert.AreEqual(2, addedRow.Elements("cell").Count());
+    }
 
     [TestMethod]
     public void Run_MetadataLoadFailure_IsWrapped()

@@ -225,14 +225,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
         public string ExecuteAddSection(XDocument formDoc, JsonElement op,
             Dictionary<string, AttributeMetadata> attrMap, Dictionary<string, string> classIdMap)
         {
+            RejectUnknownSectionProperties(op, "add_section", "section_columns", "tab_column", "fields",
+                "position", "reference_section", "reference_tab", "reference", "before_tab", "after_tab",
+                "before_section", "after_section");
             var tabName = FormXmlHelpers.GetStringProp(op, "tab")
                 ?? throw new InvalidOperationException("add_section requires 'tab'.");
             var label = FormXmlHelpers.GetStringProp(op, "label")
                 ?? throw new InvalidOperationException("add_section requires 'label'.");
             var secName = FormXmlHelpers.GetStringProp(op, "name") ?? FormXmlHelpers.AutoSectionName(tabName, label);
-            var secColumns = FormXmlHelpers.GetIntProp(op, "section_columns", 1);
+            var columnCount = ReadSectionColumns(op);
+            var secColumns = columnCount ?? FormXmlHelpers.GetIntProp(op, "section_columns", 1);
             var tabColumn = FormXmlHelpers.GetIntProp(op, "tab_column", 1);
-            var showLabel = FormXmlHelpers.GetBoolProp(op, "show_label", true);
             var visible = FormXmlHelpers.GetBoolProp(op, "visible", true);
             var hideOnPhone = FormXmlHelpers.GetBoolProp(op, "hide_on_phone", false);
             var position = FormXmlHelpers.ResolvePosition(op, "position", "reference_section");
@@ -262,7 +265,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                 columns[targetColIdx].Add(sectionsElement);
             }
 
-            var sectionElement = _builder.BuildSectionElement(secName, label, secColumns, fields, attrMap, classIdMap, showLabel, visible, hideOnPhone, FormXmlHelpers.CollectExistingControlIds(formDoc));
+            var sectionElement = _builder.BuildSectionElement(secName, label, secColumns, fields, attrMap, classIdMap, true, visible, hideOnPhone, FormXmlHelpers.CollectExistingControlIds(formDoc));
+            ApplySectionAttributes(sectionElement, op, columnCount);
             FormXmlHelpers.InsertElement(sectionsElement, sectionElement, position, "section", "name");
 
             return $"add_section: \"{label}\" in tab \"{tabName}\" ({secColumns} column(s), {fields.Count} field(s))";
@@ -270,6 +274,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 
         public string ExecuteUpdateSection(XDocument formDoc, JsonElement op)
         {
+            RejectUnknownSectionProperties(op, "update_section", "section", "new_name");
             var tabName = FormXmlHelpers.GetStringProp(op, "tab")
                 ?? throw new InvalidOperationException("update_section requires 'tab'.");
             var secName = FormXmlHelpers.GetStringProp(op, "section")
@@ -313,13 +318,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                     sectionElement.SetAttributeValue("visible", "false");
             }
 
-            if (op.TryGetProperty("show_label", out var showLabelProp))
-            {
-                if (showLabelProp.ValueKind == JsonValueKind.True)
-                    sectionElement.SetAttributeValue("showlabel", "true");
-                else if (showLabelProp.ValueKind == JsonValueKind.False)
-                    sectionElement.SetAttributeValue("showlabel", "false");
-            }
+            ApplySectionAttributes(sectionElement, op, ReadSectionColumns(op));
 
             if (op.TryGetProperty("hide_on_phone", out var hideOnPhoneProp))
             {
@@ -333,6 +332,60 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             return string.Equals(finalName, secName, StringComparison.OrdinalIgnoreCase)
                 ? $"update_section: \"{secName}\" in tab \"{tabName}\" updated"
                 : $"update_section: \"{secName}\" in tab \"{tabName}\" renamed to \"{finalName}\"";
+        }
+
+        private static void RejectUnknownSectionProperties(JsonElement op, string action, params string[] actionKeys)
+        {
+            FormXmlHelpers.RejectUnknownProperties(op, action,
+                ["action", "manage_action", "tab", "name", "label", "visible", "hide_on_phone",
+                    "showlabel", "show_label", "showbar", "show_bar", "columns", "celllabelposition",
+                    "cell_label_position", "labelwidth", "label_width", .. actionKeys]);
+        }
+
+        private static int? ReadSectionColumns(JsonElement op)
+        {
+            if (!op.TryGetProperty("columns", out var columns))
+                return null;
+
+            if (columns.ValueKind == JsonValueKind.Number && columns.TryGetInt32(out var count) && count is >= 1 and <= 3)
+                return count;
+
+            return (columns.ValueKind == JsonValueKind.String ? columns.GetString() : null) switch
+            {
+                "1" => 1,
+                "11" => 2,
+                "111" => 3,
+                _ => throw new InvalidOperationException(
+                    "Section 'columns' must be an integer (1, 2, 3) or a FormXML string (\"1\", \"11\", \"111\").")
+            };
+        }
+
+        private static void ApplySectionAttributes(XElement section, JsonElement op, int? columnCount)
+        {
+            if (FormXmlHelpers.GetBoolProp(op, "show_label", "showlabel") is bool showLabel)
+                section.SetAttributeValue("showlabel", showLabel);
+
+            if (FormXmlHelpers.GetBoolProp(op, "showbar", "show_bar") is bool showBar)
+                section.SetAttributeValue("showbar", showBar);
+
+            if (columnCount is int count)
+                section.SetAttributeValue("columns", new string('1', count));
+
+            if (op.TryGetProperty("celllabelposition", out var position) || op.TryGetProperty("cell_label_position", out position))
+            {
+                if (position.ValueKind != JsonValueKind.String || position.GetString() is not ("Top" or "Left"))
+                    throw new InvalidOperationException("Section 'celllabelposition' or 'cell_label_position' must be 'Top' or 'Left'.");
+
+                section.SetAttributeValue("celllabelposition", position.GetString());
+            }
+
+            if (op.TryGetProperty("labelwidth", out var width) || op.TryGetProperty("label_width", out width))
+            {
+                if (width.ValueKind != JsonValueKind.Number || !width.TryGetInt32(out var labelWidth) || labelWidth < 0)
+                    throw new InvalidOperationException("Section 'labelwidth' or 'label_width' must be a non-negative integer.");
+
+                section.SetAttributeValue("labelwidth", labelWidth);
+            }
         }
 
         public static string ExecuteMoveSection(XDocument formDoc, JsonElement op)

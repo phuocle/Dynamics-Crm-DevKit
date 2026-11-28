@@ -58,10 +58,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                 throw new InvalidOperationException(
                     $"Section '{sectionName}' not found in tab '{tabName}'. Available sections: {string.Join(", ", FormXmlHelpers.GetSectionNames(tabElement))}");
 
-            var secColumnsAttr = sectionElement.Attribute("columns");
-            var secColumns = 1;
-            if (secColumnsAttr != null && int.TryParse(secColumnsAttr.Value, out var sc))
-                secColumns = sc;
+            var secColumns = FormXmlHelpers.GetSectionColumnCount(sectionElement);
 
             var rowsElement = sectionElement.Element("rows");
             if (rowsElement == null)
@@ -74,7 +71,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             var cells = new List<XElement>();
             foreach (var fieldEl in fields)
             {
-                var (fieldName, fieldLabel, disabled, visible, colspan, rowspan, showlabel, hideOnPhone) = FormFieldMetadata.ParseFieldSpec(fieldEl);
+                var (fieldName, fieldLabel, disabled, visible, colspan, rowspan, showlabel, hideOnPhone, lockLevel) = FormFieldMetadata.ParseFieldSpec(fieldEl);
                 var attr = attrMap[fieldName];
                 fieldName = FormXmlHelpers.CorrectFieldName(fieldName, attr);
                 var classid = FormXmlHelpers.ResolveClassId(attr);
@@ -85,7 +82,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                     ?? fieldName;
 
                 var controlId = FormXmlHelpers.DeduplicateControlId(fieldName, existingControlIds);
-                var cell = _builder.BuildCellElement(controlId, fieldName, resolvedLabel, classid, disabled, visible, colspan, rowspan, showlabel, hideOnPhone);
+                var cell = _builder.BuildCellElement(controlId, fieldName, resolvedLabel, classid, disabled, visible, colspan, rowspan, showlabel, hideOnPhone, lockLevel);
                 cells.Add(cell);
             }
 
@@ -105,7 +102,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             if (fields.Count == 0)
                 throw new InvalidOperationException("update_fields requires at least one field.");
 
-            var updatedFields = new List<string>();
+            ValidateFieldUpdates(fields, "update_fields");
 
             var tabName = FormXmlHelpers.GetStringProp(op, "tab");
             var sectionName = FormXmlHelpers.GetStringProp(op, "section");
@@ -158,6 +155,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                     .ToList()
                 : new List<XElement>();
 
+            var updatedFields = UpdateFieldCells(fields, allCells, attrMap);
+            return $"update_fields: {updatedFields.Count} field(s) updated ({string.Join(", ", updatedFields)})";
+        }
+
+        private static void ValidateFieldUpdates(List<JsonElement> fields, string action)
+        {
+            foreach (var field in fields.Where(field => field.ValueKind == JsonValueKind.Object))
+            {
+                var name = FormXmlHelpers.GetStringProp(field, "field");
+                FormXmlHelpers.RejectUnknownProperties(field, $"{action} field '{name}'", "field", "label",
+                    "visible", "disabled", "showlabel", "show_label", "showLabel", "locklevel",
+                    "rowspan", "colspan", "hide_on_phone");
+            }
+        }
+
+        private static List<string> UpdateFieldCells(List<JsonElement> fields, List<XElement> allCells,
+            Dictionary<string, AttributeMetadata> attrMap)
+        {
+            var updatedFields = new List<string>();
             foreach (var fieldEl in fields)
             {
                 var fieldName = FormXmlHelpers.GetStringProp(fieldEl, "field");
@@ -190,13 +206,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                             cellElement.SetAttributeValue("visible", "false");
                     }
 
-                    if (fieldEl.TryGetProperty("showlabel", out var showLabelProp))
-                    {
-                        if (showLabelProp.ValueKind == JsonValueKind.True)
-                            cellElement.SetAttributeValue("showlabel", "true");
-                        else if (showLabelProp.ValueKind == JsonValueKind.False)
-                            cellElement.SetAttributeValue("showlabel", "false");
-                    }
+                    if (FormFieldMetadata.GetFieldShowLabel(fieldEl) is bool showLabel)
+                        cellElement.SetAttributeValue("showlabel", showLabel);
+
+                    if (fieldEl.TryGetProperty("locklevel", out var lockLevelProp) && lockLevelProp.ValueKind == JsonValueKind.Number)
+                        cellElement.SetAttributeValue("locklevel", lockLevelProp.GetInt32());
 
                     if (fieldEl.TryGetProperty("hide_on_phone", out var hideOnPhoneProp))
                     {
@@ -237,7 +251,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                     updatedFields.Add(fieldName);
             }
 
-            return $"update_fields: {updatedFields.Count} field(s) updated ({string.Join(", ", updatedFields)})";
+            return updatedFields;
         }
 
         public static string ExecuteRemoveFields(XDocument formDoc, JsonElement op)
@@ -427,10 +441,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                 targetSection.Add(targetRows);
             }
 
-            var secColumns = 1;
-            var secColumnsAttr = targetSection.Attribute("columns");
-            if (secColumnsAttr != null && int.TryParse(secColumnsAttr.Value, out var parsedColumns))
-                secColumns = Math.Max(1, parsedColumns);
+            var secColumns = FormXmlHelpers.GetSectionColumnCount(targetSection);
 
             var newRows = FormXmlHelpers.BuildRows(movedCells, secColumns);
             FormXmlHelpers.InsertFieldRows(targetRows, newRows, position);
@@ -508,7 +519,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 
             foreach (var fieldEl in fields)
             {
-                var (fieldName, fieldLabel, disabled, visible, colspan, rowspan, showlabel, hideOnPhone) = FormFieldMetadata.ParseFieldSpec(fieldEl);
+                var (fieldName, fieldLabel, disabled, visible, colspan, rowspan, showlabel, hideOnPhone, lockLevel) = FormFieldMetadata.ParseFieldSpec(fieldEl);
 
                 if (!attrMap.TryGetValue(fieldName, out var attr))
                     throw new InvalidOperationException(
@@ -526,7 +537,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                 var controlId = FormXmlHelpers.DeduplicateControlId(headerControlId, existingControlIds);
 
                 var newCell = _builder.BuildCellElement(controlId, fieldName, resolvedLabel, classid,
-                    disabled, visible, colspan, rowspan, showlabel, hideOnPhone);
+                    disabled, visible, colspan, rowspan, showlabel, hideOnPhone, lockLevel);
 
                 var spacerCell = firstRow.Elements("cell")
                     .FirstOrDefault(c => c.Element("control") == null);
@@ -557,7 +568,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             if (fields.Count == 0)
                 throw new InvalidOperationException("update_header requires at least one field.");
 
-            var updatedFields = new List<string>();
+            ValidateFieldUpdates(fields, "update_header");
 
             var header = formDoc.Root.Element("header");
             if (header == null) return "update_header: form has no header elements to update.";
@@ -566,84 +577,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                 .Where(c => c.Element("control") != null)
                 .ToList();
 
-            foreach (var fieldEl in fields)
-            {
-                var fieldName = FormXmlHelpers.GetStringProp(fieldEl, "field");
-                if (fieldName == null) continue;
-
-                if (attrMap.TryGetValue(fieldName, out var attr))
-                    fieldName = FormXmlHelpers.CorrectFieldName(fieldName, attr);
-
-                var matchingCells = allCells.Where(c =>
-                {
-                    var control = c.Element("control");
-                    return control != null && string.Equals(control.Attribute("datafieldname")?.Value, fieldName, StringComparison.OrdinalIgnoreCase);
-                }).ToList();
-
-                foreach (var cellElement in matchingCells)
-                {
-                    if (fieldEl.TryGetProperty("label", out var labelProp) && labelProp.ValueKind == JsonValueKind.String)
-                    {
-                        var labelDesc = labelProp.GetString();
-                        var labelEl = cellElement.Element("labels")?.Element("label");
-                        if (labelEl != null)
-                            labelEl.SetAttributeValue("description", labelDesc);
-                    }
-
-                    if (fieldEl.TryGetProperty("visible", out var visProp))
-                    {
-                        if (visProp.ValueKind == JsonValueKind.True)
-                            cellElement.Attribute("visible")?.Remove();
-                        else if (visProp.ValueKind == JsonValueKind.False)
-                            cellElement.SetAttributeValue("visible", "false");
-                    }
-
-                    if (fieldEl.TryGetProperty("showlabel", out var showLabelProp))
-                    {
-                        if (showLabelProp.ValueKind == JsonValueKind.True)
-                            cellElement.SetAttributeValue("showlabel", "true");
-                        else if (showLabelProp.ValueKind == JsonValueKind.False)
-                            cellElement.SetAttributeValue("showlabel", "false");
-                    }
-
-                    if (fieldEl.TryGetProperty("hide_on_phone", out var hideOnPhoneProp))
-                    {
-                        if (hideOnPhoneProp.ValueKind == JsonValueKind.False)
-                            cellElement.Attribute("availableforphone")?.Remove();
-                        else if (hideOnPhoneProp.ValueKind == JsonValueKind.True)
-                            cellElement.SetAttributeValue("availableforphone", "false");
-                    }
-
-                    if (fieldEl.TryGetProperty("disabled", out var disabledProp))
-                    {
-                        var controlEl = cellElement.Element("control");
-                        if (controlEl != null)
-                        {
-                            if (disabledProp.ValueKind == JsonValueKind.False)
-                                controlEl.Attribute("disabled")?.Remove();
-                            else if (disabledProp.ValueKind == JsonValueKind.True)
-                                controlEl.SetAttributeValue("disabled", "true");
-                        }
-                    }
-
-                    if (fieldEl.TryGetProperty("colspan", out var colSpanProp) && colSpanProp.ValueKind == JsonValueKind.Number)
-                    {
-                        var colspan = colSpanProp.GetInt32();
-                        if (colspan <= 1) cellElement.Attribute("colspan")?.Remove();
-                        else cellElement.SetAttributeValue("colspan", colspan.ToString());
-                    }
-
-                    if (fieldEl.TryGetProperty("rowspan", out var rowSpanProp) && rowSpanProp.ValueKind == JsonValueKind.Number)
-                    {
-                        var rowspan = rowSpanProp.GetInt32();
-                        if (rowspan <= 1) cellElement.Attribute("rowspan")?.Remove();
-                        else cellElement.SetAttributeValue("rowspan", rowspan.ToString());
-                    }
-                }
-
-                if (matchingCells.Count > 0)
-                    updatedFields.Add(fieldName);
-            }
+            var updatedFields = UpdateFieldCells(fields, allCells, attrMap);
 
             return $"update_header: {updatedFields.Count} field(s) updated ({string.Join(", ", updatedFields)})";
         }
@@ -777,7 +711,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             eventName = NormalizeEventName(eventName);
             var functionName = GetRequiredStringProp(op, "add_event", "function_name", "function", "functionName");
             var libraryName = GetRequiredStringProp(op, "add_event", "library_name", "library", "libraryName");
-            var passExecutionContext = GetBoolProp(op, true, "pass_execution_context", "passExecutionContext");
+            var passExecutionContext = FormXmlHelpers.GetBoolProp(op, "pass_execution_context", "passExecutionContext") ?? true;
             var parameters = FormXmlHelpers.GetStringProp(op, "parameters") ?? "";
             var enabled = FormXmlHelpers.GetBoolProp(op, "enabled", true);
             var target = FormXmlHelpers.GetStringProp(op, "target") ?? "form";
@@ -1103,18 +1037,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             }
 
             return null;
-        }
-
-        private static bool GetBoolProp(JsonElement op, bool defaultValue, params string[] names)
-        {
-            foreach (var name in names)
-            {
-                if (op.TryGetProperty(name, out var prop) &&
-                    (prop.ValueKind == JsonValueKind.True || prop.ValueKind == JsonValueKind.False))
-                    return prop.GetBoolean();
-            }
-
-            return defaultValue;
         }
 
         private static bool UpdateExistingHandler(XElement handler, bool enabled, bool passExecutionContext,

@@ -368,11 +368,41 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
         }
 
         internal static bool GetBoolProp(JsonElement el, string name, bool defaultValue)
+            => GetBoolProp(el, name) ?? defaultValue;
+
+        internal static bool? GetBoolProp(JsonElement el, params string[] names)
         {
-            if (el.TryGetProperty(name, out var prop) &&
-                (prop.ValueKind == JsonValueKind.True || prop.ValueKind == JsonValueKind.False))
-                return prop.GetBoolean();
-            return defaultValue;
+            foreach (var name in names)
+            {
+                if (el.TryGetProperty(name, out var prop) &&
+                    prop.ValueKind is JsonValueKind.True or JsonValueKind.False)
+                    return prop.GetBoolean();
+            }
+
+            return null;
+        }
+
+        internal static void RejectUnknownProperties(JsonElement element, string context, params string[] supportedKeys)
+        {
+            var unknown = element.EnumerateObject()
+                .Select(property => property.Name)
+                .Where(name => !supportedKeys.Contains(name))
+                .Distinct()
+                .ToList();
+            if (unknown.Count > 0)
+                throw new InvalidOperationException(
+                    $"{context}: unsupported properties: {string.Join(", ", unknown)}. Supported keys: {string.Join(", ", supportedKeys)}.");
+        }
+
+        internal static int GetSectionColumnCount(XElement section)
+        {
+            var value = (string)section.Attribute("columns");
+            return value switch
+            {
+                "11" => 2,
+                "111" => 3,
+                _ => int.TryParse(value, out var count) && count > 0 ? count : 1
+            };
         }
 
         internal static bool LevenshteinClose(string a, string b)

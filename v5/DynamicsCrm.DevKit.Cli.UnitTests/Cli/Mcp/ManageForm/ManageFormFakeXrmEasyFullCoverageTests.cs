@@ -947,6 +947,49 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
+    public async Task Update_Operations_UnsupportedFieldProperty_BlocksEntireBatch()
+    {
+        var id = SeedForm("Account Main");
+        var result = await NewTool().manage_form(null!, "update", "account", form_id: id.ToString(), operations: """
+            [
+              {"action":"manage_fields","manage_action":"add","tab":"tab_general","section":"general_section","fields":["name"]},
+              {"action":"manage_fields","manage_action":"update","fields":[{"field":"name","show_lable":false}]}
+            ]
+            """);
+
+        Assert.IsTrue(result.IsError == true);
+        StringAssert.Contains(Text(result), "unsupported properties: show_lable");
+        StringAssert.Contains(Text(result), "Supported keys:");
+        Assert.AreEqual(0, _service.Updates);
+        Assert.AreEqual(0, _service.Publishes);
+    }
+
+    [TestMethod]
+    public async Task Update_Operations_FieldAndSectionProperties_AreSavedAndPublished()
+    {
+        var id = SeedForm("Account Main");
+        var result = await NewTool().manage_form(null!, "update", "account", form_id: id.ToString(), operations: """
+            [
+              {"action":"manage_section","manage_action":"add","tab":"tab_general","name":"details","label":"Details",
+               "columns":2,"show_label":false,"fields":["name"]},
+              {"action":"manage_fields","manage_action":"update","tab":"tab_general","section":"details",
+               "fields":[{"field":"name","show_label":false}]}
+            ]
+            """);
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        Assert.AreEqual(1, _service.Updates);
+        Assert.AreEqual(1, _service.Publishes);
+        var saved = _service.Retrieve("systemform", id, new ColumnSet("formxml"));
+        var section = XDocument.Parse(saved.GetAttributeValue<string>("formxml")).Descendants("section")
+            .Single(element => (string?)element.Attribute("name") == "details");
+        Assert.AreEqual("11", section.Attribute("columns")?.Value);
+        Assert.AreEqual("false", section.Attribute("showlabel")?.Value);
+        var cell = section.Descendants("cell").Single(element => element.Element("control") != null);
+        Assert.AreEqual("false", cell.Attribute("showlabel")?.Value);
+    }
+
+    [TestMethod]
     public async Task Update_Operations_AddTab_Succeeds()
     {
         var id = SeedForm("Seed Form");

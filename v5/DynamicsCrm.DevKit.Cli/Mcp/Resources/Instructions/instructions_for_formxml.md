@@ -60,7 +60,7 @@ Call `manage_form` with tool-level `action='update'`. Inside the `operations` JS
 
 | Field | Meaning | Example |
 |-------|---------|---------|
-| `action` | Operation family | `"manage_subgrid"`, `"manage_fields"`, `"manage_tab"`, `"manage_navigation"`, `"manage_custom_control"` |
+| `action` | Operation family | `"manage_subgrid"`, `"manage_fields"`, `"manage_tab"`, `"manage_section"`, `"manage_navigation"`, `"manage_custom_control"` |
 | `manage_action` | Verb within that family | `"add"`, `"update"`, `"rename"`, `"move"`, `"remove"`, `"delete"` |
 
 Do not put verbs like `"add"` or `"remove"` in operation `action`.
@@ -111,6 +111,33 @@ Valid section actions: `add`, `update`, `rename`, `move`, `remove`, `delete`.
 
 `delete` is an alias of `remove`.
 
+### manage_section add and update properties
+
+Set these properties directly on the operation object. Both actions require `tab`. For `add`, supply `label` and optionally `name`. For `update`, identify the section with `section` or `name` and supply the changes. Unsupported properties produce an error that lists the supported keys for the action.
+
+| Property | Value and effect |
+|----------|------------------|
+| `showlabel` or `show_label` | Boolean. Sets the section's `showlabel` attribute. |
+| `showbar` or `show_bar` | Boolean. Sets the section's `showbar` attribute. |
+| `columns` | Integer `1`, `2`, or `3`, or FormXML string `"1"`, `"11"`, or `"111"`. The XML uses one `1` per column. On update, this sets the attribute and leaves existing rows in place. |
+| `celllabelposition` or `cell_label_position` | `"Top"` or `"Left"`. Sets the position of field labels, with `"Left"` as the default on add. |
+| `labelwidth` or `label_width` | Non-negative integer. Sets `labelwidth`, with `115` as the default on add. |
+| `visible`, `hide_on_phone` | Booleans that control section visibility and availability on phones. |
+| `label`, `new_name` | Set the display label with `label`. On update, set the FormXML name with `new_name`. |
+| `fields`, `tab_column`, `position`, `reference_section` | On add, optionally set the initial fields, the one-based tab column, and placement within that tab column. |
+| `section_columns` | Legacy integer column count on add. Use `columns` to write the FormXML column encoding. |
+
+```json
+[
+  { "action": "manage_section", "manage_action": "add",
+    "tab": "tab_general", "name": "general_sec_info", "label": "Info",
+    "columns": 2, "show_label": false },
+  { "action": "manage_section", "manage_action": "update",
+    "tab": "tab_general", "section": "general_sec_info",
+    "columns": "11", "showbar": true, "cell_label_position": "Top", "label_width": 140 }
+]
+```
+
 ## Tab & Section Positioning
 
 The `position` field controls where a tab or section is inserted/moved.
@@ -153,7 +180,7 @@ If the reference name is not found, the operation throws an error listing all av
       <columns>
         <column width="100%">
           <sections>
-            <section name="general_sec_info" showlabel="true" columns="2">
+            <section name="general_sec_info" showlabel="true" columns="11">
               <labels><label description="Info" languagecode="1033" /></labels>
               <rows>
                 <row>
@@ -181,7 +208,32 @@ If the reference name is not found, the operation throws an error listing all av
 - Money: {533B9E00-756B-4312-95A0-DC888637AC78}
 - SubGrid: {E7A81278-8635-4d9e-8D4D-59480B391C5B}
 
-## manage_fields — Header Operations
+## manage_fields
+
+### Field item properties
+
+The `fields` array accepts the following item properties for `add`, `update`, `add_header`, and `update_header`. For either add action, a field name string is also accepted when you want the defaults. Both update actions reject unsupported field-item keys and list the accepted keys in the error.
+
+| Property | Value and effect |
+|----------|------------------|
+| `field` | Field logical name or display name. |
+| `label` | Display label for the cell. |
+| `visible` | Boolean. Controls cell visibility. |
+| `disabled` | Boolean. Disables the control when true. |
+| `showlabel`, `show_label`, or `showLabel` | Boolean. Sets `showlabel="true"` or `showlabel="false"` on the cell. |
+| `hide_on_phone` | Boolean. Hides the cell on phones when true. |
+| `locklevel` | Non-negative integer for the cell's `locklevel` attribute. Defaults to `0` on add. |
+| `rowspan`, `colspan` | Integer cell spans. The default span is `1`. |
+
+For body field `add` and `move`, put `position` on the operation object. Use `"first"`, `"last"`, `"before:<field>"`, or `"after:<field>"` to place the fields as a group. Use `move` to change the placement of existing body fields.
+
+```json
+{ "action": "manage_fields", "manage_action": "update",
+  "tab": "tab_general", "section": "general_sec_info",
+  "fields": [{ "field": "name", "show_label": false }] }
+```
+
+### Header operations
 
 To add, update, or remove fields in the **form header** (the strip at the top of the form), use
 `manage_action: "add_header"`, `"update_header"`, or `"remove_header"`.
@@ -224,7 +276,7 @@ No `tab` or `section` required for header operations.
 ```
 
 ### Valid manage_action values for manage_fields
-`add`, `update`, `move`, `remove`, `delete` (body fields — require `tab` + `section`)
+`add`, `update`, `move`, `remove`, `delete` (body fields). Use `tab` and `section` to target a section. For `update`, either or both may be omitted to widen the search.
 `add_header`, `update_header`, `remove_header` (header fields — no `tab`/`section` needed)
 
 `delete` is an alias of `remove`. For body field moves, use `target_tab` and/or `target_section` when moving to another location; omit them to move within the same section.
