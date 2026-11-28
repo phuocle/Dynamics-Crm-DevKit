@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Confirm ribbon settings · DynamicsCrm.DevKit</title>
+<style>
+  :root { color-scheme: light; --ink:#172e34; --muted:#50666b; --line:#d5dfdd; --teal:#006860; --soft:#eef6f3; font:15px/1.45 Inter,"Segoe UI",sans-serif; color:var(--ink); background:#eef3f1 }
+  * { box-sizing:border-box }
+  body { margin:0 }
+  .frame { width:min(884px,100%); margin:auto; padding:0 clamp(12px,3vw,32px) }
+  .top,.row,.picker-head,.footer,.controls { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap }
+  .top { padding:16px 0; font-size:.84rem }
+  .brand { font-weight:700 }
+  .scenario { display:flex; gap:8px; align-items:center; color:var(--muted) }
+  input,textarea,select,button { font:inherit; color:inherit }
+  input,textarea,select { background:white; border:1px solid #a8bab6; border-radius:6px; padding:7px 9px; width:100%; min-width:0 }
+  select { width:auto; cursor:pointer }
+  .dialog { background:#fff; width:100%; position:static; border:1px solid #cbd8d5; border-radius:14px; padding:0; color:inherit; box-shadow:0 12px 45px #213e3612; margin:0 0 28px }
+  .dialog header { background:#f9fcfa; border-radius:14px 14px 0 0; border-bottom:1px solid var(--line); padding:20px 24px 16px }
+  h1,h2,h3,p,ol { margin:0 }
+  h1 { font-size:clamp(1.55rem,4vw,2rem); letter-spacing:-.045em; line-height:1.2 }
+  h2 { font-size:1.15rem }
+  h3 { font-size:1rem }
+  .subtitle,.note,.context { color:var(--muted); font-size:.86rem }
+  .subtitle { margin-top:5px }
+  .context { display:flex; gap:6px 14px; flex-wrap:wrap; margin-top:10px }
+  .context span+span::before { content:"/"; color:#a0b3ae; margin-right:12px }
+  .content,.result { padding:18px 24px }
+  .stack { display:grid; gap:12px }
+  .field { display:grid; gap:4px; font-size:.84rem; font-weight:600; min-width:0 }
+  .field input,.field textarea,.field select { font-weight:400; font-size:.92rem }
+  input::placeholder,textarea::placeholder { color:#657976 }
+  textarea { resize:vertical }
+  .handlers,.pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px }
+  .handler { display:grid; align-content:start; gap:9px; padding:12px; min-width:0; border:1px solid var(--line); border-top:3px solid #46998a; border-radius:8px }
+  .handler:nth-child(2) { border-top-color:#527caa }
+  .handler h3 { letter-spacing:-.025em }
+  .picker { min-width:0; font-size:.84rem }
+  .picker-head { border:1px solid #a8bab6; border-radius:6px; padding:7px 9px; cursor:pointer; list-style:none; font-weight:600 }
+  summary::-webkit-details-marker { display:none }
+  .picker-head::after { content:"▾"; color:var(--teal) }
+  details[open]>.picker-head::after { content:"▴" }
+  .picker-panel { margin-top:5px; border:1px solid var(--line); border-radius:6px; padding:6px }
+  .options { max-height:170px; overflow:auto; margin:4px 0 }
+  .option { display:flex; align-items:center; gap:6px; padding:3px 2px; overflow-wrap:anywhere; cursor:pointer }
+  .option input { width:auto; accent-color:var(--teal) }
+  .order { font-size:.78rem; padding:0; display:flex; gap:4px; flex-wrap:wrap; list-style:none; margin-top:6px; counter-reset:param }
+  .order li { counter-increment:param; display:inline-flex; align-items:center; gap:3px; padding:2px 6px; background:var(--soft); border-radius:4px; max-width:100%; overflow-wrap:anywhere }
+  .order li::before { content:counter(param) "."; color:#506861 }
+  .order:empty::after { content:"No arguments selected."; color:var(--muted) }
+  .move { display:none; padding:0 5px; border:1px solid #aec9c1; border-radius:3px; background:white; cursor:pointer }
+  .picker[open]+.order .move { display:inline-block }
+  button:disabled { opacity:.45; cursor:default }
+  .advanced { border-top:1px solid var(--line); padding-top:10px }
+  .advanced summary { cursor:pointer; color:var(--teal); font-size:.88rem; font-weight:600 }
+  .advanced .stack { padding-top:10px }
+  .op-title,.item-title { overflow-wrap:anywhere; padding-top:5px }
+  .item { padding:10px; border-left:3px solid #ccdcd6; background:#fafcfb }
+  .footer { border-top:1px solid var(--line); padding:13px 24px; gap:10px }
+  .controls { justify-content:flex-end; flex-wrap:nowrap }
+  .btn { border:1px solid #a8bab6; border-radius:6px; background:white; padding:8px 17px; cursor:pointer; font-weight:600 }
+  .primary { border-color:var(--teal); background:var(--teal); color:white }
+  .primary:hover { background:#00554f }
+  .form-error { margin:0 24px 12px; color:#942d25 }
+  .result { border-top:1px solid var(--line) }
+  .result p { margin:6px 0 12px }
+  pre { background:var(--soft); padding:12px; border-radius:7px; white-space:pre-wrap; overflow-wrap:anywhere; font: .83rem/1.5 Consolas,monospace }
+  :focus-visible { outline:3px solid #147dbe; outline-offset:2px }
+  [hidden] { display:none!important }
+  @media(max-width:640px) { .handlers,.pair { grid-template-columns:1fr } .dialog header,.content,.result,.footer { padding:14px } .top { padding:10px 0 } .controls { margin-left:auto } }
+</style>
+</head>
+<body><main class="frame">
+  <div class="top"><span class="brand">DynamicsCrm.DevKit · MCP Apps</span><label class="scenario">Offline example <select id="scenario"></select></label></div>
+  <dialog open class="dialog" aria-labelledby="title" aria-describedby="intro">
+    <header><h1 id="title">Confirm ribbon settings</h1><p class="subtitle" id="intro">Review the values collected by the AI. Confirm to use these settings for a single deployment.</p><div class="context" id="context"></div></header>
+    <form id="form" novalidate><div id="fields" class="content stack"></div>
+      <p id="error" role="alert" class="form-error" hidden></p><div class="footer"><p class="note">Offline demo. Your changes stay in this page.</p><div class="controls"><button class="btn primary" type="submit">Confirm</button><button class="btn" type="button" id="cancel">Cancel</button></div></div>
+    </form>
+    <section class="result" id="result" hidden aria-live="polite"><h2 tabindex="-1" id="resultTitle"></h2><p id="message"></p><pre id="snapshot" hidden></pre><button id="restart" class="btn">Reopen example</button></section>
+    <noscript>Enable JavaScript to use this dialog.</noscript>
+  </dialog>
+  <datalist id="libraries"><option>demo_/post.js</option><option>demo_/rules.js</option><option>demo_/audit.js</option></datalist>
+  <datalist id="functions"><option>Sales.canPost</option><option>Sales.post</option><option>Sales.canAudit</option><option>Sales.audit</option></datalist>
+  <datalist id="icons"><option>demo_/icons/post.svg</option><option>demo_/icons/check.svg</option></datalist>
+</main>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const el = (tag, cls, text) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text != null) n.textContent = text;
+  return n;
+};
+const defaults = {
+  form: ["PrimaryControl", "PrimaryEntityTypeName", "PrimaryItemIds"],
+  grid: ["SelectedControl", "SelectedEntityTypeName", "FirstSelectedItemId", "SelectedControlSelectedItemIds"]
+};
+const catalog = [
+  "PrimaryControl","PrimaryEntityTypeName","PrimaryItemIds","FirstPrimaryItemId","PrimaryEntityTypeCode","PrimaryControlId",
+  "SelectedControl","SelectedEntityTypeName","FirstSelectedItemId","SelectedControlSelectedItemIds","SelectedEntityTypeCode",
+  "SelectedControlSelectedItemCount","SelectedControlSelectedItemReferences","SelectedControlAllItemCount",
+  "SelectedControlAllItemIds","SelectedControlAllItemReferences","SelectedControlUnselectedItemCount",
+  "SelectedControlUnselectedItemIds","SelectedControlUnselectedItemReferences","OrgName","OrgLcid","UserLcid","CommandProperties"
+];
+const surfaceNames = { form:"Main form", main_grid:"Main grid", sub_grid:"Subgrid" };
+const titleFor = {add_button:"Create button", update_button:"Update button", add_split_button:"Create split button",
+  update_split_button:"Update split button", add_flyout_static:"Create flyout menu", update_flyout_static:"Update flyout menu"};
+const idFields = { update_button:"button_id", update_split_button:"split_button_id", update_flyout_static:"flyout_id" };
+const ids = { update_button:"devkit.account.Post.Form.Button", update_split_button:"devkit.account.Post.HomepageGrid.SplitButton", update_flyout_static:"devkit.account.Post.SubGrid.FlyoutAnchor" };
+function handlerValues(surface, isItem) {
+  const args = defaults[surface === "form" ? "form" : "grid"];
+  return { library:"demo_/post.js", function:isItem ? "Sales.audit" : "Sales.post", click_parameters:[...args],
+    enable_library:"demo_/rules.js", enable_function:isItem ? "Sales.canAudit" : "Sales.canPost", enable_parameters:[...args] };
+}
+function controlExample(action, gridButton = false) {
+  const split = action.includes("split"), flyout = action.includes("flyout"), update = action.startsWith("update");
+  const surface = split ? "main_grid" : flyout ? "sub_grid" : gridButton ? "main_grid" : "form";
+  const values = { label: flyout ? "Actions" : "Post", modern_image:"demo_/icons/post.svg", sequence:85,
+    ...(flyout ? {} : handlerValues(surface, false)) };
+  const original = update ? structuredClone(values) : null;
+  if (original) original.label = "Draft";
+  const items = split || flyout ? ["Audit log", "History"].map((label, i) => {
+    const data = {label, sequence:(i+1)*10, ...handlerValues(surface, true)};
+    return { values:data, original:update ? structuredClone(data) : null, itemLabel:label };
+  }) : [];
+  return {title:gridButton ? "Create grid button" : titleFor[action], surface, ops:[{action, values, original, items}]};
+}
+const samples = Object.keys(titleFor).map(action => controlExample(action));
+samples.push(controlExample("add_button", true));
+samples.push({title:"Hide and show controls", surface:"form", ops:[
+  {action:"hide_button",values:{button_id:ids.update_button}},
+  {action:"show_button",values:{button_id:"devkit.account.Remind.Form.Button"}},
+  {action:"hide_flyout_item",values:{flyout_label:"Actions",item_label:"Audit log"}},
+  {action:"show_flyout_item",values:{flyout_label:"Actions",item_label:"Send reminder"}}
+]});
+samples.push({title:"Apply XML patch", surface:"form",
+  xml:'<RibbonDiffXml>\n  <LocLabels>\n    <LocLabel Id="devkit.account.Post.Form.Button.LabelText">\n      <Titles><Title description="Post" languagecode="1033" /></Titles>\n    </LocLabel>\n  </LocLabels>\n</RibbonDiffXml>'});
+let sample, state;
+const bindings = new WeakMap();
+function field(parent, data, key, labelText, options={}) {
+  const label = el("label","field",labelText);
+  const input = el(options.area ? "textarea" : "input");
+  if (options.area) input.rows = options.rows || 2;
+  if (options.number) { input.type = "number"; input.step = "1"; if (options.min != null) input.min = options.min; }
+  if (options.list) input.setAttribute("list",options.list);
+  bindings.set(input,{data,key});
+  input.name = key; input.value = Array.isArray(data[key]) ? data[key].join("\n") : data[key] ?? "";
+  input.required = !!options.required; input.placeholder = options.placeholder || "";
+  input.oninput = () => {
+    input.setCustomValidity("");
+    if (options.lines) data[key] = input.value.split(/\r?\n/).map(line=>line.trim()).filter(Boolean);
+    else if (options.number) data[key] = input.value === "" ? "" : input.valueAsNumber;
+    else data[key] = input.value;
+  };
+  label.append(input); parent.append(label); return input;
+}
+function picker(parent, data, key) {
+  const box = el("details","picker"), summary = el("summary","picker-head"), panel = el("div","picker-panel");
+  const list = el("div","options"), order = el("ol","order");
+  order.setAttribute("aria-label","Argument order");
+  box.append(summary,panel); panel.append(el("span","note","Select arguments. Use the arrows below to change their order."),list);
+  parent.append(box,order);
+  function showOrder(focus) {
+    const selected = data[key]; summary.textContent = "OOB parameters · " + selected.length + " selected"; order.replaceChildren();
+    selected.forEach((value, i) => {
+      const li = el("li","",value);
+      for (const [delta, arrow] of [[-1,"←"],[1,"→"]]) {
+        const btn = el("button","move",arrow); btn.type = "button";
+        btn.setAttribute("aria-label","Move " + value + (delta < 0 ? " earlier" : " later"));
+        const j = i + delta; btn.disabled = j < 0 || j >= selected.length;
+        btn.onclick = () => { [selected[i],selected[j]] = [selected[j],selected[i]]; showOrder(value); };
+        li.append(btn);
+      }
+      order.append(li);
+      if (value === focus) li.querySelector("button:enabled")?.focus();
+    });
+  }
+  for (const value of catalog) {
+    const label = el("label","option"), input = el("input"); input.type = "checkbox"; input.value = value; input.checked = data[key].includes(value);
+    input.onchange = () => { if (input.checked) data[key].push(value); else data[key] = data[key].filter(x=>x !== value); showOrder(); };
+    label.append(input,document.createTextNode(value)); list.append(label);
+  }
+  showOrder();
+}
+function handlers(parent, data) {
+  const group = el("div","handlers");
+  for (const enable of [true,false]) {
+    const box = el("section","handler"); const role = enable ? "Enable" : "Click";
+    box.setAttribute("aria-label","JS Function " + role); box.append(el("h3","","JS Function " + role));
+    field(box,data,enable ? "enable_library":"library","JavaScript library",{required:true,list:"libraries"});
+    field(box,data,enable ? "enable_function":"function","Function name",{required:true,list:"functions"});
+    const params = el("div"); picker(params,data,enable ? "enable_parameters":"click_parameters"); box.append(params); group.append(box);
+  }
+  parent.append(group);
+}
+function renderValues(parent, data, isItem, gridAdd) {
+  field(parent,data,"label","Label",{required:true});
+  if (!isItem) field(parent,data,"tooltip_description","Description",{area:true,placeholder:"Optional description"});
+  if (data.function) handlers(parent,data);
+  const extra = el("details","advanced"), extras = el("div","stack"), pair = el("div","pair");
+  extra.append(el("summary","","Icon, tooltip and other settings"),extras); extras.append(pair); parent.append(extra);
+  field(pair,data,"modern_image","Icon · web resource",{list:"icons",placeholder:"Select or enter a resource name"});
+  field(pair,data,"sequence","Sequence",{number:true});
+  field(extras,data,"tooltip_title","Tooltip title");
+  if (data.function) field(extras,data,"dependency_libraries","Dependency libraries (one per line)",{area:true,lines:true});
+  if (gridAdd) {
+    const limits = el("div","pair"); extras.append(limits);
+    field(limits,data,"selection_min","Minimum selected rows",{number:true,min:0});
+    field(limits,data,"selection_max","Maximum selected rows",{number:true,min:0});
+  }
+}
+function load() {
+  $("error").hidden = true;
+  sample = structuredClone(samples[Number($("scenario").value)]); state="editing";
+  $("form").hidden=false; $("result").hidden=true; $("snapshot").hidden=true; $("snapshot").textContent="";
+  $("fields").replaceChildren();
+  $("context").replaceChildren(...["Sales Sandbox","account",surfaceNames[sample.surface],sample.title].map(x=>el("span","",x)));
+  if (sample.xml) {field($("fields"),sample,"xml","RibbonDiffXml patch",{required:true,area:true,rows:9}); return;}
+  for (const [index,op] of sample.ops.entries()) {
+    const section = el("div","stack"); $("fields").append(section);
+    if (idFields[op.action]) section.append(el("p","note",ids[op.action]));
+    if (!titleFor[op.action]) {
+      section.append(el("h2","op-title",(index+1) + ". " + op.action));
+      for (const key of Object.keys(op.values)) field(section,op.values,key,key,{required:true});
+      continue;
+    }
+    renderValues(section,op.values,false,op.action === "add_button" && sample.surface !== "form");
+    for (const [i,item] of op.items.entries()) {
+      const children = el("section","stack item");
+      children.append(el("h3","item-title","Menu item " + (i+1) + (item.original ? " · " + item.itemLabel : "")));
+      renderValues(children,item.values,true,false); section.append(children);
+    }
+  }
+}
+const same = (a,b) => JSON.stringify(a) === JSON.stringify(b);
+function changes(values, original) {
+  const patch = {};
+  for (const [key,value] of Object.entries(values)) {
+    if (value === "" || value == null || (original && same(value,original[key]))) continue;
+    if (key === "dependency_libraries" && !value.length && !original?.[key]?.length) continue;
+    patch[key] = value;
+  }
+  return patch;
+}
+function operation(op) {
+  if (!titleFor[op.action]) return {action:op.action,...op.values};
+  const args = { action:op.action };
+  if (op.original) args[idFields[op.action]] = ids[op.action]; else args.surface = sample.surface;
+  Object.assign(args,changes(op.values,op.original));
+  const items = op.items.flatMap(item=>{
+    const edit = changes(item.values,item.original);
+    if (item.original && !Object.keys(edit).length) return [];
+    return [item.original ? {item_label:item.itemLabel,...edit} : edit];
+  });
+  if (items.length) args.items = items;
+  return args;
+}
+function finish(confirmed,payload) {
+  if (state !== "editing") return;
+  state = confirmed ? "confirmed" : "cancelled";
+  $("form").hidden=true; $("result").hidden=false;
+  $("resultTitle").textContent = confirmed ? "Settings confirmed" : "Cancelled";
+  $("message").textContent = confirmed ? "The AI would use these values to call manage_ribbon once. This offline example stops here." : "Your draft was discarded. No values were handed to the AI for deployment.";
+  $("snapshot").hidden = !confirmed;
+  if (confirmed) $("snapshot").textContent = JSON.stringify(payload,null,2);
+  $("resultTitle").focus();
+}
+$("form").onsubmit = event => {
+  event.preventDefault();
+  if (state !== "editing") return;
+  function invalid(input,message) {
+    for (let a=input.parentElement; a; a=a.parentElement) if (a.tagName==="DETAILS") a.open=true;
+    input.setCustomValidity(message); input.reportValidity();
+  }
+  $("error").hidden = true;
+  for (const input of $("form").querySelectorAll("input,textarea")) {
+    input.setCustomValidity("");
+    if (input.required && !input.value.trim()) { invalid(input,"Enter a value before confirming."); return; }
+    if (!input.validity.valid) { invalid(input,"Enter a whole number in the allowed range."); return; }
+  }
+  if (sample.xml) {
+    const doc = new DOMParser().parseFromString(sample.xml,"application/xml");
+    if (doc.documentElement.nodeName !== "RibbonDiffXml" || doc.querySelector("parsererror")) {
+      invalid($("form").elements.xml,"Enter valid XML with a RibbonDiffXml root element."); return;
+    }
+  }
+  const fields = Array.from($("form").querySelectorAll("input,textarea"));
+  function findField(values,key) { return fields.find(input => bindings.get(input)?.data === values && input.name === key); }
+  for (const op of sample.ops || []) {
+    for (const entry of [op,...(op.items || [])]) {
+      for (const [key,old] of Object.entries(entry.original || {})) {
+        if (old !== "" && entry.values[key] === "") {
+          invalid(findField(entry.values,key),"This tool cannot clear this field. Enter the value to keep."); return;
+        }
+      }
+    }
+    if (op.original && Object.keys(operation(op)).length === 2) {
+      $("error").textContent = "These values already match the current settings. Change a value or choose Cancel.";
+      $("error").hidden = false; return;
+    }
+    const v = op.values;
+    if (typeof v.selection_min === "number" && typeof v.selection_max === "number" && v.selection_min > v.selection_max) {
+      invalid($("form").elements.selection_max,"The maximum must be greater than or equal to the minimum."); return;
+    }
+  }
+  const approved = {env:"sales-sandbox",entity_name:"account",action:"update"};
+  if (sample.xml) approved.ribbonxml = sample.xml; else approved.operations = sample.ops.map(operation);
+  finish(true,approved);
+};
+$("cancel").onclick = () => finish(false);
+$("restart").onclick = load;
+$("scenario").onchange = load;
+for (const [i,s] of samples.entries()) $("scenario").add(new Option(s.title,String(i)));
+load();
+</script>
+</body></html>
